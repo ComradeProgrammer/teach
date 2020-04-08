@@ -1,14 +1,14 @@
 module ProductionConstant
-  GitLabHost = 'http://10.2.28.170'.freeze
-  TeachHost = 'http://10.2.28.170:3000'.freeze
+  GitLabHost = 'http://127.0.0.1:30000'.freeze
+  TeachHost = 'http://127.0.0.1:3000'.freeze
   WebhookUrl = "#{TeachHost}/webhook".freeze
 
   # admin token
-  PRIVATE_TOKEN = 'HyGsfxiJaza27DBkazVu'.freeze
+  PRIVATE_TOKEN = 'eBk9ioVVzPYfrp3JX2yw'.freeze
 
   # oauth application config
-  APP_ID = '448f1a1cecb3312b4099d76b3b9f3ad65172ba51ded099a33f0a3e6e914f98db'.freeze
-  APP_SECRET = 'e2aebc01e5fe3e713f5c9cbdbe87cdf85ed5883c3d7ebe345f127809e85d0858'.freeze
+  APP_ID = '897bf428abefe85dca639ab99ec522c9e3b225552a6ed17c9e2b88862a86e023'.freeze
+  APP_SECRET = 'bec37b6163b9f9cc59f2ff79c251afe362d1ea5198a7b225ae8684b2b69c2c22'.freeze
   REDIRECT_URI = "#{TeachHost}/oauth/callback".freeze
   ACCESS_TOKEN_URL = "#{GitLabHost}/oauth/token".freeze
 end

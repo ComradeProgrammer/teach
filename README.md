@@ -1,7 +1,10 @@
-# 安装配置指南(Ubuntu14.04)
+# 安装配置指南
+
+## 系统版本
+Ubuntu 14.04
 
 ## Ruby 版本
-  2.3+ (不要使用系统ruby版本，可以使用rvm安装)
+  2.5.1+
 ## 依赖
 ### sshd
 sshd 用于 git
@@ -69,6 +72,7 @@ sudo EXTERNAL_URL="http://gitlab.ce" apt-get install gitlab-ce
 
 
 ### 本服务配置
+在项目目录下的app/config目录中修改以下内容。
 配置GitLab地址和本服务地址，如：
 ```ruby
 GitLabHost = 'http://gitlab.ce'.freeze
@@ -125,6 +129,7 @@ sudo vi _setp_link.html.haml
 `= render_if_exists 'dashboard/operations/nav_link'`<br/>
 在该行的上一行添加 `= render_if_exists 'layouts/nav/setp_link'`
 示例：
+
 ```haml
 ...
 
@@ -143,6 +148,7 @@ sudo vi /opt/gitlab/embedded/service/gitlab-rails/lib/gitlab/data_builder/push.r
 找到 `commits_limited = commits.last(20)`，注释该行，
 添加 `commits_limited = commits`
 示例：
+
 ```ruby
 commits = Array(commits)
 
@@ -153,11 +159,14 @@ commits_count ||= commits.size
 # commits_limited = commits.last(20)
 commits_limited = commits
 ```
-编辑 `/opt/gitlab/embedded/service/gitlab-rails/app/services/git_push_service.rb`
+编辑 `/opt/gitlab/embedded/service/gitlab-rails/app/services/git/base_hooks_service.rb`
 ```bash
-sudo vi /opt/gitlab/embedded/service/gitlab-rails/app/services/git_push_service.rb
+sudo vi /opt/gitlab/embedded/service/gitlab-rails/app/services/git/base_hooks_service.rb
 ```
 找到 `PROCESS_COMMIT_LIMIT = 100`，修改为
+
+/opt/gitlab/embedded/service/gitlab-rails/app/services/git# vim base_hooks_service.rb 
+
 ```ruby
 PROCESS_COMMIT_LIMIT = 2**31 -1
 ```

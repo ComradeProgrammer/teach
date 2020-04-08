@@ -1,14 +1,15 @@
 module DevelopmentConstant
-  GitLabHost = 'http://gitlab.ce'.freeze
-  TeachHost = 'http://teach.ce:3000'.freeze
+  GitLabHost = 'http://127.0.0.1:30000'.freeze
+  # TeachHost = 'http://teach.ce:3000'.freeze
+  TeachHost = 'http://127.0.0.1:3000'.freeze
   WebhookUrl = "#{TeachHost}/webhook".freeze
 
   # admin token
-  PRIVATE_TOKEN = 'oMP6bjQhpw1nG4BYTm3t'.freeze
+  PRIVATE_TOKEN = 'eBk9ioVVzPYfrp3JX2yw'.freeze
 
   # oauth application config
-  APP_ID = '2a35559a8ad74c3756b9cc63cdacf4c6efb4a9ae304f6776b317455918505fbc'.freeze
-  APP_SECRET = '89b6517b55f703a83e573fd92000607095c3f5cad2fabbc84d8619655b02230f'.freeze
+  APP_ID = '897bf428abefe85dca639ab99ec522c9e3b225552a6ed17c9e2b88862a86e023'.freeze
+  APP_SECRET = 'bec37b6163b9f9cc59f2ff79c251afe362d1ea5198a7b225ae8684b2b69c2c22'.freeze
   REDIRECT_URI = "#{TeachHost}/oauth/callback".freeze
   ACCESS_TOKEN_URL = "#{GitLabHost}/oauth/token".freeze
 end
