@@ -8,8 +8,9 @@
 /.bundle
 
 # Ignore the default SQLite database.
-/db/*.sqlite3
-/db/*.sqlite3-journal
+# In order to share, don't ignore db files
+# /db/*.sqlite3
+# /db/*.sqlite3-journal
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -41,3 +42,7 @@ yarn-debug.log*
 .yarn-integrity
 
 coverage/
+
+# Ignore config files while developing
+/app/config/development_constant.rb
+/app/config/production_constant.rb
