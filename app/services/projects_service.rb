@@ -3,6 +3,10 @@ class ProjectsService < BaseService
     get("projects/#{project_id}")
   end
 
+  def new_project(project)
+    post "projects", project
+  end
+
   def forks(project_id, params = {})
     get "projects/#{project_id}/forks", params
   end

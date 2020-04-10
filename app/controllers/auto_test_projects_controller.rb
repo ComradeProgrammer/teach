@@ -2,6 +2,45 @@ class AutoTestProjectsController < ApplicationController
   def show
   end
 
+  def new
+    @errors = []
+    @auto_test_project = AutoTestProject.new
+    @classroom_id = params[:classroom_id]
+    classroom = Classroom.find_by(id: @classroom_id)
+    @classroom_name = groups_service.get_group(classroom.gitlab_group_id)['path']
+    if params[:type] == 'personal'
+      @title = '个人'
+      @projects_name = 'personal-projects'
+    else
+      @title = '结对'
+      @projects_name = 'pair-projects'
+    end
+  end
+
+  def create
+    # todo: here now only create projects for personal projects, add pair!
+    # todo: use info in Req and `if` to add
+    # owner = User.find_by(gitlab_id: current_user.id)
+    classroom = Classroom.find_by(id: params[:classroom_id])
+    auto_test_project = classroom.auto_test_projects.new
+    @auto_test_project = params[:auto_test_project]
+    if params[:type] == 'personal'
+      @auto_test_project['namespace_id'] = classroom.personal_project_subgroup_id
+    else
+      @auto_test_project['namespace_id'] = classroom.pair_project_subgroup_id
+    end
+    @auto_test_project['visibility'] = 'public'
+    @auto_test_project['request_access_enabled'] = true
+    project = projects_service.new_project(@auto_test_project)
+    auto_test_project.gitlab_id = project['id']
+    auto_test_project.save
+    # classroom.users << owner
+    redirect_to classrooms_path
+  rescue RestClient::BadRequest => e
+    @errors = ['名称或地址包含非法字符或已被占用']
+    render 'new'
+  end
+
   def feedback
     respond_to do |format|
       format.json do
@@ -38,14 +77,14 @@ class AutoTestProjectsController < ApplicationController
 
   def create_pipeline(project_id, gitlab_username)
     pipeline = {
-      ref: 'master',
-      variables: [
-        {
-          # predefined CI 变量改为该项目 owner
-          key: 'GITLAB_USER_LOGIN',
-          value: gitlab_username
-        }
-      ]
+        ref: 'master',
+        variables: [
+            {
+                # predefined CI 变量改为该项目 owner
+                key: 'GITLAB_USER_LOGIN',
+                value: gitlab_username
+            }
+        ]
     }
     admin_api_post "projects/#{project_id}/pipeline", pipeline
   end
@@ -60,5 +99,13 @@ class AutoTestProjectsController < ApplicationController
   def get_test_record
     auto_test_project = AutoTestProject.find(params[:id])
     auto_test_project.student_test_records.find(params[:test_record_id])
+  end
+
+  def projects_service
+    ::ProjectsService.new current_user
+  end
+
+  def groups_service
+    ::GroupsService.new current_user
   end
 end

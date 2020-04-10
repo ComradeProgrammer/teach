@@ -1,0 +1,22 @@
+- content_for :scripts do
+  = javascript_pack_tag 'new_auto_test_project'
+- content_for :styles do
+  = stylesheet_pack_tag 'new_auto_test_project'
+
+#new-auto-test-project-app.small-container{data: {auto_test_project: @auto_test_project.to_json}}
+  .page-title-holder
+    .page-title= '创建' + @title + '项目'
+  %el-form{':model': "auto_test_project", ref: 'auto_test_project', ':rules': 'rules', 'label-width': '100px', action: classroom_auto_test_projects_path, method: 'post'}
+    - @errors.each do |error|
+      %el-alert.error-item{type: 'error', 'title': error}
+    %csrf
+    %el-form-item{label: '项目名称', prop: 'name'}
+      %el-input{'v-model': 'auto_test_project.name', name: 'auto_test_project[name]'}
+    %el-form-item{label: '项目地址', prop: 'path'}
+      %el-input{'v-model': 'auto_test_project.path', name: 'auto_test_project[path]'}
+        %template{slot: 'prepend'}
+          = gitlab_host+'/'+@classroom_name+'/'+@projects_name+'/'
+    %el-form-item{label: '项目描述', prop: 'description'}
+      %el-input{'v-model': 'auto_test_project.description', name: 'auto_test_project[description]', type: 'textarea', ':autosize': '{minRows: 4, maxRows: 8}'}
+    %el-form-item.clearFloat
+      %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 创建

@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       csrf
     },
     mounted() {
-      this.classroom = JSON.parse(this.$el.dataset.classroom)
+      this.classroom = JSON.parse(this.$el.dataset.classroom);
       this.$watch('classroom.name', (newVal, oldVal) => {
         this.classroom.path = newVal.toLowerCase().trim().replace(/\s+/g, '-');
       })

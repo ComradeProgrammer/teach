@@ -52,7 +52,7 @@
           .page-title 个人项目列表
           - if teacher?
             .page-title-controls
-              %a.el-button.el-button--mini{href: "#{gitlab_host}/projects/new?namespace_id=#{@classroom_record.personal_project_subgroup_id}"}
+              %a.el-button.el-button--mini{href: new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'personal')}
                 创建个人项目
         .content-list
           - @personal_projects.each do |project|
@@ -70,7 +70,7 @@
           .page-title 结对项目列表
           - if teacher?
             .page-title-controls
-              %a.el-button.el-button--mini{href: "#{gitlab_host}/projects/new?namespace_id=#{@classroom_record.pair_project_subgroup_id}"}
+              %a.el-button.el-button--mini{href: new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'pair')}
                 创建结对项目
         .content-list
           - @pair_projects.each do |project|
