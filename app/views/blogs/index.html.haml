@@ -12,16 +12,18 @@
         Daily Scrum
       %el-radio-button{'label': 'all'}
         所有
-    %el-radio-group.filter-item{'v-model': 'searchParams.scope', size: 'mini'}
-      %el-radio-button{'label': 'my'}
-        我的
-      %el-radio-button{'label': 'all'}
-        所有
-    %el-button-group.floatRight
-      %a.el-button.el-button--mini{href: new_classroom_blog_path(type: 'blog')}
-        新建博客
-      %a.el-button.el-button--mini{href: new_classroom_blog_path(type: 'daily_scrum')}
-        新建 Daily Scrum
+    - if student?
+      %el-radio-group.filter-item{'v-model': 'searchParams.scope', size: 'mini'}
+        %el-radio-button{'label': 'my'}
+          我的
+        %el-radio-button{'label': 'all'}
+          所有
+      %el-button-group.floatRight
+        %a.el-button.el-button--mini{href: new_classroom_blog_path(type: 'blog')}
+          新建博客
+        %a.el-button.el-button--mini{href: new_classroom_blog_path(type: 'daily_scrum')}
+          新建 Daily Scrum
+
   .blogs{':style': 'loadingStyle', 'v-loading': 'loading', 'element-loading-text': '加载中'}
     %el-card{shadow: 'never', 'v-for': "(blog, index) in blogs", ':key': 'index', class: 'blog-card', ':body-style': "{ padding: '10px' }"}
       .blog-info
