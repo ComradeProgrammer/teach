@@ -8,6 +8,7 @@ class AutoTestProjectsController < ApplicationController
     @classroom_id = params[:classroom_id]
     classroom = Classroom.find_by(id: @classroom_id)
     @classroom_name = groups_service.get_group(classroom.gitlab_group_id)['path']
+    @type = params[:type]
     if params[:type] == 'personal'
       @title = '个人'
       @projects_name = 'personal-projects'
@@ -18,9 +19,6 @@ class AutoTestProjectsController < ApplicationController
   end
 
   def create
-    # todo: here now only create projects for personal projects, add pair!
-    # todo: use info in Req and `if` to add
-    # owner = User.find_by(gitlab_id: current_user.id)
     classroom = Classroom.find_by(id: params[:classroom_id])
     auto_test_project = classroom.auto_test_projects.new
     @auto_test_project = params[:auto_test_project]

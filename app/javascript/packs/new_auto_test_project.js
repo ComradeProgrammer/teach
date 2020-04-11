@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // attention: here use `autoTestProject` not `auto_test_project`
             // see: https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement/dataset
             this.auto_test_project = JSON.parse(this.$el.dataset.autoTestProject);
+            console.log(this.auto_test_project);
             this.$watch('auto_test_project.name', (newVal, oldVal) => {
                 this.auto_test_project.path = newVal.toLowerCase().trim().replace(/\s+/g, '-');
             })
