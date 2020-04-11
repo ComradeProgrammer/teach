@@ -96,5 +96,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :broadcasts
+  resources :broadcasts do
+    collection do
+      get 'destroy_all', to: 'broadcasts#destroy_all'
+    end
+  end
 end

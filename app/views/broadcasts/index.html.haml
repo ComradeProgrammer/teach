@@ -6,9 +6,15 @@
 #broadcasts-app.small-container
   .page-title-holder
     .page-title 广播消息列表
+    .page-title-controls
+      = link_to '全部已读', '/broadcasts/destroy_all', method: :get, class: 'el-button el-button--primary'
   .content-list
     - @broadcasts.each do |broadcast|
-      %el-card{shadow: 'hover'}
-        %div= broadcast.from_id
-        %div= broadcast.content
+      %el-card{shadow: 'hover', span: '24'}
+        %el-col{span: '20'}
+          %h2= broadcast[:name]
+          %h4= broadcast[:time]
+          %h4= broadcast[:content]
+        %el-col{span: '4'}
+          = link_to '已读', broadcast_path(broadcast[:id]), method: :delete, class: 'el-button el-button--success'
 

@@ -3,8 +3,15 @@ class BroadcastsController < ApplicationController
 
   def index
     user_id = User.find_by(gitlab_id: current_user.id).id
-    @broadcasts = Broadcast.where(:to_id => user_id)
-      # render json: {test: 123, test2: 456}
+    @broadcasts_ori = Broadcast.where(:to_id => user_id)
+    @broadcasts = []
+    @broadcasts_ori.each do |item|
+      id = item.id
+      name = User.find_by(id: item.from_id).username
+      time = item.created_at
+      content = item.content
+      @broadcasts.append({id: id, name: name, time: time, content: content})
+    end
   end
 
   def new
@@ -61,6 +68,20 @@ class BroadcastsController < ApplicationController
       redirect_to(classrooms_path)
     end
     redirect_to(classrooms_path)
+  end
+
+  def destroy
+    @broadcast = Broadcast.find(params[:id])
+    @broadcast.destroy
+    redirect_to broadcasts_path
+  end
+
+  def destroy_all
+    user_id = User.find_by(gitlab_id: current_user.id).id
+    Broadcast.where(:to_id => user_id).each do |item|
+      item.destroy
+    end
+    redirect_to broadcasts_path
   end
 
   private
