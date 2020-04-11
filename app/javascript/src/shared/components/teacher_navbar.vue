@@ -13,9 +13,15 @@
         GitLab
         <i class="iconfont icon-link"></i>
       </el-menu-item>
-      <el-menu-item index="3">
-        广播
-      </el-menu-item>
+      <el-submenu index="3">
+        <template slot="title">广播</template>
+        <el-menu-item index="3-1">
+          发送广播
+        </el-menu-item>
+        <el-menu-item index="3-2">
+          收到的广播
+        </el-menu-item>
+      </el-submenu>
     </el-menu>
   </div>
 </template>
@@ -37,8 +43,12 @@
         else if (key === '2') {
           window.location.href = this.gitlabHost;
         }
-        else if (key === '3') {
-          window.location.href = '/broadcasts/new';
+        else if (key.startsWith('3-')) {
+          if (key == '3-1') {
+            window.location.href = '/broadcasts/new';
+          } else if (key === '3-2') {
+            window.location.href = '/broadcasts';
+          }
         }
       }
     }
