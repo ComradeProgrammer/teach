@@ -1,4 +1,12 @@
 class UsersController < ApplicationController
+  def get_all_user_id_and_name
+    res = []
+    User.all.each do |user|
+      res.append({id: user.id, gitlab_id: user.gitlab_id, name: user.username, role: user.role})
+    end
+    render json: res
+  end
+
   def new
     classroom = Classroom.find params[:classroom_id]
     @type = params[:type]

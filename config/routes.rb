@@ -76,6 +76,10 @@ Rails.application.routes.draw do
       end
     end
 
+    collection do
+      get 'get_all_classroom_id_and_name', to: 'classrooms#get_all_classroom_id_and_name'
+    end
+
     member do
       get 'join', to: 'classrooms#join'
       get 'exit', to: 'classrooms#exit'
@@ -84,6 +88,12 @@ Rails.application.routes.draw do
 
   resources :blogs, only: [] do
     resources :comments, only: %i[index create update destroy], constraints: ->(req) {req.format == :json}
+  end
+
+  resource :users, only: [] do
+    collection do
+      get 'get_all_user_id_and_name', to: 'users#get_all_user_id_and_name'
+    end
   end
 
   resources :broadcasts

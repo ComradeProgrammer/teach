@@ -10,10 +10,23 @@
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}
     %csrf
-    %el-form-item{label: '接收方', prop: 'to_id'}
-      %el-input{'v-model': 'broadcast.to_id', name: 'broadcast[to_id]'}
+    %el-form-item{label: '广播范围'}
+      %el-select{'v-model': 'form.scope', placeholder: "请选择广播范围"}
+        %el-option{label: '全体成员', value: 'all'}
+        %el-option{label: '全体学生', value: 'all_students'}
+        %el-option{label: '全体老师', value: 'all_teachers'}
+        %el-option{label: '班级', value: 'class'}
+        %el-option{label: '个人', value: 'user'}
+    %el-form-item{label: '选择班级', 'v-if': 'scope === \'class\''}
+      %el-select{'v-model': 'form.class_id', placeholder: "请选择班级"}
+        %template{'v-for': 'classItem in classList'}
+          %el-option{':label': 'classItem.label', ':value': 'classItem.value'}
+    %el-form-item{label: '选择成员', 'v-if': 'scope === \'user\''}
+      %el-select{'v-model': 'form.user_id', placeholder: "请选择成员"}
+        %template{'v-for': 'userItem in userList'}
+          %el-option{':label': 'userItem.label', ':value': 'userItem.value'}
     %el-form-item{label: '广播内容', prop: 'content'}
-      %el-input{'v-model': 'broadcast.content', name: 'broadcast[content]', type: 'textarea', ':autosize': '{minRows: 4, maxRows: 8}'}
+      %el-input{'v-model': 'form.content', type: 'textarea', ':autosize': '{minRows: 4, maxRows: 8}'}
     %el-form-item.clearFloat
       %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 发送广播
 

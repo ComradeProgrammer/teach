@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 class ClassroomsController < ApplicationController
+  def get_all_classroom_id_and_name
+    res = []
+    Classroom.all.each do |classroom|
+      gitlab_group_id = classroom.gitlab_group_id
+      classname = groups_service.get_group(gitlab_group_id)['name']
+      res.append({id: classroom.id, gitlab_group_id: gitlab_group_id, name: classname})
+    end
+    render json: res
+  end
+
   def index
     @classrooms = []
     @all_classrooms = []
