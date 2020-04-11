@@ -1,0 +1,14 @@
+- content_for :scripts do
+  = javascript_pack_tag 'broadcasts'
+- content_for :styles do
+  = stylesheet_pack_tag 'broadcasts'
+
+#broadcasts-app.small-container
+  .page-title-holder
+    .page-title 广播消息列表
+  .content-list
+    - @broadcasts.each do |broadcast|
+      .card
+        .card-title.clearFloat
+          %span= broadcast.from_id
+          %span= broadcast.content

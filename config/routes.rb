@@ -85,4 +85,6 @@ Rails.application.routes.draw do
   resources :blogs, only: [] do
     resources :comments, only: %i[index create update destroy], constraints: ->(req) {req.format == :json}
   end
+
+  resources :broadcasts
 end

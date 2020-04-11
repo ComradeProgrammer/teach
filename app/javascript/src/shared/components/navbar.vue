@@ -50,6 +50,10 @@
         <i class="iconfont icon-link"></i>
       </el-menu-item>
 
+      <el-menu-item index="7">
+        广播消息
+      </el-menu-item>
+
 
       <el-submenu index="6" style="float: right">
         <template slot="title">新建问题</template>
@@ -154,6 +158,8 @@
         } else if (key.startsWith('6-')) {
           this.newIssue.projectId = parseInt(key.substr(2));
           this.dialogVisible = true;
+        } else if (key === '7') {
+          window.location.href = "/broadcasts";
         }
       },
       handleClose(done) {

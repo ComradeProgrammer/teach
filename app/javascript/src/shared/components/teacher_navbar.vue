@@ -13,6 +13,9 @@
         GitLab
         <i class="iconfont icon-link"></i>
       </el-menu-item>
+      <el-menu-item index="3">
+        广播
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -33,6 +36,9 @@
         }
         else if (key === '2') {
           window.location.href = this.gitlabHost;
+        }
+        else if (key === '3') {
+          window.location.href = '/broadcasts/new';
         }
       }
     }

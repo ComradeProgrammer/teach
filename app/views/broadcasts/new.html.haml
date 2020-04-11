@@ -1,0 +1,21 @@
+- content_for :scripts do
+  = javascript_pack_tag 'new_broadcast'
+- content_for :styles do
+  = stylesheet_pack_tag 'new_broadcast'
+
+#new-broadcast-app.small-container{data: {broadcast: @broadcast.to_json}}
+  .page-title-holder
+    .page-title 创建广播
+  %el-form{':model': "broadcast", ref: 'broadcast', ':rules': 'rules', 'label-width': '100px', action: broadcasts_path, method: 'post'}
+    - @errors.each do |error|
+      %el-alert.error-item{type: 'error', 'title': error}
+    %csrf
+    %el-form-item{label: '接收方', prop: 'to_id'}
+      %el-input{'v-model': 'broadcast.to_id', name: 'broadcast[to_id]'}
+    %el-form-item{label: '广播内容', prop: 'content'}
+      %el-input{'v-model': 'broadcast.content', name: 'broadcast[content]', type: 'textarea', ':autosize': '{minRows: 4, maxRows: 8}'}
+    %el-form-item.clearFloat
+      %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 发送广播
+
+
+
