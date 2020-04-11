@@ -8,7 +8,7 @@
     .page-title 广播消息列表
   .content-list
     - @broadcasts.each do |broadcast|
-      .card
-        .card-title.clearFloat
-          %span= broadcast.from_id
-          %span= broadcast.content
+      %el-card{shadow: 'hover'}
+        %div= broadcast.from_id
+        %div= broadcast.content
+
