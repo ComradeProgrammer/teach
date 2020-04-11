@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   # oauth application
   get '/login', to: 'sessions#login'
   get '/oauth/callback', to: 'sessions#login'
+  get '/logout', to: 'sessions#logout'
 
   resources :issues do
     collection do

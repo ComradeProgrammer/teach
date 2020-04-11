@@ -4,6 +4,12 @@ class SessionsController < ApplicationController
   skip_before_action :require_login, only: [:login]
   before_action :login_redirect, only: [:login]
 
+  def logout
+    user_logout
+    session[:user_token] = nil
+    redirect_to root_url
+  end
+
   def login
     access_code = params['code']
     user_type = params['state']

@@ -65,6 +65,10 @@ module GitlabApi
     res['access_token']
   end
 
+  def user_logout
+    # cannot sign out from GitLab
+  end
+
   def gitlab_host
     Constant::GitLabHost
   end
