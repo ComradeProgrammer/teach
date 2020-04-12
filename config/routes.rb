@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get 'users/new'
   get 'users/destroy'
   root 'pages#main'
+
   # system hook for add system-wide webhook
   post '/system', to: 'system#index'
 

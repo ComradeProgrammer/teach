@@ -5,9 +5,8 @@ class SessionsController < ApplicationController
   before_action :login_redirect, only: [:login]
 
   def logout
-    user_logout
     session[:user_token] = nil
-    redirect_to root_url
+    redirect_to Constant::GitLabHost
   end
 
   def login
