@@ -9,10 +9,12 @@
       <el-menu-item index="1">
         班级
       </el-menu-item>
+      
       <el-menu-item index="2">
         GitLab
         <i class="iconfont icon-link"></i>
       </el-menu-item>
+      
       <el-submenu index="3">
         <template slot="title">广播</template>
         <el-menu-item index="3-1">
@@ -22,6 +24,10 @@
           收到的广播
         </el-menu-item>
       </el-submenu>
+
+      <el-menu-item index="4" style="float: right">
+        <el-button type="danger" plain>注销平台</el-button>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -49,6 +55,8 @@
           } else if (key === '3-2') {
             window.location.href = '/broadcasts';
           }
+        } else if (key === '4') {
+          window.location.href = '/logout'
         }
       }
     }

@@ -37,6 +37,7 @@
           </el-menu-item>
         </el-submenu>
       </el-submenu>
+
       <el-menu-item index="3">
         问题
       </el-menu-item>
@@ -54,6 +55,9 @@
         广播消息
       </el-menu-item>
 
+      <el-menu-item index="8" style="float: right">
+        <el-button type="danger" plain>注销平台</el-button>
+      </el-menu-item>
 
       <el-submenu index="6" style="float: right">
         <template slot="title">新建问题</template>
@@ -61,6 +65,7 @@
           {{ project.name_with_namespace }}
         </el-menu-item>
       </el-submenu>
+
 
     </el-menu>
 
@@ -160,6 +165,8 @@
           this.dialogVisible = true;
         } else if (key === '7') {
           window.location.href = "/broadcasts";
+        } else if (key === '8') {
+          window.location.href = "/logout";
         }
       },
       handleClose(done) {
