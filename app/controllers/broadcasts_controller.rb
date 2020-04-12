@@ -8,7 +8,7 @@ class BroadcastsController < ApplicationController
     @broadcasts_ori.each do |item|
       id = item.id
       name = User.find_by(id: item.from_id).username
-      time = item.created_at
+      time = item.created_at.strftime("%Y-%m-%d %k:%M:%S")
       content = item.content
       @broadcasts.append({id: id, name: name, time: time, content: content})
     end

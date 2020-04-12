@@ -21,5 +21,6 @@ module Teach
     config.autoload_paths += config.eager_load_paths
 
     config.active_job.queue_adapter = :sidekiq
+    config.time_zone = "Asia/Shanghai"
   end
 end
