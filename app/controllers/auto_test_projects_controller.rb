@@ -1,13 +1,21 @@
 class AutoTestProjectsController < ApplicationController
+  @@project_type = 'personal'
+  @@errors_save = []
+
   def show
   end
 
   def new
     @errors = []
+    if @@errors_save.size > 0
+      @errors = @@errors_save
+      @@errors_save = []
+    end
     @classroom_id = params[:classroom_id]
     classroom = Classroom.find_by(id: @classroom_id)
     @classroom_name = groups_service.get_group(classroom.gitlab_group_id)['path']
     @type = params[:type]
+    @@project_type = params[:type]
     if params[:type] == 'personal'
       @title = '个人'
       @projects_name = 'personal-projects'
@@ -23,6 +31,7 @@ class AutoTestProjectsController < ApplicationController
     classroom = Classroom.find_by(id: params[:classroom_id])
     auto_test_project = classroom.auto_test_projects.new
     @auto_test_project = params[:auto_test_project]
+
     if @auto_test_project[:test_type] == 'personal'
       @auto_test_project['namespace_id'] = classroom.personal_project_subgroup_id
     else
@@ -38,7 +47,9 @@ class AutoTestProjectsController < ApplicationController
     redirect_to classroom_path(params[:classroom_id])
   rescue RestClient::BadRequest => e
     @errors = ['名称或地址包含非法字符或已被占用']
-    render 'new'
+    @@errors_save = @errors
+    # render 'new'
+    redirect_to new_classroom_auto_test_project_path + '?type=' + @@project_type
   end
 
   def destroy

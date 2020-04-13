@@ -1,6 +1,17 @@
 class TeamProjectsController < ApplicationController
+  @@dup_proj = false
+  @@errors_save = []
+
   def new
     @errors = []
+    if @@errors_save.size > 0
+      @errors = @@errors_save
+      @@errors_save = []
+    end
+    if @@dup_proj
+      @errors = ['名称重复']
+      @@dup_proj = false
+    end
     @team_project = {
       name: '',
       path: '',
@@ -11,6 +22,19 @@ class TeamProjectsController < ApplicationController
 
   def create
     @team_project = params[:team_project]
+
+    @@dup_proj = false
+    TeamProject.all.each do |a_project|
+      if a_project[:name] == @team_project['name']
+        @@dup_proj = true
+        break
+      end
+    end
+    if @@dup_proj
+      redirect_to new_classroom_team_project_path
+      return
+    end
+
     @team_project[:initialize_with_readme] = !!@team_project[:initialize_with_readme]
     classroom = Classroom.find(params[:classroom_id])
     team_project = {
@@ -28,7 +52,8 @@ class TeamProjectsController < ApplicationController
     redirect_to @team_project['web_url']
   rescue RestClient::BadRequest => e
     @errors = ['名称或地址包含非法字符']
-    render 'new'
+    @@errors_save = @errors
+    redirect_to new_classroom_team_project_path
   end
 
   def show
