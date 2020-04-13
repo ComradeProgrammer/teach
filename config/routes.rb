@@ -51,7 +51,7 @@ Rails.application.routes.draw do
   # teachers
   resources :classrooms do
     resources :users, only: %i[new create destroy]
-    resources :auto_test_projects, only: %i[index new create show] do
+    resources :auto_test_projects, only: %i[index new create show destroy] do
       member do
         post 'feedback', to: 'auto_test_projects#feedback'
         post 'trigger', to: 'auto_test_projects#trigger'

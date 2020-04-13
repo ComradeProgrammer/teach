@@ -41,6 +41,13 @@ class AutoTestProjectsController < ApplicationController
     render 'new'
   end
 
+  def destroy
+    @auto_test_project = AutoTestProject.find_by(gitlab_id: params[:id])
+    @auto_test_project.destroy
+    projects_service.delete_project params[:id]
+    redirect_to classroom_path(params[:classroom_id])
+  end
+
   def feedback
     respond_to do |format|
       format.json do

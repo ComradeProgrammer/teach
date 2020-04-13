@@ -7,6 +7,10 @@ class ProjectsService < BaseService
     post "projects", project
   end
 
+  def delete_project(project)
+    delete "projects/#{project}"
+  end
+
   def forks(project_id, params = {})
     get "projects/#{project_id}/forks", params
   end

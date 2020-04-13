@@ -56,7 +56,7 @@
       </el-menu-item>
 
       <el-menu-item index="8" style="float: right">
-        <el-button type="danger" plain>注销平台</el-button>
+        注销平台
       </el-menu-item>
 
       <el-submenu index="6" style="float: right">

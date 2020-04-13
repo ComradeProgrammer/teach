@@ -7,7 +7,7 @@
   .page-title-holder
     .page-title 广播消息列表
     .page-title-controls
-      = link_to '全部已读', '/broadcasts/destroy_all', method: :get, class: 'el-button el-button--primary'
+      = link_to '全部已读', '/broadcasts/destroy_all', method: :get, data: {confirm: '确认清除全部消息？'}, class: 'el-button el-button--primary'
   .content-list
     - @broadcasts.each do |broadcast|
       %el-card{shadow: 'hover', span: '24'}
