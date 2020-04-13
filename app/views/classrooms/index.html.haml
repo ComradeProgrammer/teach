@@ -19,7 +19,7 @@
                 %a{href: classroom_path(classroom['id'])}= classroom['name']
               .floatRight
                 - if teacher?
-                  %a.el-button.el-button--mini{href: "#{classroom['web_url']}/-/edit"} 编辑
+                  %a.el-button.el-button--mini{href: edit_classroom_path} 编辑
                   %a.el-button.el-button--danger.el-button--mini{href: exit_classroom_path(classroom['id'])} 退出班级
                   = link_to '删除', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger el-button--mini'
                 - if student?
@@ -38,7 +38,7 @@
                   - unless classroom['own']
                     %a.el-button.el-button--mini{href: join_classroom_path(classroom['id'])} 加入班级
                   - if teacher? && classroom['own']
-                    %a.el-button.el-button--mini{href: "#{classroom['web_url']}/-/edit"} 编辑
+                    %a.el-button.el-button--mini{href: edit_classroom_path} 编辑
                     = link_to '删除', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger el-button--mini'
                   - if student? && classroom['own']
                     %el-button.el-button--mini{':disabled': 'true'} 已加入
