@@ -4,7 +4,6 @@ class AutoTestProjectsController < ApplicationController
 
   def new
     @errors = []
-    @auto_test_project = AutoTestProject.new
     @classroom_id = params[:classroom_id]
     classroom = Classroom.find_by(id: @classroom_id)
     @classroom_name = groups_service.get_group(classroom.gitlab_group_id)['path']
@@ -12,9 +11,11 @@ class AutoTestProjectsController < ApplicationController
     if params[:type] == 'personal'
       @title = '个人'
       @projects_name = 'personal-projects'
+      @auto_test_project = AutoTestProject.new('personal')
     else
       @title = '结对'
       @projects_name = 'pair-projects'
+      @auto_test_project = AutoTestProject.new('pair')
     end
   end
 
@@ -22,9 +23,11 @@ class AutoTestProjectsController < ApplicationController
     classroom = Classroom.find_by(id: params[:classroom_id])
     auto_test_project = classroom.auto_test_projects.new
     @auto_test_project = params[:auto_test_project]
-    if params[:type] == 'personal'
+    if @auto_test_project[:type] == 'personal'
+      auto_test_project.type = 'personal'
       @auto_test_project['namespace_id'] = classroom.personal_project_subgroup_id
     else
+      auto_test_project.type = 'pair'
       @auto_test_project['namespace_id'] = classroom.pair_project_subgroup_id
     end
     @auto_test_project['visibility'] = 'public'
@@ -33,7 +36,7 @@ class AutoTestProjectsController < ApplicationController
     auto_test_project.gitlab_id = project['id']
     auto_test_project.save
     # classroom.users << owner
-    redirect_to classrooms_path
+    redirect_to classroom_path(params[:classroom_id])
   rescue RestClient::BadRequest => e
     @errors = ['名称或地址包含非法字符或已被占用']
     render 'new'
