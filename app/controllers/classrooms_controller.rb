@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ClassroomsController < ApplicationController
+  @@dup_class = false
+
   def get_all_classroom_id_and_name
     res = []
     Classroom.all.each do |classroom|
@@ -12,6 +14,7 @@ class ClassroomsController < ApplicationController
   end
 
   def index
+    @errors = []
     @classrooms = []
     @all_classrooms = []
     user = User.find_by(gitlab_id: current_user.id)
@@ -34,10 +37,26 @@ class ClassroomsController < ApplicationController
 
   def new
     @errors = []
+    if @@dup_class
+      @errors = ['名称重复']
+      @@dup_class = false
+    end
     @classroom = Classroom.new
+    @new_class_name = Classroom.name
   end
 
   def create
+    @@dup_class = false
+    Classroom.all.each do |a_class|
+      if a_class[:name] == @new_class_name
+        @@dup_class = true
+        break
+      end
+    end
+    if @@dup_class
+      redirect_to new_classroom_path
+      return
+    end
     owner = User.find_by(gitlab_id: current_user.id)
     @classroom = params[:classroom]
     classroom = owner.classrooms.new
@@ -76,6 +95,8 @@ class ClassroomsController < ApplicationController
     @errors = ['名称或地址包含非法字符或已被占用']
     render 'new'
   end
+
+
 
   def destroy
     @classroom = Classroom.find(params[:id])
