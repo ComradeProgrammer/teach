@@ -12,8 +12,8 @@
     %csrf
     %el-form-item{label: '项目名称', prop: 'name'}
       %el-input{'v-model': 'auto_test_project.name', name: 'auto_test_project[name]'}
-    %el-form-item{label: '项目类型', prop: 'type'}
-      %el-input{'v-model': 'auto_test_project.type', name: 'auto_test_project[type]', readonly: "readonly"}
+    %el-form-item{label: '项目类型', prop: 'test_type'}
+      %el-input{'v-model': 'auto_test_project.test_type', name: 'auto_test_project[test_type]', readonly: "readonly"}
     %el-form-item{label: '项目地址', prop: 'path'}
       %el-input{'v-model': 'auto_test_project.path', name: 'auto_test_project[path]'}
         %template{slot: 'prepend'}

@@ -23,17 +23,16 @@ class AutoTestProjectsController < ApplicationController
     classroom = Classroom.find_by(id: params[:classroom_id])
     auto_test_project = classroom.auto_test_projects.new
     @auto_test_project = params[:auto_test_project]
-    if @auto_test_project[:type] == 'personal'
-      auto_test_project.type = 'personal'
+    if @auto_test_project[:test_type] == 'personal'
       @auto_test_project['namespace_id'] = classroom.personal_project_subgroup_id
     else
-      auto_test_project.type = 'pair'
       @auto_test_project['namespace_id'] = classroom.pair_project_subgroup_id
     end
     @auto_test_project['visibility'] = 'public'
     @auto_test_project['request_access_enabled'] = true
     project = projects_service.new_project(@auto_test_project)
     auto_test_project.gitlab_id = project['id']
+    auto_test_project.test_type = @auto_test_project[:test_type]
     auto_test_project.save
     # classroom.users << owner
     redirect_to classroom_path(params[:classroom_id])

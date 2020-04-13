@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     name: [
                         {required: true, message: '请输入项目名称', trigger: 'blur'}
                     ],
-                    type: [
+                    test_type: [
                         {required: true, message: '请输入类型名称', trigger: 'blur'}
                     ],
                     path: [

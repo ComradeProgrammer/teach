@@ -1,5 +1,5 @@
 class AutoTestProject < ApplicationRecord
-  attr_accessor :name, :path, :description, :type
+  attr_accessor :name, :path, :description, :test_type
   has_many :student_test_records, dependent: :destroy
   belongs_to :classroom
 
@@ -9,7 +9,7 @@ class AutoTestProject < ApplicationRecord
     super(nil)
     print(args.length)
     if args.length > 0
-      @type = args[0]
+      @test_type = args[0]
     end
   end
 
@@ -18,7 +18,7 @@ class AutoTestProject < ApplicationRecord
         name: @name,
         path: @path,
         description: @description,
-        type: @type
+        test_type: @test_type
     }.to_json
   end
 end
