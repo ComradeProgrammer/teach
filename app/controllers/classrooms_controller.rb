@@ -46,19 +46,16 @@ class ClassroomsController < ApplicationController
   end
 
   def create
-    @@dup_class = false
-    Classroom.all.each do |a_class|
-      if a_class[:name] == @new_class_name
-        @@dup_class = true
-        break
-      end
-    end
-    if @@dup_class
-      redirect_to new_classroom_path
-      return
-    end
     owner = User.find_by(gitlab_id: current_user.id)
     @classroom = params[:classroom]
+    @@dup_class = false
+    Classroom.all.each do |a_class|
+      if a_class[:name] == @classroom[:name]
+        @@dup_class = true
+        redirect_to new_classroom_path
+        return
+      end
+    end
     classroom = owner.classrooms.new
     personal = !!@classroom.delete(:personal)
     pair = !!@classroom.delete(:pair)
@@ -110,12 +107,9 @@ class ClassroomsController < ApplicationController
     Classroom.all.each do |a_class|
       if a_class[:name] == update[:name]
         @@dup_class = true
-        break
+        redirect_to edit_classroom_path
+        return
       end
-    end
-    if @@dup_class
-      redirect_to edit_classroom_path
-      return
     end
     @classroom_record = Classroom.find(params[:id])
     unless @classroom_record.users.include? user
