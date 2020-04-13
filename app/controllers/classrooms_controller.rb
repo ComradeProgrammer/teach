@@ -96,7 +96,38 @@ class ClassroomsController < ApplicationController
     render 'new'
   end
 
+  def edit
+    @errors = []
+    if @@dup_class
+      @errors = ['名称重复']
+      @@dup_class = false
+    end
+  end
 
+  def update
+    update = params[:classroom]
+    @@dup_class = false
+    Classroom.all.each do |a_class|
+      if a_class[:name] == update[:name]
+        @@dup_class = true
+        break
+      end
+    end
+    if @@dup_class
+      redirect_to edit_classroom_path
+      return
+    end
+    @classroom_record = Classroom.find(params[:id])
+    unless @classroom_record.users.include? user
+      render_403
+      return
+    end
+    # @classroom[:name] = update[:name]
+    groups_service.update_group(params[:id], update)
+  rescue RestClient::BadRequest => e
+    @errors = ['名称或地址包含非法字符或已被占用']
+    redirect_to edit_classroom_path
+  end
 
   def destroy
     @classroom = Classroom.find(params[:id])

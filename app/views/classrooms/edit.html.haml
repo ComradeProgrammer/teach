@@ -1,12 +1,12 @@
 - content_for :scripts do
-  = javascript_pack_tag 'new_classroom'
+  = javascript_pack_tag 'edit_classroom'
 - content_for :styles do
-  = stylesheet_pack_tag 'new_classroom'
+  = stylesheet_pack_tag 'edit_classroom'
 
-#new-classroom-app.small-container{data: {classroom: @classroom.to_json}}
+#edit-classroom-app.small-container{data: {classroom: @classroom.to_json}}
   .page-title-holder
-    .page-title 创建班级
-  %el-form{':model': "classroom", ref: 'classroom', ':rules': 'rules', 'label-width': '100px', action: classrooms_path, method: 'post'}
+    .page-title 编辑班级
+  %el-form{':model': "classroom", ref: 'classroom', ':rules': 'rules', 'label-width': '100px', action: classrooms_path, method: 'put'}
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}
     %csrf
@@ -24,4 +24,3 @@
       %el-switch{'v-model': 'classroom.team', name: 'classroom[team]', 'active-text': '团队项目'}
     %el-form-item.clearFloat
       %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 创建
-

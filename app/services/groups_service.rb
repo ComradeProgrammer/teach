@@ -3,6 +3,10 @@ class GroupsService < BaseService
     post 'groups', group
   end
 
+  def update_group(group_id, update)
+    put "groups/#{group_id}", update
+  end
+
   def get_group(group_id)
     get "groups/#{group_id}"
   end
