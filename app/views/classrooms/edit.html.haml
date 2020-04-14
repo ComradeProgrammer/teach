@@ -3,10 +3,10 @@
 - content_for :styles do
   = stylesheet_pack_tag 'edit_classroom'
 
-#edit-classroom-app.small-container{data: {classroom: @classroom.to_json}}
+#edit-classroom-app.small-container{data: {classroom: @classroom.to_json, classroom_id: @classroom_id}}
   .page-title-holder
     .page-title 编辑班级
-  %el-form{':model': "classroom", ref: 'classroom', ':rules': 'rules', 'label-width': '100px', action: edit_classroom_path, method: 'put'}
+  %el-form{':model': "classroom", ref: 'classroom', 'label-width': '100px'}
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}
     %csrf
