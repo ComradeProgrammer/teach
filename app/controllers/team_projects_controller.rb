@@ -27,14 +27,10 @@ class TeamProjectsController < ApplicationController
     TeamProject.all.each do |a_project|
       if a_project[:name] == @team_project['name']
         @@dup_proj = true
-        break
+        redirect_to new_classroom_team_project_path
+        return
       end
     end
-    if @@dup_proj
-      redirect_to new_classroom_team_project_path
-      return
-    end
-
     @team_project[:initialize_with_readme] = !!@team_project[:initialize_with_readme]
     classroom = Classroom.find(params[:classroom_id])
     team_project = {
