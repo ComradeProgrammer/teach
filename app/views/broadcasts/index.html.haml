@@ -9,12 +9,12 @@
     .page-title-controls
       = link_to '全部已读', '/broadcasts/destroy_all', method: :get, data: {confirm: '确认清除全部消息？'}, class: 'el-button el-button--primary'
   .content-list
-    - @broadcasts.each do |broadcast|
+    - @broadcasts.each_with_index  do |broadcast, i|
       %el-card{shadow: 'hover', span: '24'}
         %el-col{span: '20'}
           %h2= broadcast[:name]
           %h4= broadcast[:time]
-          %h4= broadcast[:content]
+          %broadcast-content{'content' => broadcast[:content]}
         %el-col{span: '4'}
           = link_to '已读', broadcast_path(broadcast[:id]), method: :delete, class: 'el-button el-button--success'
 

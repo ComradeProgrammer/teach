@@ -4,6 +4,7 @@ class Broadcast < ApplicationRecord
     {
         to_id: @to_id,
         content: @content
+        
     }.to_json
   end
 end
