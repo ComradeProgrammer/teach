@@ -6,7 +6,7 @@
 #edit-classroom-app.small-container{data: {classroom: @classroom.to_json}}
   .page-title-holder
     .page-title 编辑班级
-  %el-form{':model': "classroom", ref: 'classroom', ':rules': 'rules', 'label-width': '100px', action: classrooms_path, method: 'put'}
+  %el-form{':model': "classroom", ref: 'classroom', ':rules': 'rules', 'label-width': '100px', action: edit_classroom_path, method: 'put'}
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}
     %csrf
@@ -23,4 +23,4 @@
       %el-switch{'v-model': 'classroom.pair', name: 'classroom[pair]', 'active-text': '结对项目'}
       %el-switch{'v-model': 'classroom.team', name: 'classroom[team]', 'active-text': '团队项目'}
     %el-form-item.clearFloat
-      %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 创建
+      %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 提交修改
