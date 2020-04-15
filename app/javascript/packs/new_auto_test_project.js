@@ -46,6 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         return false;
                     }
                 });
+            },
+
+            cancel() {
+                // TODO: Featch location
+                // window.location.replace('/')
             }
         }
     })

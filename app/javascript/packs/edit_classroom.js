@@ -44,7 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                   });
                  */
+            },
+
+            cancel() {
+                window.location.replace('/classrooms')
             }
+
         }
     })
 });
