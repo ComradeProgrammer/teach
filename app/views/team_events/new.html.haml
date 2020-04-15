@@ -17,7 +17,7 @@
     %el-form-item{label: '团队事件代码', prop: 'code'}
       %span.info
         %strong 创建事件前，请阅读
-        %a{':href': 'illustrateUrl'} 团队事件说明
+        %a(href="https://note.youdao.com/ynoteshare1/index.html?id=181dcd24c2add9473d0bc145e7ddeafa&type=note" title="团队事件说明") 团队事件说明
       %monaco-editor.editor{'v-model': 'event.code', language: 'javascript', ':options': 'vscodeOptions'}
       %textarea{':value': 'event.code', name: 'event[code]', style: 'display: none'}
     %el-form-item.clearFloat
