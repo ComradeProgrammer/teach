@@ -242,7 +242,7 @@ export default {
       );
     },
     addNewIssue(issue) {
-      let label;
+      let label = 'todo';
       if (issue.labels[0] === 'To Do') {
       	label = 'todo';
       }
