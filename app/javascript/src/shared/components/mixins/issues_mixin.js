@@ -241,7 +241,17 @@ export default {
         JSON.parse(JSON.stringify(list[this.detailIndex]))
       );
     },
-    addNewIssue(issue, label = 'todo') {
+    addNewIssue(issue) {
+      let label;
+      if (issue.labels[0] === 'To Do') {
+      	label = 'todo';
+      }
+      if (issue.labels[0] === 'Doing') {
+      	label = 'doing';
+      }
+      if (issue.labels[0] === 'Closed') {
+      	label = 'done';
+      }
       this.loading = true;
       this.issuesService
         .newIssue(issue.toObj())
