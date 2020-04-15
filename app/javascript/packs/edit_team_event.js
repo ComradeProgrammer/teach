@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         vscodeOptions: {
           automaticLayout: true
         },
-        illustrateUrl: 'https://gist.github.com/luocaodan/cf175e433db58e0b150337ddad4c393a'
+        illustrateUrl: 'https://note.youdao.com/ynoteshare1/index.html?id=181dcd24c2add9473d0bc145e7ddeafa&type=note'
       }
     },
     components: {
