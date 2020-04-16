@@ -114,7 +114,7 @@ class AutoTestProjectsController < ApplicationController
   def create_student_private_project(student)
     @auto_test_project = {}
     @auto_test_project['namespace_id'] = student.username
-    @auto_test_projectp['visibility'] = 'private'
+    @auto_test_project['visibility'] = 'private'
     @auto_test_project['path'] = @classroom.gitlab_id + '/' + 'personal_project' + '/' + student.gitlab_id
     @auto_test_project['request_access_enabled'] = false
     auto_test_project = classroom.auto_test_projects.new
