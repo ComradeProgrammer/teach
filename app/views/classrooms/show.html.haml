@@ -88,12 +88,10 @@
       %el-tab-pane{label: '团队项目'}
         .page-title-holder-small
           .page-title 团队项目列表
-          - if student?
+          - if teacher?
             .page-title-controls
               %a.el-button.el-button--mini{href: new_classroom_team_project_path(classroom_id: params[:id])}
                 创建团队项目
-          - if teacher?
-            .page-title-controls
               %a.el-button.el-button--mini{href: classroom_team_events_path(classroom_id: params[:id])}
                 团队事件
         .content-list

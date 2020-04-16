@@ -47,7 +47,7 @@ class TeamProjectsController < ApplicationController
     add_project_master_as_owner @team_project['id'], current_user.id, owner.gitlab_id
     redirect_to @team_project['web_url']
   rescue RestClient::BadRequest => e
-    @errors = ['名称或地址包含非法字符']
+    @errors = ['BadRequest, 可能名称或地址包含非法字符']
     @@errors_save = @errors
     redirect_to new_classroom_team_project_path
   end
