@@ -53,7 +53,9 @@
           - if teacher?
             .page-title-controls
               %a.el-button.el-button--mini{href: new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'personal')}
-                创建个人项目
+                创建公共个人项目
+              %a.el-button.el-button--mini{href: new_private_personal_project_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
+                创建个人作业项目
         .content-list
           - @personal_projects.each do |project|
             .card

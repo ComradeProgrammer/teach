@@ -52,6 +52,11 @@ Rails.application.routes.draw do
   resources :classrooms do
     resources :users, only: %i[new create destroy edit update]
     resources :auto_test_projects, only: %i[index new create show destroy] do
+      collection do
+        get 'batch_create'
+        get 'new_private_personal_project'
+      end
+
       member do
         post 'feedback', to: 'auto_test_projects#feedback'
         post 'trigger', to: 'auto_test_projects#trigger'

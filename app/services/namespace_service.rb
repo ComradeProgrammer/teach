@@ -1,0 +1,2 @@
+class NamespaceService < BaseService
+end
