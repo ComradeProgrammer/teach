@@ -29,21 +29,22 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         methods: {
             submitForm() {
+                /*
                 console.log('/classrooms/' + this.classroom_id);
                 console.log(this.classroom);
                 axios.put('/classrooms/' + this.classroom_id, this.classroom).then(
                     window.location.replace('/classrooms')
                 )
+                */
                 // this.$refs.classroom.$el.submit();
-                /*
-                  this.$refs.classroom.validate((valid) => {
-                    if (valid) {
-                      this.$refs.classroom.$el.submit();
-                    } else {
-                      return false;
-                    }
-                  });
-                 */
+            
+                this.$refs.classroom.validate((valid) => {
+                if (valid) {
+                    this.$refs.classroom.$el.submit();
+                } else {
+                    return false;
+                }
+                });
             },
 
             cancel() {

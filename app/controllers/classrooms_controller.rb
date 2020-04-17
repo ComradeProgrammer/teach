@@ -94,6 +94,11 @@ class ClassroomsController < ApplicationController
   end
 
   def edit
+    print("
+    
+    Entered Edit
+    
+    ")
     @errors = []
     if @@dup_class
       @errors = ['名称重复']
@@ -104,6 +109,11 @@ class ClassroomsController < ApplicationController
   end
 
   def update
+    print("
+    
+    Entered Update.
+    
+    ")
     update = {}
     update[:name] = params[:name]
     update[:path] = params[:path]
@@ -112,7 +122,7 @@ class ClassroomsController < ApplicationController
     Classroom.all.each do |a_class|
       if a_class[:name] == update[:name]
         @@dup_class = true
-        render edit_classroom_path
+        redirect_to update[:path]
         return
       end
     end

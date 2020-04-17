@@ -6,7 +6,7 @@
 #edit-classroom-app.small-container{data: {classroom: @classroom.to_json, classroom_id: @classroom_id}}
   .page-title-holder
     .page-title 编辑班级
-  %el-form{':model': "classroom", ref: 'classroom', 'label-width': '100px'}
+  %el-form{':model': "classroom", ref: 'classroom', 'label-width': '100px', action: classroom_path(@classroom_id), method: 'get'}
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}
     %csrf
