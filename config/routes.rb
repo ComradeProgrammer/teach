@@ -56,11 +56,16 @@ Rails.application.routes.draw do
       collection do
         get 'batch_create'
         get 'new_private_personal_project'
+        get 'create_private_personal_project'
       end
 
       member do
         post 'feedback', to: 'auto_test_projects#feedback'
         post 'trigger', to: 'auto_test_projects#trigger'
+      end
+
+      collection do
+        get 'get_all_student_id_and_name'
       end
     end
 

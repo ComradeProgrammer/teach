@@ -33,7 +33,7 @@
         <el-submenu index="2-new" v-if="this.projects.length">
           <template slot="title">新建冲刺</template>
           <el-menu-item v-for="(project, index) in projects" :key="index" :index="'2-new-' + project.id">
-            {{ project.name }}
+            {{ "班级 " + project.class_name + ": " + project.name }}
           </el-menu-item>
         </el-submenu>
       </el-submenu>
@@ -122,7 +122,8 @@
           id: project.id,
           name: project.name,
           name_with_namespace: project.name_with_namespace,
-          webUrl: project.web_url
+          webUrl: project.web_url,
+          class_name: project.class_name
         });
       }
     },

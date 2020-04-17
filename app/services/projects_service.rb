@@ -7,6 +7,10 @@ class ProjectsService < BaseService
     post "projects", project
   end
 
+  def new_project_for_user(user_id, project)
+    post "projects/#{user_id}", project
+  end
+
   def delete_project(project)
     delete "projects/#{project}"
   end

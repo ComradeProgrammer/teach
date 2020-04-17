@@ -1,4 +1,6 @@
 class AutoTestProjectsController < ApplicationController
+  PERSONAL_HOMEWORK_PROJECT_NAME = "student_personal_homework_project".freeze
+
   @@project_type = 'personal'
   @@errors_save = []
 
@@ -59,14 +61,17 @@ class AutoTestProjectsController < ApplicationController
     @errors = []
   end
 
-  def batch_create
-    @classroom = Classroom.find_by(id: params[:classroom_id])
-    @users = groups_service.get_members classroom.gitlab_group_id
-    @students = users.find_all do |user|
-      !@classroom.users.find_by(gitlab_id: user[:id], role: 'student').nil?
-    end
-    @students.each do |student|
-      create_student_private_project student
+  def create_private_personal_project
+    @classroom = Classroom.find(params[:class_id])
+    @users = groups_service.get_members @classroom.gitlab_group_id
+    if params[:type] == 'class'
+      @students = users.find_all do |user|
+        !classroom.users.find_by(gitlab_id: user[:id], role: 'student').nil?
+      end
+      batch_create_student_private_project @students
+    else
+      @student = users.find_by gitlab_id: params[:user_id]
+      create_private_personal_project @student
     end
   end
 
@@ -111,14 +116,21 @@ class AutoTestProjectsController < ApplicationController
 
   private
 
+  # 一下两个方法都与gitlab通过API交互，所以需要先从gitlab中取出相应的字段值
+  def batch_create_student_private_project(students)
+    students.each do |student|
+      create_student_private_project student
+    end
+  end
+
   def create_student_private_project(student)
     @auto_test_project = {}
-    @auto_test_project['namespace_id'] = student.username
+    @auto_test_project['user_id'] = student[:id]
+    @auto_test_project['name'] = PERSONAL_HOMEWORK_PROJECT_NAME
     @auto_test_project['visibility'] = 'private'
-    @auto_test_project['path'] = @classroom.gitlab_id + '/' + 'personal_project' + '/' + student.gitlab_id
-    @auto_test_project['request_access_enabled'] = false
+    @auto_test_project['request_access_enabled'] = 'false'
     auto_test_project = classroom.auto_test_projects.new
-    project = projects_service.new_project @auto_test_project
+    project = projects_service.new_project_for_user student[:id], @auto_test_project
     auto_test_project.gitlab_id = project['id']
     auto_test_project.test_type = 'personal'
     auto_test_project.save

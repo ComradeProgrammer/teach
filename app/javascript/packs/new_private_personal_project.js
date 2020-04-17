@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
         el: '#new-private-personal-project-app',
         data() {
             return {
-                broadcast: {},
                 form: {
                     scope: '',
                     user_id: '',
@@ -28,59 +27,34 @@ document.addEventListener('DOMContentLoaded', () => {
             csrf
         },
         mounted() {
-            let classDataGet = this.getAllClassIdAndName();
-            classDataGet.then((result) => {
-                let classData = result.data;
-                for (let i = 0; i < classData.length; ++i) {
-                    this.classList.push({
-                        label: `${classData[i].name}(GitLab Group ID: ${classData[i].gitlab_group_id})`,
-                        value: classData[i].id
-                    })
-                }
-            });
-            let userDataGet = this.getAllUserIdAndName();
-            userDataGet.then((result) => {
-                let userData = result.data;
-                for (let i = 0; i < userData.length; ++i) {
-                    this.userList.push({
-                        label: `${userData[i].name}(${userData[i].role}, GitLab ID: ${userData[i].gitlab_id})`,
-                        value: userData[i].id
+            let studentDataGet = this.getAllStudentIdAndName();
+            studentDataGet.then((result) => {
+                let studentData = result.data;
+                for (let i = 0; i < studentData.length; ++i) {
+                    this.studentList.push({
+                        label: `${studentData[i].name}(${studentData[i].role}, GitLab ID: ${studentData[i].gitlab_id})`,
+                        value: studentData[i].id
                     });
                 }
             });
-            // this.broadcast = JSON.parse(this.$el.dataset.broadcast);
+
         },
         methods: {
             submitForm() {
-                // todo: add validation
-                axios.post('/broadcasts', {
+                axios.post('/classrooms/auto_test_projects/create_private_personal_project', {
                     type: this.form.scope,
-                    class_id: this.form.class_id,
+                    class_id: this.classroom_id,
                     user_id: this.form.user_id,
-                    content: this.form.content
                 });
-                window.location.href = '/classrooms';
-                /*
-                this.$refs.broadcast.validate((valid) => {
-                    if (valid) {
-                        axios.post('/broadcasts', {
-                            type: this.form.scope,
-                            class_id: this.form.class_id,
-                            user_id: this.form.user_id,
-                            content: this.form.content
-                        });
-                        window.location.href = '/classrooms';
-                    } else {
-                        return false;
-                    }
-                });
-                 */
+                window.location.href = `/classrooms`;
             },
             cancel() {
-                window.location.replace('/classrooms');
+                window.location.replace(`/classrooms`);
             },
-            getAllUserIdAndName() {
-                return axios.get('/users/get_all_user_id_and_name')
+            getAllStudentIdAndName() {
+                return axios.get('/classrooms/get_all_student_id_and_name', {
+                    classroom_id: this.classroom_id
+                })
             }
         }
     });
