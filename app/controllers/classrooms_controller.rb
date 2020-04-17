@@ -162,15 +162,21 @@ class ClassroomsController < ApplicationController
 
     @personal_homework_projects = []
     if @classroom_record.personal_project_subgroup_id
-      @student.each |student| do
-        student_projects = groups_service.get_projects student[:username]
+      @students.each do |student|
+        # puts(student)
+        # student_projects = groups_service.get_projects student[:username]
+        # student_projects = groups_service.get_projects student['username']
+        student_projects = groups_service.get_projects @classroom_record.gitlab_group_id
+        # puts('>>>> Done')
+        # puts(student_projects)
         person_homework_project = student_projects.find_all do |project|
           project[name] == AutoTestProjectsController.PERSONAL_HOMEWORK_PROJECT_NAME
         end
         if person_homework_project.length != 1
           # TODO: wrong dealing
         end
-        @person_homework_project.push {student: student, person_homework_project: person_homework_project.first}
+        # here delete the `@`, the `@` makes no sense
+        person_homework_project.push({student: student, person_homework_project: person_homework_project.first})
       end
     end
   end
@@ -273,4 +279,3 @@ class ClassroomsController < ApplicationController
     admin_api_delete "groups/#{group_id}/members/#{user_id}"
   end
 end
-

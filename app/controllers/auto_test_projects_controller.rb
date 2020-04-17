@@ -75,6 +75,10 @@ class AutoTestProjectsController < ApplicationController
     end
   end
 
+  def get_stu_proj_status
+
+  end
+
   def destroy
     @auto_test_project = AutoTestProject.find_by(gitlab_id: params[:id])
     @auto_test_project.destroy
@@ -118,8 +122,10 @@ class AutoTestProjectsController < ApplicationController
 
   # 一下两个方法都与gitlab通过API交互，所以需要先从gitlab中取出相应的字段值
   def batch_create_student_private_project(students)
+    cnt = 0
     students.each do |student|
       create_student_private_project student
+      cnt += 1
     end
   end
 

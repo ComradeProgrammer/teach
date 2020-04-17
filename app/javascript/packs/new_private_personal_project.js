@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return axios.get('/classrooms/get_all_student_id_and_name', {
                     classroom_id: this.classroom_id
                 })
-            }
+            },
         }
     });
 });
