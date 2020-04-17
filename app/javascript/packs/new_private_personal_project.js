@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     user_id: '',
                 },
                 studentList: [],
+                classroom_id: ''
             }
         },
         computed: {
@@ -27,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             csrf
         },
         mounted() {
+            this.classroom_id = this.$el.dataset.classroomId;
             let studentDataGet = this.getAllStudentIdAndName();
             studentDataGet.then((result) => {
                 let studentData = result.data;
@@ -46,15 +48,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     class_id: this.classroom_id,
                     user_id: this.form.user_id,
                 });
-                window.location.href = `/classrooms`;
+                // window.location.href = `/classrooms`;
             },
             cancel() {
                 window.location.replace(`/classrooms`);
             },
             getAllStudentIdAndName() {
                 return axios.get('/classrooms/get_all_student_id_and_name', {
-                    classroom_id: this.classroom_id
-                })
+                    params: {
+                        classroom_id: this.classroom_id
+                    }
+                });
             },
         }
     });

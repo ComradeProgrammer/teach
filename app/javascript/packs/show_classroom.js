@@ -1,8 +1,9 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from 'vue/dist/vue.esm';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import ClassroomStudentService from "../src/classroom/services/classroom_student_service";
-import AlertMixin from '../src/shared/components/mixins/alert'
+import AlertMixin from '../src/shared/components/mixins/alert';
+import axios from 'axios/index';
 
 Vue.use(ElementUI);
 
@@ -11,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     el: '#show-classroom-app',
     data() {
       return {
+        isCreatingProjects: false,
+        creatingProjectsProgress: 0,
         students: null,
         teachers: null,
         btnTeacherLoadings: null,
@@ -19,6 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     mixins: [AlertMixin],
     mounted() {
+      this.getPersonalProjectStatus().then((result) => {
+        let status = result.data;
+        console.log(status);
+        this.isCreatingProjects = status.is_creating;
+        this.creatingProjectsProgress = status.progress;
+      });
       this.students = JSON.parse(this.$el.dataset.students);
       this.teachers = JSON.parse(this.$el.dataset.teachers);
       this.btnTeacherLoadings = [];
@@ -35,6 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     },
     methods: {
+      getPersonalProjectStatus() {
+        return axios.get('/auto_test_projects/get_personal_project_status');
+      },
       deleteStudent(index, user_id) {
         this.deleteUser(index, user_id, 'student');
       },

@@ -63,6 +63,7 @@
                 %a{href: project['web_url']}= project['name']
                 .floatRight
                   - if teacher?
+                    %div{'v-if': 'isCreatingProjects'} 正在创建
                     %a.el-button.el-button-mini{href: "#{project['web_url']}/edit"} 编辑
                     = link_to '删除', classroom_auto_test_project_path(classroom_id: params[:id], id: project['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger'
                   %a.el-button.el-button-mini{href: auto_test_path(project)} 自动测试

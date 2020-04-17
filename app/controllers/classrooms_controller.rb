@@ -198,11 +198,22 @@ class ClassroomsController < ApplicationController
   end
 
   def get_all_student_id_and_name
-    @classroom = Classroom.find(params[:classroom_id])
-    users = groups_service.get_members @classroom.gitlab_group_id
-    @students = users.find_all do |s|
-      !@classroom_record.users.find_by(gitlab_id: s['id'], role: 'student').nil?
+    # @classroom = Classroom.find(params[:classroom_id])
+
+    # puts ('>>>>>>>>>>>>')
+    # puts @classroom.gitlab_group_id
+    # users = groups_service.get_members @classroom.gitlab_group_id
+    # @students = users.find_all do |s|
+    #   !@classroom_record.users.find_by(gitlab_id: s['id'], role: 'student').nil?
+    # end
+
+    @students_id_query = SelectClassroom.where(:classroom_id => params[:classroom_id])
+    @students_id = []
+    @students_id_query.each do |item|
+      @students_id.append(item.user_id)
     end
+    @students = User.where(:id => @students_id, :role => 'student')
+
     res = []
     @students.all.each do |student|
       res.append({id: student.id, gitlab_id: student.gitlab_id, name: student.username, role: student.role})

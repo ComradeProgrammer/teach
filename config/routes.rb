@@ -51,21 +51,24 @@ Rails.application.routes.draw do
   # teachers
   post '/classrooms/:id/edit', to: 'classrooms#update'
   resources :classrooms do
+    collection do
+      resources :auto_test_projects, only: [] do
+        collection do
+          post 'create_private_personal_project', to: 'auto_test_projects#create_private_personal_project'
+        end
+      end
+    end
     resources :users, only: %i[new create destroy edit update]
     resources :auto_test_projects, only: %i[index new create show destroy] do
       collection do
-        get 'batch_create'
-        get 'new_private_personal_project'
-        get 'create_private_personal_project'
+        get 'batch_create', to: '#'
+        get 'new_private_personal_project', to: '#'
+        # post 'create_private_personal_project', to: 'auto_test_projects#create_private_personal_project'
       end
 
       member do
         post 'feedback', to: 'auto_test_projects#feedback'
         post 'trigger', to: 'auto_test_projects#trigger'
-      end
-
-      collection do
-        get 'get_all_student_id_and_name'
       end
     end
 
@@ -89,6 +92,7 @@ Rails.application.routes.draw do
     end
 
     collection do
+      get 'get_all_student_id_and_name', to: 'classrooms#get_all_student_id_and_name'
       get 'get_all_classroom_id_and_name', to: 'classrooms#get_all_classroom_id_and_name'
     end
 
@@ -105,6 +109,12 @@ Rails.application.routes.draw do
   resource :users, only: [] do
     collection do
       get 'get_all_user_id_and_name', to: 'users#get_all_user_id_and_name'
+    end
+  end
+
+  resource :auto_test_projects, only: [] do
+    collection do
+      get 'get_personal_project_status', to: 'auto_test_projects#get_personal_project_status'
     end
   end
 
