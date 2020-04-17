@@ -268,3 +268,4 @@ class ClassroomsController < ApplicationController
     admin_api_delete "groups/#{group_id}/members/#{user_id}"
   end
 end
+

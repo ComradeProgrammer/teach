@@ -5,7 +5,7 @@
 
 #new-auto-test-project-app.small-container{data: {auto_test_project: @auto_test_project.to_json}}
   .page-title-holder
-    .page-title= '创建' + @title + '项目'
+    .page-title= @title
   %el-form{':model': "auto_test_project", ref: 'auto_test_project', ':rules': 'rules', 'label-width': '100px', action: classroom_auto_test_projects_path, method: 'post'}
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}

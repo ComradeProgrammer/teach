@@ -1,0 +1,23 @@
+- content_for :scripts do
+  = javascript_pack_tag 'new_private_personal_project'
+- content_for :styles do
+  = stylesheet_pack_tag 'new_private_personal_project'
+
+#new-private-personal-project-app.small-container{data: {classroom_id: @classroom_id}}
+  .page-title-holder
+    .page-title 创建个人作业项目
+  %el-form{':model': "broadcast", ref: 'broadcast', ':rules': 'rules', 'label-width': '100px', action: broadcasts_path, method: 'post'}
+    - @errors.each do |error|
+      %el-alert.error-item{type: 'error', 'title': error}
+    %csrf
+    %el-form-item{label: '学生范围'}
+      %el-select{'v-model': 'form.scope', placeholder: "请选择学生范围"}
+        %el-option{label: '班级全体学生', value: 'class'}
+        %el-option{label: '单个学生', value: 'student'}
+    %el-form-item{label: '选择成员', 'v-if': 'scope === \'student\''}
+      %el-select{'v-model': 'form.user_id', placeholder: "请选择成员"}
+        %template{'v-for': 'student in studentList'}
+          %el-option{':label': 'student.label', ':value': 'student.value'}
+    %el-form-item.clearFloat
+      %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 确认创建
+      %el-button.floatRight{'@click': 'cancel'} 返回

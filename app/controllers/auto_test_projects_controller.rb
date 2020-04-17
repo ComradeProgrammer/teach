@@ -17,11 +17,13 @@ class AutoTestProjectsController < ApplicationController
     @type = params[:type]
     @@project_type = params[:type]
     if params[:type] == 'personal'
-      @title = '个人'
+      @title = '创建个人项目'
       @projects_name = 'personal-projects'
       @auto_test_project = AutoTestProject.new('personal')
-    else
-      @title = '结对'
+    elsif params[:type] == 'personal-batch'
+      redirect_to batch_create_classroom_auto_test_projects_path classroom_id: params[:classroom_id]
+    elsif params[:type] == 'pair'
+      @title = '创建结对项目'
       @projects_name = 'pair-projects'
       @auto_test_project = AutoTestProject.new('pair')
     end
@@ -50,6 +52,22 @@ class AutoTestProjectsController < ApplicationController
     @@errors_save = @errors
     # render 'new'
     redirect_to new_classroom_auto_test_project_path + '?type=' + @@project_type
+  end
+
+  def new_private_personal_project
+    @classroom_id = params[:classroom_id]
+    @errors = []
+  end
+
+  def batch_create
+    @classroom = Classroom.find_by(id: params[:classroom_id])
+    @users = groups_service.get_members classroom.gitlab_group_id
+    @students = users.find_all do |user|
+      !@classroom.users.find_by(gitlab_id: user[:id], role: 'student').nil?
+    end
+    @students.each do |student|
+      create_student_private_project student
+    end
   end
 
   def destroy
@@ -92,6 +110,19 @@ class AutoTestProjectsController < ApplicationController
   end
 
   private
+
+  def create_student_private_project(student)
+    @auto_test_project = {}
+    @auto_test_project['namespace_id'] = student.username
+    @auto_test_project['visibility'] = 'private'
+    @auto_test_project['path'] = @classroom.gitlab_id + '/' + 'personal_project' + '/' + student.gitlab_id
+    @auto_test_project['request_access_enabled'] = false
+    auto_test_project = classroom.auto_test_projects.new
+    project = projects_service.new_project @auto_test_project
+    auto_test_project.gitlab_id = project['id']
+    auto_test_project.test_type = 'personal'
+    auto_test_project.save
+  end
 
   def create_pipeline(project_id, gitlab_username)
     pipeline = {
