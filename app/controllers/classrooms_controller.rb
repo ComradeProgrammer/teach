@@ -42,7 +42,6 @@ class ClassroomsController < ApplicationController
       @@dup_class = false
     end
     @classroom = Classroom.new
-    @new_class_name = Classroom.name
   end
 
   def create
