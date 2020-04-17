@@ -49,8 +49,7 @@ Rails.application.routes.draw do
   end
 
   # teachers
-  get '/classrooms/:id/edit', to: 'classrooms#edit'
-  get '/classrooms/:id', to: 'classrooms#update'
+  post '/classrooms/:id/edit', to: 'classrooms#update'
   resources :classrooms do
     resources :users, only: %i[new create destroy edit update]
     resources :auto_test_projects, only: %i[index new create show destroy] do

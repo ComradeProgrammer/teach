@@ -42,7 +42,6 @@ class ClassroomsController < ApplicationController
       @@dup_class = false
     end
     @classroom = Classroom.new
-    @new_class_name = Classroom.name
   end
 
   def create
@@ -94,11 +93,6 @@ class ClassroomsController < ApplicationController
   end
 
   def edit
-    print("
-    
-    Entered Edit
-    
-    ")
     @errors = []
     if @@dup_class
       @errors = ['名称重复']
@@ -106,39 +100,26 @@ class ClassroomsController < ApplicationController
     end
     @classroom = Classroom.new
     @classroom_id = params[:id]
+    puts 
+    puts @classroom_id
+    puts
   end
-
+  
   def update
-    print("
-    
-    Entered Update.
-    
-    ")
-    update = {}
-    update[:name] = params[:name]
-    update[:path] = params[:path]
-    update[:description] = params[:description]
-    @@dup_class = false
+    @classroom = params[:classroom]
+    @classroom_id = params[:classroom_id]
+
     Classroom.all.each do |a_class|
-      if a_class[:name] == update[:name]
+      if a_class[:name] == @classroom[:name]
         @@dup_class = true
-        redirect_to update[:path]
+        redirect_to edit_classrooms_path(@classroom_id)
         return
       end
     end
-    @classroom_record = Classroom.find_by(params[:id])
-    # todo: it seems that the code bellow is kind of buggy
-    # `user` is not defined (said by rails server)
-    # unless @classroom_record.users.include? user
-    #   render_403
-    #   return
-    # end
-    @classroom_record.update_attributes(update)
-    groups_service.update_group(@classroom_record.gitlab_group_id, update)
+
+    classroom = Classroom.find_by(@classroom_id)
+    groups_service.update_group(classroom.gitlab_group_id, @classroom)
     redirect_to classrooms_path
-  rescue RestClient::BadRequest => e
-    @errors = ['名称或地址包含非法字符或已被占用']
-    redirect_to edit_classroom_path
   end
 
   def destroy
