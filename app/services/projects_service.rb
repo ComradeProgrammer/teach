@@ -7,8 +7,24 @@ class ProjectsService < BaseService
     post "projects", project
   end
 
-  def new_project_for_user(user_id, project)
-    post "projects/user/#{user_id}", project
+  def new_project_for_user(user_id, project, student_id_list, teacher_id_list)
+    puts('>>><<<>>><<<1')
+    # print(project)
+    res = post "projects/", project
+    puts('>>><<<>>><<<2')
+    project_id = res['id']
+    puts('>>><<<>>><<<3')
+    student_id_list.each do |stu_id|
+      if stu_id != user_id 
+        # puts({"id"=> project_id, "user_id"=> stu_id, "access_level"=> 10})
+        put "projects/#{project_id}/members/#{stu_id}", {"id":"#{project_id}", "user_id":"#{stu_id}", "access_level": "10"}
+      end
+    end
+    puts('>>><<<>>><<<4')
+    teacher_id_list.each do |t_id|
+      put("projects/#{project_id}/members/#{t_id}", {"id":"#{project_id}", "user_id":"#{stu_id}", "access_level": "40"})
+    end
+    puts('>>><<<>>><<<5')
   end
 
   def delete_project(project)

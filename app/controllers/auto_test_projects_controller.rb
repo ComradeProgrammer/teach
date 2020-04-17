@@ -1,5 +1,5 @@
 class AutoTestProjectsController < ApplicationController
-  PERSONAL_HOMEWORK_PROJECT_NAME = "student_personal_homework_project_"
+  PERSONAL_HOMEWORK_PROJECT_NAME = "student123_personal_homework_project_"
 
   @@project_type = 'personal'
   @@errors_save = []
@@ -69,12 +69,19 @@ class AutoTestProjectsController < ApplicationController
     @classroom = Classroom.find(params[:class_id])
     @classroom_students_query = SelectClassroom.where(:classroom_id => params[:class_id])
     @all_students_gitlab_id_in_class = []
+    @all_teachers_gitlab_id_in_class = []
     @classroom_students_query.each do |item|
       tmp = User.find(item.user_id)
       if tmp.role == 'student'
         @all_students_gitlab_id_in_class.append(tmp.gitlab_id)
+      else
+        @all_teachers_gitlab_id_in_class.append(tmp.gitlab_id)
       end
     end
+
+    # todo: ADD PAIR, use TYPE to differ them
+    @gitlab_namespace_id = @classroom.personal_project_subgroup_id
+
 
     @users = groups_service.get_members @classroom.gitlab_group_id
 
@@ -91,14 +98,13 @@ class AutoTestProjectsController < ApplicationController
       end
       @@total_students_num = @students.length
       # puts('>>>>>>>>')
-      # puts(@students)
       # puts(@students.length)
       # puts('>>>>>>>>')
-      batch_create_student_private_project @students
+      batch_create_student_private_project(@students, @gitlab_namespace_id, @all_students_gitlab_id_in_class, @all_teachers_gitlab_id_in_class)
       @@creating_private_personal_project = false
     else
       @student = @users.find_by gitlab_id: params[:user_id]
-      create_student_private_project @student
+      create_student_private_project(@student, @gitlab_namespace_id, @all_students_gitlab_id_in_class, @all_teachers_gitlab_id_in_class)
     end
   end
 
@@ -153,30 +159,42 @@ class AutoTestProjectsController < ApplicationController
   private
 
   # 一下两个方法都与gitlab通过API交互，所以需要先从gitlab中取出相应的字段值
-  def batch_create_student_private_project(students)
+  def batch_create_student_private_project(students, namespace_id, student_id_list, teacher_id_list)
     cnt = 0
     students.each do |student|
       puts('************')
-      create_student_private_project student
+      create_student_private_project(student, namespace_id, student_id_list, teacher_id_list)
       cnt += 1
       @@private_personal_project_progress = 100 * (cnt / @@total_students_num)
     end
   end
 
-  def create_student_private_project(student)
+  def create_student_private_project(student, namespace_id, student_id_list, teacher_id_list)
     @auto_test_project = {}
-    @auto_test_project['user_id'] = student['id']
+    # @auto_test_project['user_id'] = student['id']
+    # @auto_test_project['user_id'] = student['id']
     # @auto_test_project['name'] = PERSONAL_HOMEWORK_PROJECT_NAME
     @auto_test_project['name'] = PERSONAL_HOMEWORK_PROJECT_NAME + student['username']
     @auto_test_project['visibility'] = 'private'
-    @auto_test_project['request_access_enabled'] = 'false'
+    @auto_test_project['request_access_enabled'] = "true"
+    @auto_test_project['namespace_id'] = "#{namespace_id}"
+    # puts('>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    # puts(@auto_test_project)
+    # puts('>>>>>>>>>>>>>>>>>>>>>>>>>>')
     auto_test_project = @classroom.auto_test_projects.new
-    puts('>>>>>>>>>>>>>')
+    # puts('>>>>>>>>>>>>>')
+    # puts(student)
+    # puts(student['id'])
+    # puts(@auto_test_project)
+    puts('>>>>>>>>>>>>>>')
+    puts(student_id_list)
+    puts(teacher_id_list)
     puts(student)
-    puts(student['id'])
     puts(@auto_test_project)
-    project = projects_service.new_project_for_user student['id'], @auto_test_project
-    puts('>>>>>>>>>>>>>')
+    puts(namespace_id)
+    puts('>>>>>>>>>>>>>>')
+    project = projects_service.new_project_for_user(student['id'], @auto_test_project, student_id_list, teacher_id_list)
+    puts('!!!!!!!!>>>>>>>>>>>>>')
     auto_test_project.gitlab_id = project['id']
     auto_test_project.test_type = 'personal'
     auto_test_project.save

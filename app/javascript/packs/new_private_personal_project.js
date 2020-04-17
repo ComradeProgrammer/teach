@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     class_id: this.classroom_id,
                     user_id: this.form.user_id,
                 });
-                // window.location.href = `/classrooms`;
+                window.location.assign('/classrooms');
             },
             cancel() {
                 window.location.replace(`/classrooms`);
