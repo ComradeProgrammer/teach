@@ -171,6 +171,20 @@ class ClassroomsController < ApplicationController
     @teachers.each do |t|
       t['is_me'] = t['id'] == current_user.id
     end
+
+    @personal_homework_projects = []
+    if @classroom_record.personal_project_subgroup_id
+      @student.each |student| do
+        student_projects = groups_service.get_projects student[:username]
+        person_homework_project = student_projects.find_all do |project|
+          project[name] == AutoTestProjectsController.PERSONAL_HOMEWORK_PROJECT_NAME
+        end
+        if person_homework_project.length != 1
+          # TODO: wrong dealing
+        end
+        @person_homework_project.push {student: student, person_homework_project: person_homework_project.first}
+      end
+    end
   end
 
   # current user join classroom
@@ -187,6 +201,19 @@ class ClassroomsController < ApplicationController
     add_group_member group_id, member
     classroom.users << User.find_by(gitlab_id: current_user.id)
     redirect_to classrooms_path
+  end
+
+  def get_all_student_id_and_name
+    @classroom = Classroom.find(params[:classroom_id])
+    users = groups_service.get_members @classroom.gitlab_group_id
+    @students = users.find_all do |s|
+      !@classroom_record.users.find_by(gitlab_id: s['id'], role: 'student').nil?
+    end
+    res = []
+    @students.all.each do |student|
+      res.append({id: student.id, gitlab_id: student.gitlab_id, name: student.username, role: student.role})
+    end
+    render json: res
   end
 
   # current user exit classroom

@@ -6,7 +6,7 @@
 #new-private-personal-project-app.small-container{data: {classroom_id: @classroom_id}}
   .page-title-holder
     .page-title 创建个人作业项目
-  %el-form{':model': "broadcast", ref: 'broadcast', ':rules': 'rules', 'label-width': '100px', action: broadcasts_path, method: 'post'}
+  %el-form{':model': "broadcast", ':rules': 'rules', 'label-width': '100px'}
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}
     %csrf
@@ -14,8 +14,8 @@
       %el-select{'v-model': 'form.scope', placeholder: "请选择学生范围"}
         %el-option{label: '班级全体学生', value: 'class'}
         %el-option{label: '单个学生', value: 'student'}
-    %el-form-item{label: '选择成员', 'v-if': 'scope === \'student\''}
-      %el-select{'v-model': 'form.user_id', placeholder: "请选择成员"}
+    %el-form-item{label: '选择学生', 'v-if': 'scope === \'student\''}
+      %el-select{'v-model': 'form.user_id', placeholder: "请选择学生"}
         %template{'v-for': 'student in studentList'}
           %el-option{':label': 'student.label', ':value': 'student.value'}
     %el-form-item.clearFloat
