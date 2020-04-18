@@ -136,6 +136,8 @@ class ClassroomsController < ApplicationController
     @classroom = groups_service.get_group @classroom_record.gitlab_group_id
     if @classroom_record.personal_project_subgroup_id
       @personal_projects = groups_service.get_projects @classroom_record.personal_project_subgroup_id
+      puts('>>>>>>>>>>>>>>>><<<<<<<<>>>>>>>><<<<<<<<')
+      puts(@personal_projects)
     end
     if @classroom_record.pair_project_subgroup_id
       @pair_projects = groups_service.get_projects @classroom_record.pair_project_subgroup_id

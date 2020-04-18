@@ -7,24 +7,23 @@ class ProjectsService < BaseService
     post "projects", project
   end
 
-  def new_project_for_user(user_id, project, student_id_list, teacher_id_list)
-    puts('>>><<<>>><<<1')
+  def add_user_as_project_reporter(project_id, user_id)
+    # 10 => Guest access
+    # 20 => Reporter access
+    # 30 => Developer access
+    # 40 => Maintainer access
+    # 50 => Owner access # Only valid for groups
+    # puts('>>>>>>>><<<<<>>')
+    # puts({user_id: user_id, access_level: 20})
+    post("projects/#{project_id}/members", {user_id: user_id, access_level: 20})
+  end
+
+  def new_project_for_user(user_id, project)
     # print(project)
     res = post "projects/", project
-    puts('>>><<<>>><<<2')
     project_id = res['id']
-    puts('>>><<<>>><<<3')
-    student_id_list.each do |stu_id|
-      if stu_id != user_id 
-        # puts({"id"=> project_id, "user_id"=> stu_id, "access_level"=> 10})
-        put "projects/#{project_id}/members/#{stu_id}", {"id":"#{project_id}", "user_id":"#{stu_id}", "access_level": "10"}
-      end
-    end
-    puts('>>><<<>>><<<4')
-    teacher_id_list.each do |t_id|
-      put("projects/#{project_id}/members/#{t_id}", {"id":"#{project_id}", "user_id":"#{stu_id}", "access_level": "40"})
-    end
-    puts('>>><<<>>><<<5')
+    post("projects/#{project_id}/members", {user_id: user_id, access_level: 40})
+    return project_id
   end
 
   def delete_project(project)

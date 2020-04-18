@@ -41,15 +41,18 @@ class UsersController < ApplicationController
     user = User.find_by(gitlab_id: gitlab_user_id)
     user ||= User.create gitlab_id: gitlab_user_id, role: type, username: gitlab_username
     SelectClassroom.create(user_id: user.id, classroom_id: @classroom.id)
-    # 添加学生为 group 成员
-    reporter = 20
-    maintainer = 40
-    # 老师或助教 owner 权限
-    owner = 50
-    member = {}
-    member['user_id'] = gitlab_user_id
-    member['access_level'] = type == 'teacher' ? owner : reporter
-    groups_service.add_member @classroom.gitlab_group_id, member
+    if type == 'teacher'
+      # 添加学生为 group 成员
+      reporter = 20
+      maintainer = 40
+      # 老师或助教 owner 权限
+      owner = 50
+      member = {}
+      member['user_id'] = gitlab_user_id
+      # here we only add teacher to the gitlab group
+      member['access_level'] = type == 'teacher' ? owner : reporter
+      groups_service.add_member @classroom.gitlab_group_id, member
+    end
     # 学生重新添加到 团队项目 subgroup 团队项目group可以创建项目
     # if type == 'student'
     #   member['access_level'] = maintainer

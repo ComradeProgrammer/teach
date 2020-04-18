@@ -1,5 +1,5 @@
 class AutoTestProjectsController < ApplicationController
-  PERSONAL_HOMEWORK_PROJECT_NAME = "student123_personal_homework_project_"
+  PERSONAL_HOMEWORK_PROJECT_NAME = "student_personal_homework_"
 
   @@project_type = 'personal'
   @@errors_save = []
@@ -36,10 +36,21 @@ class AutoTestProjectsController < ApplicationController
   end
 
   def create
+    @classroom_students_query = SelectClassroom.where(:classroom_id => params[:classroom_id])
+    @all_students_gitlab_id_in_class = []
+    @all_teachers_gitlab_id_in_class = []
+    @classroom_students_query.each do |item|
+      tmp = User.find(item.user_id)
+      if tmp.role == 'student'
+        @all_students_gitlab_id_in_class.append(tmp.gitlab_id)
+      else
+        @all_teachers_gitlab_id_in_class.append(tmp.gitlab_id)
+      end
+    end
+
     classroom = Classroom.find_by(id: params[:classroom_id])
     auto_test_project = classroom.auto_test_projects.new
     @auto_test_project = params[:auto_test_project]
-
     if @auto_test_project[:test_type] == 'personal'
       @auto_test_project['namespace_id'] = classroom.personal_project_subgroup_id
     else
@@ -48,6 +59,12 @@ class AutoTestProjectsController < ApplicationController
     @auto_test_project['visibility'] = 'public'
     @auto_test_project['request_access_enabled'] = true
     project = projects_service.new_project(@auto_test_project)
+
+    # here add all class students to this project, with permission `reporter`
+    @all_students_gitlab_id_in_class.each do |stu_id|
+      projects_service.add_user_as_project_reporter(project['id'], stu_id)
+    end
+
     auto_test_project.gitlab_id = project['id']
     auto_test_project.test_type = @auto_test_project[:test_type]
     auto_test_project.save
@@ -78,33 +95,34 @@ class AutoTestProjectsController < ApplicationController
         @all_teachers_gitlab_id_in_class.append(tmp.gitlab_id)
       end
     end
-
     # todo: ADD PAIR, use TYPE to differ them
     @gitlab_namespace_id = @classroom.personal_project_subgroup_id
 
 
-    @users = groups_service.get_members @classroom.gitlab_group_id
+    # @users = groups_service.get_members @classroom.gitlab_group_id
 
     if params[:type] == 'class'
       @@creating_private_personal_project = true
-      # @students = @users.find_all do |user|
-      #   !@classroom.users.find_by(gitlab_id: user[:id], role: 'student').nil?
-      # end
       @students = []
-      @users.each do |item|
+      # use @all_students_gitlab_id_in_class to get student info in gitlab
+      all_users = users_service.all
+      all_users[0].each do |item|
         if @all_students_gitlab_id_in_class.index(item['id'])
           @students.append(item)
         end
       end
+
+      # @users.each do |item|
+      #   if @all_students_gitlab_id_in_class.index(item['id'])
+      #     @students.append(item)
+      #   end
+      # end
       @@total_students_num = @students.length
-      # puts('>>>>>>>>')
-      # puts(@students.length)
-      # puts('>>>>>>>>')
-      batch_create_student_private_project(@students, @gitlab_namespace_id, @all_students_gitlab_id_in_class, @all_teachers_gitlab_id_in_class)
+      batch_create_student_private_project(@students, @gitlab_namespace_id)
       @@creating_private_personal_project = false
     else
       @student = @users.find_by gitlab_id: params[:user_id]
-      create_student_private_project(@student, @gitlab_namespace_id, @all_students_gitlab_id_in_class, @all_teachers_gitlab_id_in_class)
+      create_student_private_project(@student, @gitlab_namespace_id)
     end
   end
 
@@ -159,43 +177,24 @@ class AutoTestProjectsController < ApplicationController
   private
 
   # 一下两个方法都与gitlab通过API交互，所以需要先从gitlab中取出相应的字段值
-  def batch_create_student_private_project(students, namespace_id, student_id_list, teacher_id_list)
+  def batch_create_student_private_project(students, namespace_id)
     cnt = 0
     students.each do |student|
-      puts('************')
-      create_student_private_project(student, namespace_id, student_id_list, teacher_id_list)
+      create_student_private_project(student, namespace_id)
       cnt += 1
       @@private_personal_project_progress = 100 * (cnt / @@total_students_num)
     end
   end
 
-  def create_student_private_project(student, namespace_id, student_id_list, teacher_id_list)
+  def create_student_private_project(student, namespace_id)
     @auto_test_project = {}
-    # @auto_test_project['user_id'] = student['id']
-    # @auto_test_project['user_id'] = student['id']
-    # @auto_test_project['name'] = PERSONAL_HOMEWORK_PROJECT_NAME
     @auto_test_project['name'] = PERSONAL_HOMEWORK_PROJECT_NAME + student['username']
     @auto_test_project['visibility'] = 'private'
-    @auto_test_project['request_access_enabled'] = "true"
-    @auto_test_project['namespace_id'] = "#{namespace_id}"
-    # puts('>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    # puts(@auto_test_project)
-    # puts('>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    @auto_test_project['request_access_enabled'] = true
+    @auto_test_project['namespace_id'] = namespace_id
     auto_test_project = @classroom.auto_test_projects.new
-    # puts('>>>>>>>>>>>>>')
-    # puts(student)
-    # puts(student['id'])
-    # puts(@auto_test_project)
-    puts('>>>>>>>>>>>>>>')
-    puts(student_id_list)
-    puts(teacher_id_list)
-    puts(student)
-    puts(@auto_test_project)
-    puts(namespace_id)
-    puts('>>>>>>>>>>>>>>')
-    project = projects_service.new_project_for_user(student['id'], @auto_test_project, student_id_list, teacher_id_list)
-    puts('!!!!!!!!>>>>>>>>>>>>>')
-    auto_test_project.gitlab_id = project['id']
+    project_id = projects_service.new_project_for_user(student['id'], @auto_test_project)
+    auto_test_project.gitlab_id = project_id
     auto_test_project.test_type = 'personal'
     auto_test_project.save
   end
@@ -232,5 +231,9 @@ class AutoTestProjectsController < ApplicationController
 
   def groups_service
     ::GroupsService.new current_user
+  end
+
+  def users_service
+    ::UsersService.new current_user
   end
 end
