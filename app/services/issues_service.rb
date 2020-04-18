@@ -11,11 +11,26 @@ class IssuesService < BaseService
     preprocess params
     issue_list, gitlab_headers = get_with_headers "projects/#{project_id}/issues", params
     add_external_field issue_list
-    records = if milestone_id
-                Issue.where(milestone_id: milestone_id)
-              else
-                Issue.where(project_id: project_id)
-              end
+
+    records = []
+    if milestone_id
+	    issue_list.each do |issue|
+		    if(issue['milestone_id'] == milestone_id.to_i)
+			    records.push(issue)
+		    end
+	    end
+    else
+	    issue_list.each do |issue|
+		    if(issue['project_id'] == project_id.to_i)
+			    records.push(issue)
+		    end
+	    end
+    end
+#    records = if milestone_id
+#                Issue.where(milestone_id: milestone_id)
+#              else
+#                Issue.where(project_id: project_id)
+#              end
     # 计算 issues 数量和权重
     issues_cnts = get_issues_cnts records, state
 
@@ -53,7 +68,7 @@ class IssuesService < BaseService
     issue = post "projects/#{project_id}/issues", params
     if weight || priority
       issue_record = Issue.find_by(id: issue['id'])
-      issue_record ||= Issue.create id: issue['id']
+      issue_record ||= Issue.create(id: issue['id'], project_id: issue['project_id'])
       issue_record.update weight: weight, priority: priority
     end
     add_external_field [issue]
@@ -62,13 +77,17 @@ class IssuesService < BaseService
   end
 
   def update_issue(id, project_id, iid, update)
+#    puts '======================='
+#    puts 'update'
+#    puts update
+#    puts '======================='
     attr = update.delete :attr
     if %w[weight priority].include? attr
       if Issue.exists? id
         issue = Issue.find id
         issue.update attr => update[:value]
       else
-        Issue.create(id: id, attr => update[:value])
+        Issue.create(id: id, project_id: project_id, attr => update[:value])
       end
       issue = get "projects/#{project_id}/issues/#{iid}"
     else
@@ -150,27 +169,69 @@ class IssuesService < BaseService
   def get_issues_cnts(records, state)
     # records: issues records
     # state: current issues state
-    todos = records.where(state: 'To Do')
-    doings = records.where(state: 'Doing')
-    dones = records.where(state: 'Closed')
+#    todos = records.where(state: 'To Do')
+#    doings = records.where(state: 'Doing')
+#    dones = records.where(state: 'Closed')
+#    total_weight = if !state
+#                     records.sum {|r| r.weight.to_i}
+#                   elsif state == 'Open'
+#                     records.where(
+#                       state: ['Open', 'To Do', 'Doing']
+#                     ).sum {|r| r.weight.to_i}
+#                   else
+#                     records.where(state: state).sum {|r| r.weight.to_i}
+#                   end
 
-    total_weight = if !state
-                     records.sum {|r| r.weight.to_i}
-                   elsif state == 'Open'
-                     records.where(
-                       state: ['Open', 'To Do', 'Doing']
-                     ).sum {|r| r.weight.to_i}
-                   else
-                     records.where(state: state).sum {|r| r.weight.to_i}
-                   end
+
+    total_weight = 0
+    todo_total = 0
+    todo_total_weight = 0
+    doing_total = 0
+    doing_total_weight = 0
+    done_total = 0
+    done_total_weight = 0
+
+	records.each do |record|
+		weight = record['weight'].to_i
+		rstate = record['state']
+		if rstate == 'To Do'
+			todo_total += 1
+			todo_total_weight += weight
+		elsif rstate == 'Doing'
+			doing_total += 1
+			doing_total_weight += weight
+		elsif rstate == 'Closed'
+			done_total += 1
+			done_total_weight += weight
+		end
+		if !state
+			total_weight += weight
+		elsif state == 'Open'
+			if(rstate == 'Open' || rstate == 'To Do' || rstate == 'Doing')
+				total_weight += weight	
+			end
+		else
+			if rstate == state
+				total_weight += weight
+			end
+		end	
+	end
+    
+
     {
       total_weight: total_weight,
-      todo_total: todos.count,
-      todo_total_weight: todos.sum {|r| r.weight.to_i},
-      doing_total: doings.count,
-      doing_total_weight: doings.sum {|r| r.weight.to_i},
-      done_total: dones.count,
-      done_total_weight: dones.sum {|r| r.weight.to_i},
+      # todo_total: todos.count,
+      todo_total: todo_total,
+      # todo_total_weight: todos.sum {|r| r.weight.to_i},
+      todo_total_weight: todo_total_weight,
+      # doing_total: doings.count,
+      doing_total: doing_total,
+      # doing_total_weight: doings.sum {|r| r.weight.to_i},
+      doing_total_weight: doing_total_weight,
+      # done_total: dones.count,
+      done_total: done_total,
+      # done_total_weight: dones.sum {|r| r.weight.to_i},
+      done_total_weight: done_total_weight,
     }
   end
 
