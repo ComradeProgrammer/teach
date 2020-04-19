@@ -39,9 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
           }
         });
-      },
-      cancel() {
-        window.location.replace('/classrooms')
       }
     }
   })

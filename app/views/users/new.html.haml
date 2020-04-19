@@ -15,6 +15,7 @@
           {{ addBtnText(scope.row.added) }}
 
   %el-pagination.pages{layout: 'prev, pager, next', ':page-count': @page_count, ':current-page': @page, '@current-change': 'pageChange', '@prev-click': 'pageChange', '@next-click': 'pageChange'}
+  %a.el-button.floatRight{href: classroom_path(params[:classroom_id])} 返回
 
 :css
   .pages {

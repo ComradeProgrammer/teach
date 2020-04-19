@@ -21,8 +21,9 @@
       %monaco-editor.editor{'v-model': 'event.code', language: 'javascript', ':options': 'vscodeOptions'}
       %textarea{':value': 'event.code', name: 'event[code]', style: 'display: none'}
     %el-form-item.clearFloat
-      %a.el-button{href: classroom_team_events_path} 取消
-      %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 创建
+      %el-button-group.floatRight
+        %a.el-button{href: classroom_team_events_path} 返回
+        %el-button{'@click': 'submitForm', type: 'primary'} 创建
 
 :css
   .editor {

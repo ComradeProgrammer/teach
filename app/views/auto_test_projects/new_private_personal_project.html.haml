@@ -19,5 +19,6 @@
         %template{'v-for': 'student in studentList'}
           %el-option{':label': 'student.label', ':value': 'student.value'}
     %el-form-item.clearFloat
-      %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 确认创建
-      %el-button.floatRight{'@click': 'cancel'} 返回
+      %el-button-group.floatRight
+        %a.el-button{href: classroom_path(@classroom_id)} 返回
+        %el-button{'@click': 'submitForm', type: 'primary'} 创建

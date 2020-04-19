@@ -21,4 +21,6 @@
     %el-form-item{label: '初始化仓库'}
       %el-switch{'v-model': 'project.initialize_with_readme', name: 'team_project[initialize_with_readme]', 'active-text': '使用 README 初始化仓库'}
     %el-form-item.clearFloat
-      %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 创建
+      %el-button-group.floatRight
+        %a.el-button{href: classroom_path(params[:classroom_id])} 返回
+        %el-button{'@click': 'submitForm', type: 'primary'} 创建

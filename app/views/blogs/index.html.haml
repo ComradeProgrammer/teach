@@ -23,7 +23,6 @@
           新建博客
         %a.el-button.el-button--mini{href: new_classroom_blog_path(type: 'daily_scrum')}
           新建 Daily Scrum
-
   .blogs{':style': 'loadingStyle', 'v-loading': 'loading', 'element-loading-text': '加载中'}
     %el-card{shadow: 'never', 'v-for': "(blog, index) in blogs", ':key': 'index', class: 'blog-card', ':body-style': "{ padding: '10px' }"}
       .blog-info
@@ -46,7 +45,7 @@
             %img{':title': "'作者: ' + blog.author.username", ':src': "blog.author.avatar_url"}
             %a{':href': 'blog.author.web_url'}
               {{ blog.author.name }}
-
+  %a.el-button.floatRight{href: classroom_path(params[:classroom_id])} 返回
 :css
   #blog-filter {
     border-bottom: 1px solid #e6e6e6;

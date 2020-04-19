@@ -21,5 +21,6 @@
     %el-form-item{label: '项目描述', prop: 'description'}
       %el-input{'v-model': 'auto_test_project.description', name: 'auto_test_project[description]', type: 'textarea', ':autosize': '{minRows: 4, maxRows: 8}'}
     %el-form-item.clearFloat
-      %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 创建
-      %el-button.floatRight{'@click': 'cancel'} 返回
+      %el-button-group.floatRight
+        %a.el-button{href: classroom_path(@classroom_id)} 返回
+        %el-button{'@click': 'submitForm', type: 'primary'} 创建

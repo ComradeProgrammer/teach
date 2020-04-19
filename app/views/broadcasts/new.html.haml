@@ -28,8 +28,6 @@
     %el-form-item{label: '广播内容', prop: 'content'}
       %el-input{'v-model': 'form.content', type: 'textarea', ':autosize': '{minRows: 4, maxRows: 8}'}
     %el-form-item.clearFloat
-      %el-button.floatRight{'@click': 'submitForm', type: 'primary'} 发送广播
-      %el-button.floatRight{'@click': 'cancel'} 返回
-
-
-
+      %el-button-group.floatRight
+        %a.el-button{href: classrooms_path} 返回
+        %el-button{'@click': 'submitForm', type: 'primary'} 发送广播

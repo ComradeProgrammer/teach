@@ -85,9 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                  */
             },
-            cancel() {
-                window.location.replace('/classrooms');
-            },
             getAllClassIdAndName() {
                 return axios.get('/classrooms/get_all_classroom_id_and_name');
             },

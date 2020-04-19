@@ -50,9 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 window.location.assign('/classrooms');
             },
-            cancel() {
-                window.location.replace(`/classrooms`);
-            },
             getAllStudentIdAndName() {
                 return axios.get('/classrooms/get_all_student_id_and_name', {
                     params: {
