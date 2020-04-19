@@ -21,8 +21,8 @@
     </div>
     <div class="sprint-description">
       <div class="block-title">
-        <p>GitLab Project id: {{ sprint.projectId }}</p>
-        <p>class name: {{ sprint.className }}</p>
+        <p>属于班级: {{ getNames(sprint.projectId)[0] }}</p>
+        <p>属于项目: {{ getNames(sprint.projectId)[1] }}</p>
         <span>冲刺描述</span>
         <i class="el-icon-edit title-icon" @click="openPolicy('description')"></i>
       </div>
@@ -113,6 +113,19 @@
       sprint: Sprint
     },
     methods: {
+      getNames(id) {
+        const $navbar = document.getElementById('navbar');
+        const projects = JSON.parse($navbar.dataset.projects);
+        let milestone = null;
+        for (let project of projects) {
+          milestone = project.milestones.find(
+                  (m) => m.id === id
+          );
+          if (milestone) {
+            return [project.class_name, project.name];
+          }
+        }
+      },
       openPolicy(attr) {
         this.policy[attr] = true;
         if (attr === 'title') {
