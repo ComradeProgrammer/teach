@@ -21,6 +21,8 @@
     </div>
     <div class="sprint-description">
       <div class="block-title">
+        <p>GitLab Project id: {{ sprint.projectId }}</p>
+        <p>class name: {{ sprint.className }}</p>
         <span>冲刺描述</span>
         <i class="el-icon-edit title-icon" @click="openPolicy('description')"></i>
       </div>
