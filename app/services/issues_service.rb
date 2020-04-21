@@ -4,13 +4,15 @@ class IssuesService < BaseService
   def all(params = {})
     # pagination
     params[:scope] = 'all'
-    project_id = params.delete 'project'
-    milestone_id = params.delete 'milestone_id'
+    project_id = params[:project]
+    milestone_id = params[:milestone_id]
     # 改为 gitlab 格式的查询参数
     state = params[:state]
     preprocess params
-    issue_list, gitlab_headers = get_with_headers "projects/#{project_id}/issues", params
-    add_external_field issue_list
+    issues = all_issues params
+    issue_list = issues[:issues]
+    # issue_list, gitlab_headers = get_with_headers "projects/#{project_id}/issues", params
+    # add_external_field issue_list
 
     records = []
     if milestone_id
@@ -37,8 +39,10 @@ class IssuesService < BaseService
     issue_list.each(&method(:update_issue_time))
     {
       issues: issue_list,
-      total: gitlab_headers[:x_total].to_i,
-      next: gitlab_headers[:x_next_page].to_i
+      total: issue_list.length,
+      next: 0
+      # total: gitlab_headers[:x_total].to_i,
+      # next: gitlab_headers[:x_next_page].to_i
     }.merge!(issues_cnts)
   end
 
@@ -217,7 +221,6 @@ class IssuesService < BaseService
 		end	
 	end
     
-
     {
       total_weight: total_weight,
       # todo_total: todos.count,
