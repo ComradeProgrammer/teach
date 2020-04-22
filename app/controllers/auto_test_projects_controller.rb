@@ -1,3 +1,5 @@
+require 'json'
+
 class AutoTestProjectsController < ApplicationController
   PERSONAL_HOMEWORK_PROJECT_NAME = "student_personal_project_"
 
@@ -257,7 +259,18 @@ class AutoTestProjectsController < ApplicationController
         :classroom_id => @classroom_id,
         :is_public => 1
     ).gitlab_id
-    @auto_test_results = auto_test_runners_service.get_auto_test_results(@public_personal_project_id)
+    auto_test_results = auto_test_runners_service.get_auto_test_results(@public_personal_project_id)
+    @refined_results = []
+    auto_test_results.keys.each do |key|
+      auto_test_results[key]['name'] = User.find(key.to_i).username
+      @refined_results.append(auto_test_results[key])
+    end
+    puts('>>>>>>>>>>>>>')
+    puts(@refined_results)
+    puts('>>>>>>>>>>>>>')
+
+    @test_case_num = @refined_results[0].length - 1
+    @refined_results = @refined_results.to_json
 
     render 'auto_test_projects/auto_test_results'
   end

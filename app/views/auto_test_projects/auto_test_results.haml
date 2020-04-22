@@ -3,8 +3,10 @@
 - content_for :styles do
   = stylesheet_pack_tag 'show_auto_test_results'
 
-#show-auto-test-results-app.small-container{data: {}}
+#show-auto-test-results-app.small-container{data: {results: @refined_results}}
   .page-title-holder
     .page-title 查看评测成绩
-    
-  %div= @auto_test_results
+  %el-table{":data":"tableData", style: "width: 100%"}
+    %el-table-column{prop: 'name', label: '用户名', width: '180'}
+    - (0...@test_case_num).each do |num|
+      %el-table-column{prop: "#{num}", label: "测试点#{num}", width: '180'}
