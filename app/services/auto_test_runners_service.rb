@@ -8,7 +8,7 @@ class AutoTestRunnersService
         :input => input,
         :expected_output => expected_output
     })
-    JSON.parser response.body
+    JSON.parse response.body
   end
 
   def start_auto_test(project_id, git_repo_list, use_text_file = nil,

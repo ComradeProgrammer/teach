@@ -186,9 +186,14 @@ class AutoTestProjectsController < ApplicationController
   end
 
   def create_auto_test_point
-    puts('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    puts(params)
-    redirect_to('/classrooms')
+    res = auto_test_runners_service.create_auto_test_point(
+        params[:project_id],
+        params[:input],
+        params[:expected_output]
+    )
+    puts('[Debug] create_auto_test_point >>>>>>>>>>')
+    puts(res)
+    redirect_to(classroom_path(id: params[:classroom_id]))
   end
 
   private
@@ -254,5 +259,9 @@ class AutoTestProjectsController < ApplicationController
 
   def users_service
     ::UsersService.new current_user
+  end
+
+  def auto_test_runners_service
+    ::AutoTestRunnersService.new
   end
 end
