@@ -35,7 +35,9 @@ class AutoTestRunnersService
 
   def get_auto_test_results(project_id)
     response = RestClient.get(auto_test_runner_host + '/get_auto_test_results', {
-        :project_id => project_id
+        params: {
+          :project_id => project_id
+        }
     })
     JSON.parse response.body
   end

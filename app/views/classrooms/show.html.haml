@@ -62,7 +62,7 @@
                 分配学生仓库
               %a.el-button.el-button--mini{href: start_auto_test_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
                 提交评测任务
-              %a.el-button.el-button--mini{}
+              %a.el-button.el-button--mini{href: get_auto_test_results_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
                 获取评测结果
         .content-list
           - @personal_projects.each do |project|
