@@ -129,6 +129,15 @@ class ClassroomsController < ApplicationController
   def show
     user = User.find_by(gitlab_id: current_user.id)
     classroom_id = params[:id]
+
+    # if there is already a personal PUBLIC repo
+    @has_personal_public = false
+    if AutoTestProject.find_by(:classroom_id => classroom_id, :is_public => 1).nil?
+      @has_personal_public = false
+    else
+      @has_personal_public = true
+    end
+
     @classroom_record = Classroom.find(params[:id])
     unless @classroom_record.users.include? user
       render_403
@@ -137,8 +146,8 @@ class ClassroomsController < ApplicationController
     @classroom = groups_service.get_group @classroom_record.gitlab_group_id
     if @classroom_record.personal_project_subgroup_id
       @personal_projects = groups_service.get_projects @classroom_record.personal_project_subgroup_id
-      puts('>>>>>>>>>>>>>>>><<<<<<<<>>>>>>>><<<<<<<<')
-      puts(@personal_projects)
+      # puts('>>>>>>>>>>>>>>>><<<<<<<<>>>>>>>><<<<<<<<')
+      # puts(@personal_projects)
     end
     if @classroom_record.pair_project_subgroup_id
       @pair_projects = groups_service.get_projects @classroom_record.pair_project_subgroup_id
@@ -173,8 +182,8 @@ class ClassroomsController < ApplicationController
     @teachers.each do |t|
       t['is_me'] = t['id'] == current_user.id
     end
-    puts('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    puts(@teachers)
+    # puts('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    # puts(@teachers)
 
     @personal_homework_projects = []
     if @classroom_record.personal_project_subgroup_id

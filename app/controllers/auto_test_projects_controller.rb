@@ -1,5 +1,5 @@
 class AutoTestProjectsController < ApplicationController
-  PERSONAL_HOMEWORK_PROJECT_NAME = "student_personal_homework_"
+  PERSONAL_HOMEWORK_PROJECT_NAME = "student_personal_project_"
 
   @@project_type = 'personal'
   @@errors_save = []
@@ -67,6 +67,7 @@ class AutoTestProjectsController < ApplicationController
 
     auto_test_project.gitlab_id = project['id']
     auto_test_project.test_type = @auto_test_project[:test_type]
+    auto_test_project.is_public = 1
     auto_test_project.save
     # classroom.users << owner
     redirect_to classroom_path(params[:classroom_id])
@@ -188,7 +189,8 @@ class AutoTestProjectsController < ApplicationController
 
   def create_student_private_project(student, namespace_id)
     @auto_test_project = {}
-    @auto_test_project['name'] = PERSONAL_HOMEWORK_PROJECT_NAME + student['username']
+    student_platform_id = User.find_by(:gitlab_id => student['id']).id
+    @auto_test_project['name'] = PERSONAL_HOMEWORK_PROJECT_NAME + student['username'] + '_' + student_platform_id.to_s
     @auto_test_project['visibility'] = 'private'
     @auto_test_project['request_access_enabled'] = true
     @auto_test_project['namespace_id'] = namespace_id
@@ -196,6 +198,7 @@ class AutoTestProjectsController < ApplicationController
     project_id = projects_service.new_project_for_user(student['id'], @auto_test_project)
     auto_test_project.gitlab_id = project_id
     auto_test_project.test_type = 'personal'
+    auto_test_project.is_public = 0
     auto_test_project.save
   end
 

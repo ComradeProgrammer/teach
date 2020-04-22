@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_13_032622) do
+ActiveRecord::Schema.define(version: 2020_04_22_092806) do
 
   create_table "auto_test_projects", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2020_04_13_032622) do
     t.integer "gitlab_id"
     t.integer "classroom_id"
     t.string "test_type"
+    t.integer "is_public"
     t.index ["classroom_id"], name: "index_auto_test_projects_on_classroom_id"
   end
 
