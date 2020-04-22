@@ -65,6 +65,8 @@ Rails.application.routes.draw do
         get 'new_private_personal_project', to: '#'
         get 'create_auto_test_point', to: 'auto_test_projects#new_auto_test_point'
         post 'create_auto_test_point', to: 'auto_test_projects#create_auto_test_point'
+        get 'start_auto_test', to: 'auto_test_projects#new_start_auto_test'
+        post 'start_auto_test', to: 'auto_test_projects#start_auto_test'
         # post 'create_private_personal_project', to: 'auto_test_projects#create_private_personal_project'
       end
 

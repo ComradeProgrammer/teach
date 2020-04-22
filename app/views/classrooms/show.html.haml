@@ -53,8 +53,6 @@
           - if teacher?
             .page-title-controls
               - if @has_personal_public
-                %a.el-button.el-button--mini{}
-                  班级个人项目已创建公共发布区
                 %a.el-button.el-button--mini{href: create_auto_test_point_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
                   创建个人项目评测点
               - else
@@ -62,6 +60,10 @@
                   创建公共发布区
               %a.el-button.el-button--mini{href: new_private_personal_project_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
                 分配学生仓库
+              %a.el-button.el-button--mini{href: start_auto_test_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
+                提交评测任务
+              %a.el-button.el-button--mini{}
+                获取评测结果
         .content-list
           - @personal_projects.each do |project|
             .card

@@ -1,5 +1,5 @@
 class AutoTestProject < ApplicationRecord
-  attr_accessor :name, :path, :description, :test_type
+  attr_accessor :name, :path, :description
   has_many :student_test_records, dependent: :destroy
   belongs_to :classroom
 

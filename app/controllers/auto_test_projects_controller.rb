@@ -196,6 +196,63 @@ class AutoTestProjectsController < ApplicationController
     redirect_to(classroom_path(id: params[:classroom_id]))
   end
 
+  def new_start_auto_test
+    @classroom_id = params[:classroom_id]
+    @public_personal_project_id = AutoTestProject.find_by(
+        :classroom_id => @classroom_id,
+        :is_public => 1
+    ).gitlab_id
+    @errors = []
+    render 'auto_test_projects/start_auto_test'
+  end
+
+  def start_auto_test
+    auto_test_record = AutoTestProject.find_by(:gitlab_id => params[:project_id])
+    auto_test_classroom_id = auto_test_record.classroom_id
+    auto_test_type = auto_test_record.test_type
+    auto_test_students_record = AutoTestProject.where(
+        :classroom_id => auto_test_classroom_id,
+        :test_type => auto_test_type, 
+        :is_public => 0
+    )
+
+    git_repo_list = ''
+    auto_test_students_record.each do |item|
+      git_repo_list += projects_service.project(item.gitlab_id)['http_url_to_repo'] + ','
+    end
+    git_repo_list.chop!
+
+    # puts('::::::::::::::::::::::::::')
+    # puts(git_repo_list)
+
+    use_text_file = false
+    if params[:use_text_file] == 'true'
+      use_text_file = true
+    end
+
+    compile_command = nil
+    if params[:compile_command] != ''
+      compile_command = params[:compile_command]
+    end
+
+    exec_command = nil
+    if params[:exec_command] != ''
+      exec_command = params[:exec_command]
+    end
+
+    auto_test_runners_service.start_auto_test(
+        params[:project_id],
+        git_repo_list,
+        use_text_file,
+        compile_command,
+        exec_command
+    )
+
+    redirect_to(classroom_path(id: params[:classroom_id]))
+  end
+
+  
+
   private
 
   # 一下两个方法都与gitlab通过API交互，所以需要先从gitlab中取出相应的字段值
