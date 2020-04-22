@@ -29,7 +29,9 @@ class UsersController < ApplicationController
     user = User.find_by(gitlab_id: gitlab_user_id)
     sc = SelectClassroom.find_by(user_id: user.id, classroom_id: classroom.id)
     sc.destroy
-    groups_service.delete_member classroom.gitlab_group_id, gitlab_user_id
+    if user.role == 'teacher'
+      groups_service.delete_member classroom.gitlab_group_id, gitlab_user_id
+    end
     render json: {status: 'success'}
   end
 

@@ -128,6 +128,7 @@ class ClassroomsController < ApplicationController
 
   def show
     user = User.find_by(gitlab_id: current_user.id)
+    classroom_id = params[:id]
     @classroom_record = Classroom.find(params[:id])
     unless @classroom_record.users.include? user
       render_403
@@ -151,9 +152,20 @@ class ClassroomsController < ApplicationController
     end
     users = groups_service.get_members @classroom_record.gitlab_group_id
     # 所有 student
-    @students = users.find_all do |s|
-      !@classroom_record.users.find_by(gitlab_id: s['id'], role: 'student').nil?
+    # @students = users.find_all do |s|
+    #   !@classroom_record.users.find_by(gitlab_id: s['id'], role: 'student').nil?
+    # end
+    all_classroom_member_id = []
+    SelectClassroom.where(:classroom_id => classroom_id).each do |item|
+      all_classroom_member_id.append(item.user_id)
     end
+    #@students = SelectClassroom.where(:id => all_classroom_member_id, :role => 'student')
+    @students = []
+    User.where(:id => all_classroom_member_id, :role => 'student').each do |item|
+      @students.append({:id => item.gitlab_id, :username => item.username,
+                        :name => users_service.get_user_info(item.gitlab_id)['name']})
+    end
+
     # 所有 teacher
     @teachers = users.find_all do |s|
       !@classroom_record.users.find_by(gitlab_id: s['id'], role: 'teacher').nil?
@@ -161,6 +173,8 @@ class ClassroomsController < ApplicationController
     @teachers.each do |t|
       t['is_me'] = t['id'] == current_user.id
     end
+    puts('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    puts(@teachers)
 
     @personal_homework_projects = []
     if @classroom_record.personal_project_subgroup_id
@@ -282,6 +296,10 @@ class ClassroomsController < ApplicationController
 
   def groups_service
     ::GroupsService.new current_user
+  end
+
+  def users_service
+    ::UsersService.new current_user
   end
 
   def add_group_member(group_id, member)
