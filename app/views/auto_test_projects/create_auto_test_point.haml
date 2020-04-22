@@ -1,0 +1,22 @@
+- content_for :scripts do
+  = javascript_pack_tag 'new_auto_test_point'
+- content_for :styles do
+  = stylesheet_pack_tag 'new_auto_test_point'
+
+#new-auto-test-point-app.small-container{data: {gitlabid: @public_personal_project_id}}
+  .page-title-holder
+    .page-title 创建个人项目测试点
+  %el-form{':model': "form", ref: 'new_auto_test_point', 'label-width': '100px', action: create_auto_test_point_classroom_auto_test_projects_path, method: 'post'}
+    - @errors.each do |error|
+      %el-alert.error-item{type: 'error', 'title': error}
+    %csrf
+    %el-form-item{label: '项目GitLab ID'}
+      %el-input{'v-model': 'form.project_id', readonly: true, name: 'project_id'}
+    %el-form-item{label: '输入数据'}
+      %el-input{'v-model': 'form.input', type: 'textarea', ':rows': '2', placeholder: '在此处输入评测点的输入', name: 'input'}
+    %el-form-item{label: '期望输出'}
+      %el-input{'v-model': 'form.expected_output', type: 'textarea', ':rows': '2', placeholder: '在此处输入评测点的期望输出', name: 'expected_output'}
+    %el-form-item.clearFloat
+      %el-button-group.floatRight
+        %a.el-button{href: classroom_path(id: @classroom_id)} 返回
+        %el-button{'@click': 'submitForm', type: 'primary'} 创建

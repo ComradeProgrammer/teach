@@ -63,6 +63,8 @@ Rails.application.routes.draw do
       collection do
         get 'batch_create', to: '#'
         get 'new_private_personal_project', to: '#'
+        get 'create_auto_test_point', to: 'auto_test_projects#new_auto_test_point'
+        post 'create_auto_test_point', to: 'auto_test_projects#create_auto_test_point'
         # post 'create_private_personal_project', to: 'auto_test_projects#create_private_personal_project'
       end
 

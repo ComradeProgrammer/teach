@@ -175,6 +175,22 @@ class AutoTestProjectsController < ApplicationController
     end
   end
 
+  def new_auto_test_point
+    @classroom_id = params[:classroom_id]
+    @public_personal_project_id = AutoTestProject.find_by(
+        :classroom_id => @classroom_id,
+        :is_public => 1
+    ).gitlab_id
+    @errors = []
+    render 'auto_test_projects/create_auto_test_point'
+  end
+
+  def create_auto_test_point
+    puts('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    puts(params)
+    redirect_to('/classrooms')
+  end
+
   private
 
   # 一下两个方法都与gitlab通过API交互，所以需要先从gitlab中取出相应的字段值

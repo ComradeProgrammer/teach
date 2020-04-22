@@ -55,6 +55,8 @@
               - if @has_personal_public
                 %a.el-button.el-button--mini{}
                   班级个人项目已创建公共发布区
+                %a.el-button.el-button--mini{href: create_auto_test_point_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
+                  创建个人项目评测点
               - else
                 %a.el-button.el-button--mini{href: new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'personal')}
                   创建公共发布区
