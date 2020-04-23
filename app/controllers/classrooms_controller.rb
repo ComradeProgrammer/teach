@@ -227,7 +227,9 @@ class ClassroomsController < ApplicationController
       user_id: current_user.id,
       access_level: access
     }
-    add_group_member group_id, member
+    if user.role == 'teacher'
+      add_group_member group_id, member
+    end
     classroom.users << User.find_by(gitlab_id: current_user.id)
     redirect_to classrooms_path
   end
@@ -274,7 +276,9 @@ class ClassroomsController < ApplicationController
         return
       end
     end
-    remove_group_member group_id, current_user.id
+    if user.role == 'teacher'
+      remove_group_member group_id, current_user.id
+    end
     redirect_to classrooms_path
   end
 
