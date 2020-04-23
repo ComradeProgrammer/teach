@@ -67,9 +67,16 @@
       </el-submenu>
 
 
+      <el-submenu index="9" style="float: right">
+        <template slot="title">新建label</template>
+        <el-menu-item v-for="(project, index) in projects" :key="index" :index="'9-' + project.id">
+          {{ project.name_with_namespace }}
+        </el-menu-item>
+      </el-submenu>
+
     </el-menu>
 
-    <el-dialog
+    <el-dialog v-if="flag"
       title="新建问题"
       top="50px"
       :visible.sync="dialogVisible"
@@ -82,10 +89,27 @@
         <el-button type="primary" @click="addIssue('newIssueForm')">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog v-else="flag"
+      title="新建label"
+      top="50px"
+      :visible.sync="dialogVisible"
+      v-loading="loading"
+      element-loading-text="创建中"
+      width="80%">
+      <new-label ref="newLabel" :label="newLabel"></new-label>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addLabel('newLabelForm')">确 定</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 <script>
+  import NewLabel from './new_label.vue'
   import NewIssue from './new_issue.vue'
+  import Label from '../../issues/models/label'
   import Issue from '../../issues/models/issue'
   import IssuesService from "../../issues/services/issues_service";
   import AlertMixin from '../../shared/components/mixins/alert'
@@ -94,6 +118,7 @@
     mixins: [AlertMixin],
     components: {
       NewIssue,
+      NewLabel,
     },
     data() {
       return {
@@ -104,6 +129,8 @@
         milestones: [],
         gitlabHost: '',
         dialogVisible: false,
+	flag: true,
+        newLabel: new Label(),
         newIssue: new Issue(),
         // 创建 Issue 时的 loading
         loading: false
@@ -164,11 +191,16 @@
         } else if (key.startsWith('6-')) {
           this.newIssue.projectId = parseInt(key.substr(2));
           this.dialogVisible = true;
+	  this.flag = true;
         } else if (key === '7') {
           window.location.href = "/broadcasts";
         } else if (key === '8') {
           window.location.href = "/logout";
-        }
+        } else if (key.startsWith('9-')) {
+          this.newLabel.projectId = parseInt(key.substr(2));
+          this.dialogVisible = true;
+	  this.flag = false;
+        } 
       },
       handleClose(done) {
         this.$confirm('确认关闭？')
@@ -177,6 +209,38 @@
           })
           .catch(_ => {
           });
+      },
+      addLabel(formName) {
+        this.$refs['newLabel'].$refs[formName].validate((valid) => {
+          if (valid) {
+            this.addNewLabel(this.newLabel);
+            this.newLabel = new Label();
+          } else {
+            return false;
+          }
+        })
+      },
+      addNewLabel(label) {
+        this.loading = true;
+        const navbar = document.getElementById('navbar');
+        const issuesService = new IssuesService({
+          issuesEndpoint: navbar.dataset.issuesEndpoint
+        });
+
+        issuesService
+          .newLabel(label.toObj())
+          .then(res => res.data)
+          .then((data) => {
+            let label = Label.valueOf(data);
+            this.success('创建成功');
+            this.loading = false;
+            this.dialogVisible = false;
+          })
+          .catch(e => {
+            this.alert('创建失败');
+            this.loading = false;
+            this.dialogVisible = false;
+          })
       },
       addIssue(formName) {
         this.$refs['newIssue'].$refs[formName].validate((valid) => {

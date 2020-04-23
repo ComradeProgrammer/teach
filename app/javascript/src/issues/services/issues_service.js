@@ -29,6 +29,12 @@ export default class IssuesService {
     return axios.get(`/projects/${projectId}/members.json`)
   }
 
+  newLabel(label) {
+    return axios.post(this.issuesEndpoint, {
+      label: label
+    });
+  }
+
   newIssue(issue) {
     return axios.post(this.issuesEndpoint, {
       issue: issue
