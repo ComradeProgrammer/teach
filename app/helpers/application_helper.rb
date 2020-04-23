@@ -2,7 +2,8 @@ module ApplicationHelper
   include ::GitlabApi
 
   def get_proj_class_name(proj_gitlab_id)
-    record = AutoTestProject.find_by(gitlab_id: proj_gitlab_id)
+    # record = AutoTestProject.find_by(gitlab_id: proj_gitlab_id)
+    record = TeamProject.find_by(gitlab_id: proj_gitlab_id)
     if record == nil # todo: this is a team project, but TeamProject is empty
     end
     class_id = record["classroom_id"]
@@ -18,9 +19,13 @@ module ApplicationHelper
     project_service = ProjectsService.new current_user
     # 最小为开发者权限
     projects = project_service.all(simple: false, membership: true, min_access_level: 30)
+    # puts('%%%%%%%%%%%%%%%%%%%%%')
+    # puts(projects)
+    # puts('%%%%%%%%%%%%%%%%%%%%%')
     infos = []
     projects.each do |project|
-      if AutoTestProject.find_by(gitlab_id: project['id'])
+      # if AutoTestProject.find_by(gitlab_id: project['id'])
+      if TeamProject.find_by(gitlab_id: project['id'])
         info = {
           id: project['id'],
           name: project['name'],
@@ -32,6 +37,8 @@ module ApplicationHelper
         infos << info
       end
     end
+    puts('&&&&&&&')
+    puts(infos)
     data['projects'] = infos.to_json
     data['issues-endpoint'] = issues_url(format: :json)
     data
