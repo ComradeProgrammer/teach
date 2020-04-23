@@ -24,6 +24,7 @@ class AutoTestProjectsController < ApplicationController
     @classroom_name = groups_service.get_group(classroom.gitlab_group_id)['path']
     @type = params[:type]
     @@project_type = params[:type]
+    @is_public = 'yes'
     if params[:type] == 'personal'
       @title = '创建个人项目'
       @projects_name = 'personal-projects'
@@ -34,6 +35,7 @@ class AutoTestProjectsController < ApplicationController
       @title = '创建结对项目'
       @projects_name = 'pair-projects'
       @auto_test_project = AutoTestProject.new('pair')
+      @is_public = params[:is_public]
     end
   end
 
@@ -58,18 +60,57 @@ class AutoTestProjectsController < ApplicationController
     else
       @auto_test_project['namespace_id'] = classroom.pair_project_subgroup_id
     end
-    @auto_test_project['visibility'] = 'public'
+    if @auto_test_project[:test_type] == 'pair'
+      @auto_test_project['visibility'] = 'public'
+    else
+      @auto_test_project['visibility'] = 'private'
+    end
+    
     @auto_test_project['request_access_enabled'] = true
+
+    # check if there is duplicated repo
+    has_deplicated_name = false
+    all_subgroup_repo = groups_service.get_projects(@auto_test_project['namespace_id'])
+    if all_subgroup_repo
+      all_subgroup_repo.each do |item|
+        if item['name'] == @auto_test_project[:name]
+          has_deplicated_name = true
+        end
+      end
+    end
+
+    if has_deplicated_name
+      puts('>>>>>>>>debug: has duplicated repo name, continue')
+      puts(']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]')
+      redirect_to classroom_path(params[:classroom_id])
+      return
+    end
+
     project = projects_service.new_project(@auto_test_project)
 
-    # here add all class students to this project, with permission `reporter`
-    @all_students_gitlab_id_in_class.each do |stu_id|
-      projects_service.add_user_as_project_reporter(project['id'], stu_id)
+    if @auto_test_project[:test_type] == 'pair'
+      gitlab_id_pair1 = User.find(@auto_test_project[:pair1_id]).gitlab_id
+      gitlab_id_pair2 = User.find(@auto_test_project[:pair2_id]).gitlab_id
+      projects_service.add_user_as_project_maintainer(project['id'], gitlab_id_pair1)
+      projects_service.add_user_as_project_maintainer(project['id'], gitlab_id_pair2)
+    else
+      # here add all class students to this project, with permission `reporter`
+      @all_students_gitlab_id_in_class.each do |stu_id|
+        projects_service.add_user_as_project_reporter(project['id'], stu_id)
+      end
     end
 
     auto_test_project.gitlab_id = project['id']
-    auto_test_project.test_type = @auto_test_project[:test_type]
-    auto_test_project.is_public = 1
+    if @auto_test_project[:test_type] == 'pair-public'
+      auto_test_project.test_type = 'pair'
+    else
+      auto_test_project.test_type = @auto_test_project[:test_type]
+    end
+    if @auto_test_project[:test_type] == 'pair'
+      auto_test_project.is_public = 0
+    else
+      auto_test_project.is_public = 1
+    end
     auto_test_project.save
     # classroom.users << owner
     redirect_to classroom_path(params[:classroom_id])

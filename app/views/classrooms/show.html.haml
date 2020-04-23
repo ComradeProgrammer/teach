@@ -74,7 +74,6 @@
                   - if teacher?
                     %a.el-button.el-button-mini{href: "#{project['web_url']}/edit"} 编辑
                     = link_to '删除', classroom_auto_test_project_path(classroom_id: params[:id], id: project['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger'
-                  %a.el-button.el-button-mini{href: auto_test_path(project)} 自动测试
               .card-info= project['description']
     -if @pair_projects
       %el-tab-pane{label: '结对项目'}
@@ -82,8 +81,14 @@
           .page-title 结对项目列表
           - if teacher?
             .page-title-controls
-              %a.el-button.el-button--mini{href: new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'pair')}
-                创建结对项目
+              - if @has_pair_public
+                %a.el-button.el-button--mini{}
+                  创建结对项目测试点
+              - else
+                %a.el-button.el-button--mini{href: new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'pair', is_public: 'yes')}
+                  创建结对项目公共发布区
+              %a.el-button.el-button--mini{href: new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'pair', is_public: 'no')}
+                创建结对项目学生仓库
         .content-list
           - @pair_projects.each do |project|
             .card
@@ -93,7 +98,6 @@
                   -if teacher?
                     %a.el-button.el-button-mini{href: "#{project['web_url']}/edit"} 编辑
                     = link_to '删除', classroom_auto_test_project_path(classroom_id: params[:id], id: project['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger'
-                  %a.el-button.el-button-mini{href: auto_test_path(project)} 自动测试
               .card-info= project['description']
     -if @team_projects
       %el-tab-pane{label: '团队项目'}

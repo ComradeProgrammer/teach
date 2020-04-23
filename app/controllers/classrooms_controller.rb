@@ -132,10 +132,17 @@ class ClassroomsController < ApplicationController
 
     # if there is already a personal PUBLIC repo
     @has_personal_public = false
+    @has_pair_public = false
     if AutoTestProject.find_by(:classroom_id => classroom_id, :test_type => 'personal', :is_public => 1).nil?
       @has_personal_public = false
     else
       @has_personal_public = true
+    end
+
+    if AutoTestProject.find_by(:classroom_id => classroom_id, :test_type => 'pair', :is_public => 1).nil?
+      @has_pair_public = false
+    else
+      @has_pair_public = true
     end
 
     @classroom_record = Classroom.find(params[:id])

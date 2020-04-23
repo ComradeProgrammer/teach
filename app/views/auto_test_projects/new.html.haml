@@ -3,21 +3,40 @@
 - content_for :styles do
   = stylesheet_pack_tag 'new_auto_test_project'
 
-#new-auto-test-project-app.small-container{data: {auto_test_project: @auto_test_project.to_json}}
+#new-auto-test-project-app.small-container{data: {auto_test_project: @auto_test_project.to_json, type: @type, classroomid: @classroom_id, ispublic: @is_public}}
   .page-title-holder
     .page-title= @title
   %el-form{':model': "auto_test_project", ref: 'auto_test_project', ':rules': 'rules', 'label-width': '100px', action: classroom_auto_test_projects_path, method: 'post'}
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}
     %csrf
-    %el-form-item{label: '项目名称', prop: 'name'}
-      %el-input{'v-model': 'auto_test_project.name', name: 'auto_test_project[name]'}
+    - if @type == 'pair' && @is_public == 'no'
+      %el-form-item{label: '项目名称', prop: 'name'}
+        %el-input{'v-model': 'auto_test_project.name', name: 'auto_test_project[name]', readonly: 'readonly', placeholder: '项目名称会根据结对成员课程平台用户ID自动生成'}
+    - else
+      %el-form-item{label: '项目名称', prop: 'name'}
+        %el-input{'v-model': 'auto_test_project.name', name: 'auto_test_project[name]'}
     %el-form-item{label: '项目类型', prop: 'test_type'}
       %el-input{'v-model': 'auto_test_project.test_type', name: 'auto_test_project[test_type]', readonly: "readonly"}
-    %el-form-item{label: '项目地址', prop: 'path'}
-      %el-input{'v-model': 'auto_test_project.path', name: 'auto_test_project[path]'}
-        %template{slot: 'prepend'}
-          = gitlab_host+'/'+@classroom_name+'/'+@projects_name+'/'
+    - if @type == 'pair' && @is_public == 'no'
+      %el-form-item{label: '结对成员1'}
+        %el-select{'v-model': 'auto_test_project.pair1_id', name: 'auto_test_project[pair1_id]', style: "width: 100%;", placeholder: "请选择成员1"}
+          %template{'v-for': 'item in userList'}
+            %el-option{':key': 'item.value', ':value': 'item.value'} {{ item.label }}
+      %el-form-item{label: '结对成员2'}
+        %el-select{'v-model': 'auto_test_project.pair2_id', name: 'auto_test_project[pair2_id]', style: "width: 100%;", placeholder: "请选择成员2"}
+          %template{'v-for': 'item in userList'}
+            %el-option{':key': 'item.value', ':value': 'item.value'} {{ item.label }}
+    - if @type == 'pair' && @is_public == 'no'
+      %el-form-item{label: '项目地址', prop: 'path'}
+        %el-input{'v-model': 'auto_test_project.path', name: 'auto_test_project[path]', readonly: 'readonly', placeholder: '项目地址会根据结对成员课程平台用户ID自动生成'}
+          %template{slot: 'prepend'}
+            = gitlab_host+'/'+@classroom_name+'/'+@projects_name+'/'
+    - else
+      %el-form-item{label: '项目地址', prop: 'path'}
+        %el-input{'v-model': 'auto_test_project.path', name: 'auto_test_project[path]'}
+          %template{slot: 'prepend'}
+            = gitlab_host+'/'+@classroom_name+'/'+@projects_name+'/'
     %el-form-item{label: '项目描述', prop: 'description'}
       %el-input{'v-model': 'auto_test_project.description', name: 'auto_test_project[description]', type: 'textarea', ':autosize': '{minRows: 4, maxRows: 8}'}
     %el-form-item.clearFloat
