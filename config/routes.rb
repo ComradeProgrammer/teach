@@ -114,6 +114,7 @@ Rails.application.routes.draw do
   resource :users, only: [] do
     collection do
       get 'get_all_user_id_and_name', to: 'users#get_all_user_id_and_name'
+      get 'get_classroom_user_id_and_name', to: 'users#get_classroom_user_id_and_name'
     end
   end
 

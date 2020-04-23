@@ -12,6 +12,11 @@ class TeamProjectsController < ApplicationController
       @errors = ['名称重复']
       @@dup_proj = false
     end
+    @classroom_id = params[:classroom_id]
+    # puts('team >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    # puts(params)
+    # puts(@classroom_id)
+    # puts('team >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     @team_project = {
       name: '',
       path: '',
@@ -21,6 +26,12 @@ class TeamProjectsController < ApplicationController
   end
 
   def create
+    # puts('team create >>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    # puts(params)
+    # puts('team create >>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    # redirect_to('/classrooms')
+    # return
+    save_team_projects = TeamProject.new
     @team_project = params[:team_project]
 
     @@dup_proj = false
@@ -44,8 +55,32 @@ class TeamProjectsController < ApplicationController
     owner = classroom.users.where(role: 'teacher').first
     @team_project = create_project_as_owner team_project, owner.gitlab_id
     # 当前用户添加为 Maintainer
-    add_project_master_as_owner @team_project['id'], current_user.id, owner.gitlab_id
-    redirect_to @team_project['web_url']
+    # now we assume that only teacher could create project
+    # therefore, we should add all teachers in the classroom and the group member
+    # to this repo as Maintainer
+    member_gitlab_id = []
+    @team_project_ori = params[:team_project]
+    @team_project_ori[:members].each do |member|
+      member_gitlab_id.append(User.find(member).gitlab_id)
+    end
+
+    save_team_projects.gitlab_id = @team_project['id']
+    save_team_projects.classroom_id = params[:classroom_id]
+    #puts('>>>>>>>xxxxxxxxxx')
+    #puts(@team_project)
+    #puts(save_team_projects.gitlab_id)
+    #puts(save_team_projects.classroom_id)
+    save_team_projects.save
+    #puts('>>>>>>>')
+
+    member_gitlab_id.each do |gitlab_id|
+      if gitlab_id != owner.gitlab_id
+        add_project_master_as_owner @team_project['id'], gitlab_id, owner.gitlab_id
+        # projects_service.add_user_as_project_maintainer(@team_project['id'], gitlab_id)
+      end
+    end
+    # redirect_to @team_project['web_url']
+    return
   rescue RestClient::BadRequest => e
     @errors = ['BadRequest, 可能名称或地址包含非法字符']
     @@errors_save = @errors
@@ -77,6 +112,10 @@ class TeamProjectsController < ApplicationController
   end
 
   private
+
+  def projects_service
+    ::ProjectsService.new current_user
+  end
 
   def create_project_as_owner(project, owner_id)
     admin_api_post "projects?sudo=#{owner_id}", project

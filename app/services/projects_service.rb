@@ -18,6 +18,10 @@ class ProjectsService < BaseService
     post("projects/#{project_id}/members", {user_id: user_id, access_level: 20})
   end
 
+  def add_user_as_project_maintainer(project_id, user_id)
+    post("projects/#{project_id}/members", {user_id: user_id, access_level: 40})
+  end
+
   def new_project_for_user(user_id, project)
     # print(project)
     res = post "projects/", project
