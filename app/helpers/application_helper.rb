@@ -5,6 +5,8 @@ module ApplicationHelper
     # record = AutoTestProject.find_by(gitlab_id: proj_gitlab_id)
     record = TeamProject.find_by(gitlab_id: proj_gitlab_id)
     if record == nil # todo: this is a team project, but TeamProject is empty
+      # then this must be auto test
+      record = AutoTestProject.find_by(gitlab_id: proj_gitlab_id)
     end
     class_id = record["classroom_id"]
     class_record = Classroom.find(class_id)
@@ -25,7 +27,7 @@ module ApplicationHelper
     infos = []
     projects.each do |project|
       # if AutoTestProject.find_by(gitlab_id: project['id'])
-      if TeamProject.find_by(gitlab_id: project['id'])
+      if TeamProject.find_by(gitlab_id: project['id']) || AutoTestProject.find_by(gitlab_id: project['id'])
         info = {
           id: project['id'],
           name: project['name'],
