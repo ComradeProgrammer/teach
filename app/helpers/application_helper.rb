@@ -20,15 +20,17 @@ module ApplicationHelper
     projects = project_service.all(simple: false, membership: true, min_access_level: 30)
     infos = []
     projects.each do |project|
-      info = {
-        id: project['id'],
-        name: project['name'],
-        name_with_namespace: project['name_with_namespace'],
-        web_url: project['web_url'],
-        class_name: get_proj_class_name(project['id'])
-      }
-      info[:milestones] = project_service.all_milestones project['id']
-      infos << info
+      if AutoTestProject.find_by(gitlab_id: project['id'])
+        info = {
+          id: project['id'],
+          name: project['name'],
+          name_with_namespace: project['name_with_namespace'],
+          web_url: project['web_url'],
+          class_name: get_proj_class_name(project['id'])
+        }
+        info[:milestones] = project_service.all_milestones project['id']
+        infos << info
+      end
     end
     data['projects'] = infos.to_json
     data['issues-endpoint'] = issues_url(format: :json)
