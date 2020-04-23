@@ -291,16 +291,31 @@ class AutoTestProjectsController < ApplicationController
   def create_student_private_project(student, namespace_id)
     @auto_test_project = {}
     student_platform_id = User.find_by(:gitlab_id => student['id']).id
-    @auto_test_project['name'] = PERSONAL_HOMEWORK_PROJECT_NAME + student['username'] + '_' + student_platform_id.to_s
-    @auto_test_project['visibility'] = 'private'
-    @auto_test_project['request_access_enabled'] = true
-    @auto_test_project['namespace_id'] = namespace_id
-    auto_test_project = @classroom.auto_test_projects.new
-    project_id = projects_service.new_project_for_user(student['id'], @auto_test_project)
-    auto_test_project.gitlab_id = project_id
-    auto_test_project.test_type = 'personal'
-    auto_test_project.is_public = 0
-    auto_test_project.save
+
+    # check whether student already has repo
+    all_group_projects = groups_service.get_projects(namespace_id)
+    create_new_repo = true
+    all_group_projects.each do |item|
+      if item['name'] == PERSONAL_HOMEWORK_PROJECT_NAME + student['username'] + '_' + student_platform_id.to_s
+        create_new_repo = false
+      end
+    end
+
+    if create_new_repo
+      @auto_test_project['name'] = PERSONAL_HOMEWORK_PROJECT_NAME + student['username'] + '_' + student_platform_id.to_s
+      @auto_test_project['visibility'] = 'private'
+      @auto_test_project['request_access_enabled'] = true
+      @auto_test_project['namespace_id'] = namespace_id
+      auto_test_project = @classroom.auto_test_projects.new
+      project_id = projects_service.new_project_for_user(student['id'], @auto_test_project)
+      auto_test_project.gitlab_id = project_id
+      auto_test_project.test_type = 'personal'
+      auto_test_project.is_public = 0
+      auto_test_project.save
+    else
+      puts("[Debug] student #{student_platform_id} already has a repo, continue")
+      puts(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>**********************************")
+    end
   end
 
   def create_pipeline(project_id, gitlab_username)

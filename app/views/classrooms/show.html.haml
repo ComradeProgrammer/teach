@@ -52,6 +52,7 @@
           .page-title 个人项目列表
           - if teacher?
             .page-title-controls
+              %a.el-button.el-button--mini{'v-if': 'isCreatingProjects'} 正在自动分配仓库
               - if @has_personal_public
                 %a.el-button.el-button--mini{href: create_auto_test_point_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
                   创建个人项目评测点
@@ -71,7 +72,6 @@
                 %a{href: project['web_url']}= project['name']
                 .floatRight
                   - if teacher?
-                    %div{'v-if': 'isCreatingProjects'} 正在创建
                     %a.el-button.el-button-mini{href: "#{project['web_url']}/edit"} 编辑
                     = link_to '删除', classroom_auto_test_project_path(classroom_id: params[:id], id: project['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger'
                   %a.el-button.el-button-mini{href: auto_test_path(project)} 自动测试
