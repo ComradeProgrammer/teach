@@ -27,4 +27,4 @@
     %el-form-item.clearFloat
       %el-button-group.floatRight
         %a.el-button{href: classroom_path(params[:classroom_id])} 返回
-        %el-button{'@click': 'axiosSubmitForm', type: 'primary'} 创建
+        %el-button{'@click': 'axiosSubmitForm', type: 'primary', ':loading':'is_loading'} 创建

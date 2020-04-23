@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
             {required: true, message: '请输入团队项目地址', trigger: 'blur'}
           ]
         },
-        userList: []
+        userList: [],
+        is_loading: false
       }
     },
     components: {
@@ -36,7 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
     mounted() {
       // this.project = JSON.parse(this.$el.dataset.project)
       // this.project['members'] = []
-      this.project.submit_path = this.$el.dataset.submitpath
+      this.project.submit_path = this.$el.dataset.submitpath;
+      this.is_loading = false;
       this.getClassroomUserIdAndName().then((result) => {
         let userData = result.data;
         // console.log(userData);
@@ -48,8 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
       });
-      console.log('>>>>>>>>>>');
-      console.log(this.userList);
+      // console.log('>>>>>>>>>>');
+      // console.log(this.userList);
       this.$watch('project.name', (newVal, oldVal) => {
         this.project.path = newVal.toLowerCase().trim().replace(/\s+/g, '-');
         // console.log(this.project)
@@ -66,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       },
       axiosSubmitForm() {
+        this.is_loading = true
         axios.post(this.project.submit_path, {
           team_project: {
             name: this.project.name,
@@ -75,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             members: this.project.members
           }
         }).then(() => {
+          // this.is_loading = false
           window.location.assign(`/classrooms/${this.$el.dataset.classroomid}`)
         })
       },
