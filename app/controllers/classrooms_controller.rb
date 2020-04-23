@@ -132,7 +132,7 @@ class ClassroomsController < ApplicationController
 
     # if there is already a personal PUBLIC repo
     @has_personal_public = false
-    if AutoTestProject.find_by(:classroom_id => classroom_id, :is_public => 1).nil?
+    if AutoTestProject.find_by(:classroom_id => classroom_id, :test_type => 'personal', :is_public => 1).nil?
       @has_personal_public = false
     else
       @has_personal_public = true
@@ -154,17 +154,17 @@ class ClassroomsController < ApplicationController
     end
     if @classroom_record.team_project_subgroup_id
       @team_projects = groups_service.get_projects @classroom_record.team_project_subgroup_id
-      puts('>>>>>>>>>>>>>subgroup')
-      puts(@classroom_record.team_project_subgroup_id)
-      puts(@team_projects)
-      puts('>>>>>>>>>>>>>')
+      # puts('>>>>>>>>>>>>>subgroup')
+      # puts(@classroom_record.team_project_subgroup_id)
+      # puts(@team_projects)
+      # puts('>>>>>>>>>>>>>')
       @team_projects.each do |team_project|
-        puts('>>>>>>>>>>>>>????')
-        puts(team_project)
-        puts('>>>>>>>>>>>>>????')
+        # puts('>>>>>>>>>>>>>????')
+        # puts(team_project)
+        # puts('>>>>>>>>>>>>>????')
         record = TeamProject.find_by gitlab_id: team_project['id']
-        puts(record)
-        puts('>>>>>>>>>>>>>???xxxx?')
+        # puts(record)
+        # puts('>>>>>>>>>>>>>???xxxx?')
         # todo: fix bug with team status
         # team_project['states'] = record.team_states.collect(&:state).compact
       end
