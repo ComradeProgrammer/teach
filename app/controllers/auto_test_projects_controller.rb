@@ -288,6 +288,7 @@ class AutoTestProjectsController < ApplicationController
     end
 
     auto_test_runners_service.start_auto_test(
+        auto_test_type,
         params[:project_id],
         git_repo_list,
         use_text_file,
@@ -315,9 +316,16 @@ class AutoTestProjectsController < ApplicationController
     puts('>>>>>>>>>>>>>')
     puts(@refined_results)
     puts('>>>>>>>>>>>>>')
-
-    @test_case_num = @refined_results[0].length - 1
-    @refined_results = @refined_results.to_json
+    @no_result = 'no'
+    @table_width = '20'
+    if @refined_results.empty?
+      @no_result = 'yes'
+    else
+      @test_case_num = @refined_results[0].length - 1
+      @refined_results = @refined_results.to_json
+      @table_width = 1.0 / @test_case_num * 100
+    end
+    @table_width = @table_width.to_s + '%'
 
     render 'auto_test_projects/auto_test_results'
   end

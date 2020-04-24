@@ -11,9 +11,10 @@ class AutoTestRunnersService
     JSON.parse response.body
   end
 
-  def start_auto_test(project_id, git_repo_list, use_text_file = nil,
+  def start_auto_test(test_type, project_id, git_repo_list, use_text_file = nil,
                       compile_command = nil, exec_command = nil)
     payload = {
+        :test_type => test_type,
         :project_id => project_id,
         :git_repo_list => git_repo_list
     }

@@ -24,4 +24,4 @@
     %el-form-item.clearFloat
       %el-button-group.floatRight
         %a.el-button{href: classroom_path(id: @classroom_id)} 返回
-        %el-button{'@click': 'submitForm', type: 'primary'} 提交
+        %el-button{'@click': 'submitForm', type: 'primary', ':loading':'is_loading'} 提交

@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     compile_command: '',
                     exec_command: ''
                 },
+                is_loading: false
             }
         },
         components: {
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         methods: {
             submitForm() {
+                this.is_loading = true
                 this.$refs.start_auto_test.$el.submit();
             }
         }

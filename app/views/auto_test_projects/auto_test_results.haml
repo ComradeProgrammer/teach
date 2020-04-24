@@ -6,7 +6,10 @@
 #show-auto-test-results-app.small-container{data: {results: @refined_results}}
   .page-title-holder
     .page-title 查看评测成绩
-  %el-table{":data":"tableData", style: "width: 100%"}
-    %el-table-column{prop: 'name', label: '用户名', width: '180'}
-    - (0...@test_case_num).each do |num|
-      %el-table-column{prop: "#{num}", label: "测试点#{num}", width: '180'}
+  - if @no_result == 'yes'
+    %el-alert{type: 'warning', title: '当前暂无评测结果'}
+  - else
+    %el-table{":data":"tableData", style: "width: 100%"}
+      %el-table-column{prop: 'name', label: '用户名', style: "width: " + @table_width}
+      - (0...@test_case_num).each do |num|
+        %el-table-column{prop: "#{num}", label: "测试点#{num}", style: "width: " + @table_width}
