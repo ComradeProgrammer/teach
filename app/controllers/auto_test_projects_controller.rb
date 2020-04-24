@@ -165,7 +165,13 @@ class AutoTestProjectsController < ApplicationController
       batch_create_student_private_project(@students, @gitlab_namespace_id)
       @@creating_private_personal_project = false
     else
-      @student = @users.find_by gitlab_id: params[:user_id]
+      # @student = @users.find_by gitlab_id: params[:user_id]
+      # puts('::::::::::::::::::::::::::::')
+      # puts(params)
+      @student = {}
+      student_record = User.find(params[:user_id])
+      @student['id'] = student_record.gitlab_id
+      @student['username'] = student_record.username
       create_student_private_project(@student, @gitlab_namespace_id)
     end
   end
@@ -375,7 +381,7 @@ class AutoTestProjectsController < ApplicationController
       auto_test_project.save
     else
       puts("[Debug] student #{student_platform_id} already has a repo, continue")
-      puts(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>**********************************")
+      puts("????>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>**********************************")
     end
   end
 
