@@ -300,8 +300,10 @@ class AutoTestProjectsController < ApplicationController
 
   def get_auto_test_results
     @classroom_id = params[:classroom_id]
+    test_type = params[:test_type]
     @public_personal_project_id = AutoTestProject.find_by(
         :classroom_id => @classroom_id,
+        :test_type => test_type,
         :is_public => 1
     ).gitlab_id
     auto_test_results = auto_test_runners_service.get_auto_test_results(@public_personal_project_id)
