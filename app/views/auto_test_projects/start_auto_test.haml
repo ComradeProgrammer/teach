@@ -17,6 +17,11 @@
         是，测试点作为文件输入（input.txt）
       %el-radio{'v-model': 'form.use_text_file', name: 'use_text_file', value: 'false', label: 'false'}
         否，测试点通过标准输入（stdin）
+    %el-form-item{label: '使用文件输出'}
+      %el-radio{'v-model': 'form.use_text_output', name: 'use_text_output', value: 'true', label: 'true'}
+        是，学生程序输出为文件（output.txt）
+      %el-radio{'v-model': 'form.use_text_output', name: 'use_text_output', value: 'false', label: 'false'}
+        否，学生程序使用标准输出（stdout）
     %el-form-item{label: '编译指令'}
       %el-input{'v-model': 'form.compile_command', type: 'textarea', ':rows': '2', placeholder: '默认根据评测机平台使用clang++/g++编译main.cpp，如使用默认，此处留空', name: 'compile_command'}
     %el-form-item{label: '执行指令'}

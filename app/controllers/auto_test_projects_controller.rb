@@ -277,6 +277,11 @@ class AutoTestProjectsController < ApplicationController
       use_text_file = true
     end
 
+    use_text_output = false
+    if params[:use_text_output] == 'true'
+      use_text_output = true
+    end
+
     compile_command = nil
     if params[:compile_command] != ''
       compile_command = params[:compile_command]
@@ -292,6 +297,7 @@ class AutoTestProjectsController < ApplicationController
         params[:project_id],
         git_repo_list,
         use_text_file,
+        use_text_output,
         compile_command,
         exec_command
     )

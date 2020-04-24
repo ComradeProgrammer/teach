@@ -12,7 +12,7 @@ class AutoTestRunnersService
   end
 
   def start_auto_test(test_type, project_id, git_repo_list, use_text_file = nil,
-                      compile_command = nil, exec_command = nil)
+                      use_text_output = nil, compile_command = nil, exec_command = nil)
     payload = {
         :test_type => test_type,
         :project_id => project_id,
@@ -21,6 +21,10 @@ class AutoTestRunnersService
 
     if use_text_file
       payload[:use_text_file] = use_text_file
+    end
+
+    if use_text_output
+      payload[:use_text_output] = use_text_output
     end
 
     if compile_command

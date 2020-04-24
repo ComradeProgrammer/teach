@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 form: {
                     project_id: '',
                     use_text_file: 'true',
+                    use_text_output: 'true',
                     compile_command: '',
                     exec_command: ''
                 },
