@@ -54,14 +54,14 @@
             .page-title-controls
               %a.el-button.el-button--mini{'v-if': 'isCreatingProjects'} 正在自动分配仓库
               - if @has_personal_public
-                %a.el-button.el-button--mini{href: create_auto_test_point_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
+                %a.el-button.el-button--mini{href: create_auto_test_point_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'personal')}
                   创建个人项目评测点
               - else
                 %a.el-button.el-button--mini{href: new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'personal')}
-                  创建公共发布区
+                  创建个人项目公共发布区
               %a.el-button.el-button--mini{href: new_private_personal_project_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
                 分配学生仓库
-              %a.el-button.el-button--mini{href: start_auto_test_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
+              %a.el-button.el-button--mini{href: start_auto_test_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'personal')}
                 提交评测任务
               %a.el-button.el-button--mini{href: get_auto_test_results_classroom_auto_test_projects_path(classroom_id: @classroom_record.id)}
                 获取评测结果
@@ -82,11 +82,13 @@
           - if teacher?
             .page-title-controls
               - if @has_pair_public
-                %a.el-button.el-button--mini{}
-                  创建结对项目测试点
+                %a.el-button.el-button--mini{href: create_auto_test_point_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'pair')}
+                  创建结对项目评测点
               - else
                 %a.el-button.el-button--mini{href: new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'pair', is_public: 'yes')}
                   创建结对项目公共发布区
+              %a.el-button.el-button--mini{href: start_auto_test_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'pair')}
+                提交评测任务
               %a.el-button.el-button--mini{href: new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'pair', is_public: 'no')}
                 创建结对项目学生仓库
         .content-list
