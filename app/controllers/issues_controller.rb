@@ -22,28 +22,28 @@ class IssuesController < ApplicationController
     respond_to do |format|
       format.json do
         issue = params[:issue]
-	      label = issue[:label]
-	      if !!issue['title']
-        	# 自动标记为todo
-        	# issue['labels'] << 'To Do'
-        	payload = {
-        	  title: issue['title'],
- 		        description: issue['description'],
-        	  assignee_ids: issue['assignee'],
-	          milestone_id: issue['milestone'],
-        	  labels: issue['labels'].join(','),
-	          due_date: issue['due_date'],
-        	  weight: issue['weight'],
-	          priority: issue['priority']
-        	}
-        	issue_info = issues_service.new_issue issue.delete('project_id'), payload
-        	render json: issue_info
+	label = params[:label]
+	if !!issue['title']
+        # 自动标记为todo
+        # issue['labels'] << 'To Do'
+        payload = {
+          title: issue['title'],
+ 	  description: issue['description'],
+          assignee_ids: issue['assignee'],
+	  milestone_id: issue['milestone'],
+          labels: issue['labels'].join(','),
+	  due_date: issue['due_date'],
+          weight: issue['weight'],
+	  priority: issue['priority']
+        }
+        issue_info = issues_service.new_issue issue.delete('project_id'), payload
+        render json: issue_info
         elsif !!label['title']
           payload = {
-            name: label['title'],
-            color: label['color'],
-            description: label['description']
-          }
+          	name: label['title'],
+          	color: label['color'],
+          	description: label['description']
+	  }
           url = "projects/#{label['project_id']}/labels"
           admin_api_post url, payload
         end
