@@ -243,13 +243,10 @@ export default {
     },
     addNewIssue(issue) {
       let label = 'todo';
-      if (issue.labels[0] === 'To Do') {
-      	label = 'todo';
-      }
-      if (issue.labels[0] === 'Doing') {
+      if (issue.labels.find((l) => l==='Doing')) {
       	label = 'doing';
       }
-      if (issue.labels[0] === 'Closed') {
+      else if (issue.labels.find((l) => l==='Closed')) {
       	label = 'done';
       }
       this.loading = true;
