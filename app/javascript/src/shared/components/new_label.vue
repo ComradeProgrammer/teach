@@ -47,7 +47,7 @@
             {required: true, message: '请选择项目', trigger: 'change'}
           ],
           title: [
-            {required: true, message: '请输入label', trigger: 'blur'}
+            {required: true, message: '请输入标签', trigger: 'blur'}
           ],
         },
       }

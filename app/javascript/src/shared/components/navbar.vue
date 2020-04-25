@@ -68,7 +68,7 @@
 
 
       <el-submenu index="9" style="float: right">
-        <template slot="title">新建label</template>
+        <template slot="title">新建标签</template>
         <el-menu-item v-for="(project, index) in projects" :key="index" :index="'9-' + project.id">
           {{ project.name_with_namespace }}
         </el-menu-item>
@@ -91,7 +91,7 @@
     </el-dialog>
 
     <el-dialog v-else="flag"
-      title="新建label"
+      title="新建标签"
       top="50px"
       :visible.sync="dialogVisible"
       v-loading="loading"
