@@ -148,10 +148,11 @@ class IssuesService < BaseService
     issue['state'] = if issue['state'] != 'closed'
                        if doing
                          'Doing'
-                       elsif todo
+                       # elsif todo
+		       else
                          'To Do'
-                       else
-                         'Open'
+                       # else
+                       #   'Open'
                        end
                      else
                        'Closed'
