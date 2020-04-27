@@ -104,8 +104,7 @@ class ClassroomsController < ApplicationController
   
   def update
     @classroom = params[:classroom]
-    @classroom_id = params[:classroom_id]
-
+    @classroom_id = params[:id]
     Classroom.all.each do |a_class|
       if a_class[:name] == @classroom[:name]
         @@dup_class = true
@@ -113,8 +112,7 @@ class ClassroomsController < ApplicationController
         return
       end
     end
-
-    classroom = Classroom.find_by(@classroom_id)
+    classroom = Classroom.find(@classroom_id)
     groups_service.update_group(classroom.gitlab_group_id, @classroom)
     redirect_to classrooms_path
   end
