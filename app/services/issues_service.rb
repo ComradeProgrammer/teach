@@ -17,7 +17,7 @@ class IssuesService < BaseService
     records = []
     if milestone_id
 	    issue_list.each do |issue|
-		    if(issue['milestone_id'] == milestone_id.to_i)
+		    if(issue['milestone']['id'] == milestone_id.to_i)
 			    records.push(issue)
 		    end
 	    end
