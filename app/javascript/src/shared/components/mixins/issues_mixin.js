@@ -282,7 +282,11 @@ export default {
         .then((data) => {
           let updated = Issue.valueOf(data);
           let list = this.getIssuesList(this.curLabel);
-          list.splice(this.detailIndex, 1, updated);
+	  let to_list = this.getIssuesList(this.toLower(updated.state));
+	  let old = list[this.detailIndex];
+          list.splice(this.detailIndex, 1);
+	  to_list.splice(0, 0, updated);
+	  this.updateCount(old, updated);
           eventhub.$emit('updateDetailIndex', this.detailIndex, this.curLabel);
           this.loading = false;
         })
@@ -307,6 +311,42 @@ export default {
       document.body.removeChild(P);
 
       return scrollbarHeight;
+    },
+    toLower(state) {
+    	let label = 'todo';
+	if (state === 'Doing') {
+		label = 'doing';
+	}
+	else if (state === 'Closed') {
+		label = 'done';
+	}
+	return label;
+    },
+    updateCount(before, after) {
+	if (before.state === 'Doing') {
+		this.doingTotal -= 1;
+		this.doingTotalWeight -= before.weight;
+	}
+	else if (before.state === 'Closed') {
+		this.doneTotal -= 1;
+		this.doneTotalWeight -= before.weight;
+	}
+	else {
+		this.todoTotal -= 1;
+		this.todoTotalWeight -= before.weight;
+	}
+	if (after.state === 'Doing') {
+		this.doingTotal += 1;
+		this.doingTotalWeight += after.weight;
+	}
+	else if (after.state === 'Closed') {
+		this.doneTotal += 1;
+		this.doneTotalWeight += after.weight;
+	}
+	else {
+		this.todoTotal += 1;
+		this.todoTotalWeight += after.weight;
+	}
     },
   }
 }
