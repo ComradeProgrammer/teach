@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class BlogTest < ActiveSupport::TestCase
+  setup do
+    user = User.new
+  end
+
   test "should not save without classroom_id" do
     b = Blog.new
     assert_not b.save

@@ -1,7 +1,12 @@
 require 'test_helper'
 
 class BroadcastTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  setup do
+    @broadcast = Broadcast.new
+  end
+
+  test "get json" do
+    @broadcast.to_json
+    assert true
+  end
 end
