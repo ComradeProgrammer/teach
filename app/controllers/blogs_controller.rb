@@ -5,7 +5,7 @@ class BlogsController < ApplicationController
     respond_to do |format|
       format.json do
         classroom = Classroom.find(params[:classroom_id])
-        type_query = if search_params[:type] == 'all'
+        type_query = if search_params[:type] == 'my'
                        %w[blog daily_scrum]
                      else
                        search_params[:type]
