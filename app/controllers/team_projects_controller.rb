@@ -4,6 +4,7 @@ class TeamProjectsController < ApplicationController
 
   def new
     @errors = []
+    # find if duplicate
     if @@errors_save.size > 0
       @errors = @@errors_save
       @@errors_save = []
@@ -34,6 +35,7 @@ class TeamProjectsController < ApplicationController
     save_team_projects = TeamProject.new
     @team_project = params[:team_project]
 
+    # look up for duplicate projects
     @@dup_proj = false
     TeamProject.all.each do |a_project|
       if a_project[:name] == @team_project['name']
@@ -99,6 +101,8 @@ class TeamProjectsController < ApplicationController
     @done_weight = issues.select(:weight).joins(:issue).sum { |i| i.weight.to_i }
     @percent = @total.zero? ? 100 : @done * 100 / @total
     @percent_weight = @total_weight.zero? ? 100 : @done_weight * 100 / @total_weight
+
+    # set up member properties
     @members.each do |member|
       member['role'] = team_role member.delete('access_level')
       user = User.find_by gitlab_id: member['id']

@@ -12,7 +12,8 @@ class AutoTestProjectsController < ApplicationController
 
   def show
   end
-
+  
+  # new auto test project
   def new
     @errors = []
     if @@errors_save.size > 0
@@ -39,6 +40,7 @@ class AutoTestProjectsController < ApplicationController
     end
   end
 
+  # create a new project
   def create
     @classroom_students_query = SelectClassroom.where(:classroom_id => params[:classroom_id])
     @all_students_gitlab_id_in_class = []
@@ -51,7 +53,8 @@ class AutoTestProjectsController < ApplicationController
         @all_teachers_gitlab_id_in_class.append(tmp.gitlab_id)
       end
     end
-
+    
+    # find the classroom
     classroom = Classroom.find_by(id: params[:classroom_id])
     auto_test_project = classroom.auto_test_projects.new
     @auto_test_project = params[:auto_test_project]
@@ -78,10 +81,11 @@ class AutoTestProjectsController < ApplicationController
         end
       end
     end
-
+    
+    # find duplicate repo
     if has_deplicated_name
-      puts('>>>>>>>>debug: has duplicated repo name, continue')
-      puts(']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]')
+      # puts('>>>>>>>>debug: has duplicated repo name, continue')
+      # puts(']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]')
       redirect_to classroom_path(params[:classroom_id])
       return
     end
@@ -120,12 +124,13 @@ class AutoTestProjectsController < ApplicationController
     # render 'new'
     redirect_to new_classroom_auto_test_project_path + '?type=' + @@project_type
   end
-
+  
   def new_private_personal_project
     @classroom_id = params[:classroom_id]
     @errors = []
   end
 
+  # create a private personal project
   def create_private_personal_project
     @classroom = Classroom.find(params[:class_id])
     @classroom_students_query = SelectClassroom.where(:classroom_id => params[:class_id])
@@ -259,6 +264,7 @@ class AutoTestProjectsController < ApplicationController
     render 'auto_test_projects/start_auto_test'
   end
 
+  # start a new auto test
   def start_auto_test
     auto_test_record = AutoTestProject.find_by(:gitlab_id => params[:project_id])
     auto_test_classroom_id = auto_test_record.classroom_id
@@ -311,6 +317,7 @@ class AutoTestProjectsController < ApplicationController
     redirect_to(classroom_path(id: params[:classroom_id]))
   end
 
+  # get result
   def get_auto_test_results
     @classroom_id = params[:classroom_id]
     test_type = params[:test_type]

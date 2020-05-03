@@ -3,6 +3,7 @@
 class ClassroomsController < ApplicationController
   @@dup_class = false
 
+  # tool func: get id & name
   def get_all_classroom_id_and_name
     res = []
     Classroom.all.each do |classroom|
@@ -13,6 +14,7 @@ class ClassroomsController < ApplicationController
     render json: res
   end
 
+  # show index
   def index
     @errors = []
     @classrooms = []
@@ -47,9 +49,12 @@ class ClassroomsController < ApplicationController
   def create
     owner = User.find_by(gitlab_id: current_user.id)
     @classroom = params[:classroom]
+
+    # find any duplicate class
     @@dup_class = false
     Classroom.all.each do |a_class|
       if a_class[:name] == @classroom[:name]
+        # find it
         @@dup_class = true
         redirect_to new_classroom_path
         return
@@ -59,6 +64,7 @@ class ClassroomsController < ApplicationController
     personal = !!@classroom.delete(:personal)
     pair = !!@classroom.delete(:pair)
     team = !!@classroom.delete(:team)
+    # set up properties
     @classroom['visibility'] = 'public'
     @classroom['request_access_enabled'] = true
     group = groups_service.new_group @classroom
@@ -107,6 +113,7 @@ class ClassroomsController < ApplicationController
     @classroom_id = params[:id]
     Classroom.all.each do |a_class|
       if a_class[:name] == @classroom[:name]
+        # set duplicate class
         @@dup_class = true
         redirect_to edit_classrooms_path(@classroom_id)
         return
@@ -239,6 +246,7 @@ class ClassroomsController < ApplicationController
     redirect_to classrooms_path
   end
 
+  # tool func: get id & name of stu
   def get_all_student_id_and_name
     # @classroom = Classroom.find(params[:classroom_id])
 
@@ -289,6 +297,7 @@ class ClassroomsController < ApplicationController
 
   private
 
+  # new team proj dir
   def new_team_project_dir(parent_id)
     team_project_dir = {}
     team_project_dir['name'] = '团队项目'
@@ -300,6 +309,7 @@ class ClassroomsController < ApplicationController
     team_project_dir
   end
 
+  # new person proj dir
   def new_personal_project_dir(parent_id)
     team_project_dir = {}
     team_project_dir['name'] = '个人项目'
@@ -311,6 +321,7 @@ class ClassroomsController < ApplicationController
     team_project_dir
   end
 
+  # new pair proj dir
   def new_pair_project_dir(parent_id)
     team_project_dir = {}
     team_project_dir['name'] = '结对项目'

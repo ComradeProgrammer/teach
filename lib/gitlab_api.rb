@@ -1,13 +1,16 @@
 module GitlabApi
+  # get data
   def get_api_url(url)
     "#{gitlab_host}/api/v4/#{url}"
   end
 
+  # admin get data
   def admin_api_get(url, params = {})
     url = get_api_url url
     Http.json_get url, admin_headers.merge!(params: params)
   end
 
+  # admin post
   def admin_api_post(url, payload)
     url = get_api_url url
     Http.json_post url, payload, admin_headers
@@ -33,6 +36,7 @@ module GitlabApi
     Http.json_get_with_headers url, user_headers(token).merge!(params: params)
   end
 
+  # post data
   def user_api_post(url, token, payload)
     url = get_api_url url
     Http.json_post url, payload, user_headers(token)
@@ -43,6 +47,7 @@ module GitlabApi
     Http.multipart_post url, data, user_headers(token)
   end
 
+  # put data
   def user_api_put(url, token, payload)
     url = get_api_url url
     Http.json_put url, payload, user_headers(token)

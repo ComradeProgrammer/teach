@@ -4,6 +4,7 @@ class SessionsController < ApplicationController
   skip_before_action :require_login, only: [:login]
   before_action :login_redirect, only: [:login]
 
+  # log out from platform
   def logout
     session[:user_token] = nil
     redirect_to Constant::GitLabHost
@@ -16,6 +17,7 @@ class SessionsController < ApplicationController
 
     access_token = user_auth access_code
     if access_token
+      # success
       session[:type] = user_type
       log_in access_token
       unless create_user

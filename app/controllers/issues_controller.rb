@@ -36,6 +36,7 @@ class IssuesController < ApplicationController
           weight: issue['weight'],
 	  priority: issue['priority']
         }
+        # get info
         issue_info = issues_service.new_issue issue.delete('project_id'), payload
         render json: issue_info
         elsif !!label['title']

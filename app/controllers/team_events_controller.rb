@@ -10,6 +10,7 @@ class TeamEventsController < ApplicationController
       TeamEventsExecJob.perform_later classroom.team_project_ids, [@event]
       redirect_to classroom_team_events_path
     else
+      # get error
       @errors = get_record_errors @event
       render 'new'
     end
