@@ -8,23 +8,16 @@ class UsersController < ApplicationController
   end
 
   def get_classroom_user_id_and_name
-    # puts('<<<<<<<<<<<<<<<<<<<< 1')
     classroom_id = params[:classroom_id].to_i
-    # puts(params)
-    # puts(classroom_id)
     classroom_user_id = []
     SelectClassroom.where(:classroom_id => classroom_id).each do |item|
       classroom_user_id.append(item.user_id)
     end
-    # puts('<<<<<<<<<<<<<<<<<<<< 2')
-    # puts(classroom_user_id)
     classroom_users = User.where(:id => classroom_user_id)
     res = []
     classroom_users.all.each do |user|
       res.append({id: user.id, gitlab_id: user.gitlab_id, name: user.username, role: user.role})
     end
-    # puts('<<<<<<<<<<<<<<<<<<<< 3')
-    # puts(res)
     render json: res
   end
 

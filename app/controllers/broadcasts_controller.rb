@@ -1,3 +1,9 @@
+=begin
+This controller contains methods with broadcast, like basic resource method
+and some helper methods like getting all students id, etc. (which are useful
+in frontend while use a list to show all students number)
+=end
+
 class BroadcastsController < ApplicationController
   # todo: add permission control
 
@@ -85,6 +91,12 @@ class BroadcastsController < ApplicationController
   end
 
   private
+
+=begin
+These private methods are used to display member list
+at the frontend in different scopes (eg. all members/
+all teachers/all students, etc.)
+=end
 
   def get_all_id_list
     res = []

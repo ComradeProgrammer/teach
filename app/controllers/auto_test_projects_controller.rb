@@ -1,5 +1,12 @@
 require 'json'
 
+=begin
+This controller contains methods about interacting with runner like
+creating auto test points, start auto test task and get result, etc.
+We use auto-test-runner API (defined in `services/auto_test_runners_service`)
+to make interaction with runner.
+=end
+
 class AutoTestProjectsController < ApplicationController
   PERSONAL_HOMEWORK_PROJECT_NAME = "student_personal_project_"
 
@@ -84,8 +91,6 @@ class AutoTestProjectsController < ApplicationController
     
     # find duplicate repo
     if has_deplicated_name
-      # puts('>>>>>>>>debug: has duplicated repo name, continue')
-      # puts(']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]')
       redirect_to classroom_path(params[:classroom_id])
       return
     end
@@ -161,18 +166,10 @@ class AutoTestProjectsController < ApplicationController
         end
       end
 
-      # @users.each do |item|
-      #   if @all_students_gitlab_id_in_class.index(item['id'])
-      #     @students.append(item)
-      #   end
-      # end
       @@total_students_num = @students.length
       batch_create_student_private_project(@students, @gitlab_namespace_id)
       @@creating_private_personal_project = false
     else
-      # @student = @users.find_by gitlab_id: params[:user_id]
-      # puts('::::::::::::::::::::::::::::')
-      # puts(params)
       @student = {}
       student_record = User.find(params[:user_id])
       @student['id'] = student_record.gitlab_id

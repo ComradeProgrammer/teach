@@ -1,6 +1,11 @@
 require 'rest-client'
 require 'json'
 
+=begin
+Interact with auto-test-runner,
+see out API doc at: https://github.com/Jiyuan-Yang/teach-auto-test-runner/blob/master/README.md
+=end
+
 class AutoTestRunnersService
   def create_auto_test_point(project_id, input, expected_output)
     response = RestClient.post(auto_test_runner_host + '/create_auto_test_point', {
