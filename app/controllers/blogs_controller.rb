@@ -51,7 +51,7 @@ class BlogsController < ApplicationController
     code = blogs_service.get_blog_raw_code blog.project_id, blog.gitlab_id
     render plain: code
   end
-
+#新建博客
   def create
     classroom = Classroom.find(params[:classroom_id])
     new_blog = params[:blog]
@@ -67,7 +67,7 @@ class BlogsController < ApplicationController
     blog_record.save
     redirect_to classroom_blogs_path
   end
-
+#更新博客信息到gitlab
   def update
     respond_to do |format|
       format.json do
@@ -79,7 +79,7 @@ class BlogsController < ApplicationController
       end
     end
   end
-
+#删除博客
   def destroy
     respond_to do |format|
       format.json do
@@ -101,7 +101,7 @@ class BlogsController < ApplicationController
   def search_params
     params.permit :type, :scope
   end
-
+#检查访问博客的用户是否与博客在同一班级
   def check_classroom
     classroom = Classroom.find(params[:classroom_id])
     user = User.find_by(gitlab_id: current_user.id)
