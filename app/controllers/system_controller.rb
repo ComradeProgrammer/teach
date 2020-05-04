@@ -70,6 +70,7 @@ class SystemController < ApplicationController
     res = admin_api_post url, data until res.key?('id')
   end
 
+  # 加入默认的label
   def add_default_labels(project_id)
     red = '#d9534f'
     yellow = '#f0ad4e'

@@ -9,6 +9,7 @@ class IssuesController < ApplicationController
     end
   end
 
+  # 获取gitlab所有页issue信息
   def all_issues
     respond_to do |format|
       format.json do
@@ -18,6 +19,7 @@ class IssuesController < ApplicationController
     end
   end
 
+  # 新建issue或label
   def create
     respond_to do |format|
       format.json do
@@ -52,6 +54,7 @@ class IssuesController < ApplicationController
     end
   end
 
+  # 更新gitlab上issue信息
   def update
     respond_to do |format|
       format.json do

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class IssuesService < BaseService
+  # 从gitlab中拉取所有的issue，并将统计数据返回
   def all(params = {})
     # pagination
     params[:scope] = 'all'
@@ -46,6 +47,7 @@ class IssuesService < BaseService
     }.merge!(issues_cnts)
   end
 
+  # 读取gitlab中所有页的issue信息
   def all_issues(params = {})
     params[:scope] = 'all'
     project_id = params.delete 'project'
@@ -66,6 +68,7 @@ class IssuesService < BaseService
     }
   end
 
+  # 在gitlab中新建issue，如果此issue有权重或优先级，就在数据库中进行新建
   def new_issue(project_id, params = {})
     weight = params.delete :weight
     priority = params.delete :priority
@@ -80,6 +83,7 @@ class IssuesService < BaseService
     issue
   end
 
+  # 在gitlab中更新issue信息，如果此issue有权重或优先级，就在数据库中进行修改
   def update_issue(id, project_id, iid, update)
 #    puts '======================='
 #    puts 'update'
@@ -120,6 +124,7 @@ class IssuesService < BaseService
     issue
   end
 
+  # 将gitlab中issue的字段信息转换为自定义的字段信息
   def add_external_field(issue_list)
     map = {}
     issue_list.each do |issue|
@@ -142,6 +147,7 @@ class IssuesService < BaseService
     end
   end
 
+  # 确定issue的state字段
   def add_state(issue)
     todo = issue['labels'].delete 'To Do'
     doing = issue['labels'].delete 'Doing'
@@ -165,12 +171,14 @@ class IssuesService < BaseService
     ProjectsService.new user
   end
 
+  # 更新isssue的updated_at字段
   def update_issue_time(issue)
     issue_record = Issue.find_by(id: issue['id'])
     return unless issue_record
     issue['updated_at'] = issue_record.updated_at
   end
 
+  # 返回issues的统计信息
   def get_issues_cnts(records, state)
     # records: issues records
     # state: current issues state
@@ -239,6 +247,7 @@ class IssuesService < BaseService
     }
   end
 
+  # 对前端请求的params部分的字段进行预处理
   def preprocess(params)
     # state 处理
     state = params[:state]
