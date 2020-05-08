@@ -3,10 +3,7 @@
     <el-menu
       :default-active="kanban"
       mode="horizontal"
-      @select="handleSelect"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b">
+      @select="handleSelect">
       <el-submenu index="1">
         <template slot="title">项目看板</template>
         <el-menu-item v-for="(project, index) in projects" :key="index" :index="'1-' + project.id">
@@ -46,13 +43,13 @@
         班级
       </el-menu-item>
 
-      <el-menu-item index="5">
-        GitLab
-        <i class="iconfont icon-link"></i>
-      </el-menu-item>
-
       <el-menu-item index="7">
         广播消息
+      </el-menu-item>
+
+      <el-menu-item index="5">
+        GitLab
+        <i class="el-icon-link"></i>
       </el-menu-item>
 
       <el-menu-item index="8" style="float: right">

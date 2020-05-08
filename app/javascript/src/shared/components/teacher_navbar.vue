@@ -1,18 +1,11 @@
 <template>
   <div class="navbar clearFloat">
     <el-menu
+      :default-active="activeIndex"
       mode="horizontal"
-      @select="handleSelect"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b">
+      @select="handleSelect">
       <el-menu-item index="1">
         班级
-      </el-menu-item>
-      
-      <el-menu-item index="2">
-        GitLab
-        <i class="iconfont icon-link"></i>
       </el-menu-item>
       
       <el-submenu index="3">
@@ -25,6 +18,12 @@
         </el-menu-item>
       </el-submenu>
 
+      <el-menu-item index="2">
+        GitLab
+        <i class="el-icon-link"></i>
+      </el-menu-item>
+
+
       <el-menu-item index="4" style="float: right">
         注销平台
       </el-menu-item>
@@ -35,6 +34,7 @@
   export default {
     data() {
       return {
+        activeIndex: '1',
         gitlabHost: ''
       }
     },
@@ -50,7 +50,7 @@
           window.location.href = this.gitlabHost;
         }
         else if (key.startsWith('3-')) {
-          if (key == '3-1') {
+          if (key === '3-1') {
             window.location.href = '/broadcasts/new';
           } else if (key === '3-2') {
             window.location.href = '/broadcasts';

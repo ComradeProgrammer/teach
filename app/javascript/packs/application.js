@@ -10,3 +10,4 @@ import Rails from 'rails-ujs'
 import "@babel/polyfill"
 
 Rails.start()
+

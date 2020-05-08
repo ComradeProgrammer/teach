@@ -5,18 +5,22 @@
 - content_for :styles do
   = stylesheet_pack_tag 'login'
 
-#login
-  %img{src: '/logo/gitlab-icon-rgb.svg'}
-  %a.el-button{href: gitlab_auth_url('student')}
-    学生登录
-  %a.el-button{href: gitlab_auth_url('teacher')}
-    教师登录
+#login.small-container
+  .page-title-holder
+    .page-title 登陆
+  %el-row
+    %el-col{':span': '8'}
+      %img{src: '/logo/gitlab-icon-rgb.svg'}
+    %el-col{':span': '15', style: 'float: right'}
+      %login_panel{:student_href => gitlab_auth_url('student'),
+        :teacher_href => gitlab_auth_url('teacher'),
+        :admin_href => gitlab_auth_url('admin')}
 
-:css
+:scss
   #login {
     margin: auto;
     text-align: center;
-    width: 400px;
+    width: 100%;
   }
 
   #login > img {
@@ -25,4 +29,14 @@
 
   #login a {
     text-decoration: none;
+  }
+
+  .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .el-col {
+    border-radius: 4px;
   }

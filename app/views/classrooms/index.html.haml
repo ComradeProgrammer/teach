@@ -9,39 +9,64 @@
     - if teacher?
       .page-title-controls
         %a.el-button{href: new_classroom_path} 新建班级
-  %el-tabs
+  %el-tabs{type: 'card'}
     %el-tab-pane{label: '我的班级'}
       .content-list
-        - @classrooms.each do |classroom|
-          .card
-            .card-title.clearFloat
-              %span
-                %a{href: classroom_path(classroom['id'])}= classroom['name']
-              .floatRight
+        -if @classrooms.length == 0
+          %div
+            %el-card{style: 'width: 80%; margin: auto;'}
+              %br
+              您还没有加入任何班级，您可以
+              %br
+              %br
+              %ul
+                %li 从所有班级中选择您要加入的班级
+                %br
                 - if teacher?
-                  %a.el-button.el-button--mini{href: edit_classroom_path(classroom['id'])} 编辑
-                  %a.el-button.el-button--danger.el-button--mini{href: exit_classroom_path(classroom['id'])} 退出班级
-                  = link_to '删除', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger el-button--mini'
-                - if student?
-                  %a.el-button.el-button--danger.el-button--mini{href: exit_classroom_path(classroom['id'])} 退出班级
+                  %li 您是老师或助教，您可以创建新的班级
+                -else
+                  %li 联系老师或助教将您加入一个班级
 
-            .card-info
-              = classroom['description']
+        -else
+          - @classrooms.each do |classroom|
+            .card
+              .card-title.clearFloat
+                %span
+                  %a{href: classroom_path(classroom['id'])}= classroom['name']
+                .floatRight
+                  - if teacher?
+                    %a.el-button.el-button--mini{href: edit_classroom_path(classroom['id'])} 编辑
+                    %a.el-button.el-button--danger.el-button--mini{href: exit_classroom_path(classroom['id'])} 退出班级
+                    = link_to '删除', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger el-button--mini'
+                  - if student?
+                    %a.el-button.el-button--danger.el-button--mini{href: exit_classroom_path(classroom['id'])} 退出班级
+
+              .card-info
+                = classroom['description']
     %el-tab-pane{label: '所有班级'}
       .content-list
-        - @all_classrooms.each do |classroom|
-          .card
-            .card-title.clearFloat
-              %span
-                %a{href: my_class?(classroom['id']) ? classroom_path(classroom['id']) : '#'}= classroom['name']
-                .floatRight
-                  - unless classroom['own']
-                    %a.el-button.el-button--mini{href: join_classroom_path(classroom['id'])} 加入班级
-                  - if teacher? && classroom['own']
-                    %a.el-button.el-button--mini{href: edit_classroom_path(classroom['id'])} 编辑
-                    = link_to '删除', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger el-button--mini'
-                  - if student? && classroom['own']
-                    %el-button.el-button--mini{':disabled': 'true'} 已加入
+        -if @classrooms.length == 0
+          %div
+            - if teacher?
+              %el-card{style: 'width: 80%; margin: auto;'}
+                当前平台还没有任何班级，您是老师或助教，您可以创建新的班级
+            -else
+              %el-card{style: 'width: 80%; margin: auto;'}
+                当前平台还没有任何班级，请等待老师或助教创建班级
+        -else
+          - @all_classrooms.each do |classroom|
+            .card
+              .card-title.clearFloat
+                %span
+                  %a{href: my_class?(classroom['id']) ? classroom_path(classroom['id']) : '#'}= classroom['name']
+                  .floatRight
+                    - unless classroom['own']
+                      %a.el-button.el-button--mini{href: join_classroom_path(classroom['id'])} 加入班级
+                    - if teacher? && classroom['own']
+                      %a.el-button.el-button--mini{href: edit_classroom_path(classroom['id'])} 编辑
+                      = link_to '删除', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger el-button--mini'
+                    - if student? && classroom['own']
+                      %el-button.el-button--mini{':disabled': 'true'} 已加入
 
-            .card-info
-              = classroom['description']
+              .card-info
+                = classroom['description']

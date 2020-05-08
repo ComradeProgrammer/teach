@@ -41,6 +41,7 @@ module SessionsHelper
   end
 
   def teacher?
-    session[:type] == 'teacher'
+    # add new role: admin
+    session[:type] == 'teacher' || session[:type] == 'admin'
   end
 end

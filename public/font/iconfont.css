@@ -73,6 +73,7 @@
 
 .icon-link:before {
   content: "\e60c";
+  color: white;
 }
 
 .icon-mux-task-doing:before {
