@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   resources :issues do
     collection do
       # 全量 issues
-      get 'all', to: 'issues#all_issues', constraints: ->(req) {req.format == :json}
+      get 'all', to: 'issues#all_issues', constraints: ->(req) { req.format == :json }
     end
   end
 
@@ -33,9 +33,9 @@ Rails.application.routes.draw do
       # file upload
       post 'uploads', to: 'uploads#index'
 
-      get 'labels', to: 'projects#labels', constraints: ->(req) {req.format == :json}
+      get 'labels', to: 'projects#labels', constraints: ->(req) { req.format == :json }
 
-      get 'members', to: 'projects#members', constraints: ->(req) {req.format == :json}
+      get 'members', to: 'projects#members', constraints: ->(req) { req.format == :json }
     end
   end
 
@@ -108,7 +108,7 @@ Rails.application.routes.draw do
   end
 
   resources :blogs, only: [] do
-    resources :comments, only: %i[index create update destroy], constraints: ->(req) {req.format == :json}
+    resources :comments, only: %i[index create update destroy], constraints: ->(req) { req.format == :json }
   end
 
   resource :users, only: [] do
@@ -127,6 +127,12 @@ Rails.application.routes.draw do
   resources :broadcasts do
     collection do
       get 'destroy_all', to: 'broadcasts#destroy_all'
+    end
+  end
+
+  resources :organizations, only: [] do
+    collection do
+      get 'get_all_info', to: 'organizations#get_all_info'
     end
   end
 end

@@ -28,7 +28,7 @@
   %body
     #container
       #navbar{data: projects_data}
-        %navbar
+        %navbar{:is_admin => admin?}
       #content
         .content-wrapper
           = yield

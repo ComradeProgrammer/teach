@@ -7,6 +7,16 @@
       <el-menu-item index="1">
         班级
       </el-menu-item>
+
+      <el-submenu index="5">
+        <template slot="title">组织</template>
+        <el-menu-item index="5-1">
+          新建组织
+        </el-menu-item>
+        <el-menu-item index="5-2">
+          管理组织
+        </el-menu-item>
+      </el-submenu>
       
       <el-submenu index="3">
         <template slot="title">广播</template>
@@ -32,6 +42,7 @@
 </template>
 <script>
   export default {
+    props: ['is_admin'],
     data() {
       return {
         activeIndex: '1',
@@ -56,7 +67,13 @@
             window.location.href = '/broadcasts';
           }
         } else if (key === '4') {
-          window.location.href = '/logout'
+          window.location.href = '/logout';
+        } else if (key.startsWith('5-')) {
+          if (key === '5-1') {
+            window.location.assign('/organizations/new');
+          } else if (key === '5-2') {
+            window.location.assign('/organizations');
+          }
         }
       }
     }
