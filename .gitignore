@@ -45,3 +45,5 @@ coverage/
 # Ignore config files while developing
 /app/config/development_constant.rb
 /app/config/production_constant.rb
+
+.sass-cache
