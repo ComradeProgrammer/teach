@@ -8,7 +8,7 @@
         班级
       </el-menu-item>
 
-      <el-submenu index="5">
+      <el-submenu index="5" v-if="is_admin">
         <template slot="title">组织</template>
         <el-menu-item index="5-1">
           新建组织
