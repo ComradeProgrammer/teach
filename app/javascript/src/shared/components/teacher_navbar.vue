@@ -8,7 +8,7 @@
         班级
       </el-menu-item>
 
-      <el-submenu index="5" v-if="is_admin">
+      <el-submenu index="5" v-if="admin === 'admin'">
         <template slot="title">组织</template>
         <el-menu-item index="5-1">
           新建组织
@@ -42,7 +42,7 @@
 </template>
 <script>
   export default {
-    props: ['is_admin'],
+    props: ['admin'],
     data() {
       return {
         activeIndex: '1',

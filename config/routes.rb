@@ -130,7 +130,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :organizations, only: [] do
+  resources :organizations do
     collection do
       get 'get_all_info', to: 'organizations#get_all_info'
     end
