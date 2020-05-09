@@ -5,6 +5,7 @@ import ClassroomStudentService from "../src/classroom/services/classroom_student
 import AlertMixin from '../src/shared/components/mixins/alert';
 import axios from 'axios/index';
 import side_bar_personal from "../src/classroom/components/side_bar_personal.vue";
+import side_bar_pair from "../src/classroom/components/side_bar_pair";
 
 Vue.use(ElementUI);
 
@@ -12,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   new Vue({
     el: '#show-classroom-app',
     components: {
-      side_bar_personal
+      side_bar_personal,
+      side_bar_pair
     },
     data() {
       return {
