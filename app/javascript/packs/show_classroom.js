@@ -4,12 +4,16 @@ import 'element-ui/lib/theme-chalk/index.css';
 import ClassroomStudentService from "../src/classroom/services/classroom_student_service";
 import AlertMixin from '../src/shared/components/mixins/alert';
 import axios from 'axios/index';
+import side_bar_personal from "../src/classroom/components/side_bar_personal.vue";
 
 Vue.use(ElementUI);
 
 document.addEventListener('DOMContentLoaded', () => {
   new Vue({
     el: '#show-classroom-app',
+    components: {
+      side_bar_personal
+    },
     data() {
       return {
         isCreatingProjects: false,

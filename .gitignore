@@ -47,3 +47,5 @@ coverage/
 /app/config/production_constant.rb
 
 .sass-cache
+
+package-lock.json
