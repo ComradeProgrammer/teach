@@ -1,11 +1,10 @@
 <template>
   <div>
     <el-button type="primary" @click="table = true">结对项目管理面板</el-button>
-    <el-drawer
+    <el-dialog
       :visible.sync="table"
       direction="rtl"
-      size="40%"
-      style="">
+      width="40%">
       <h2 class="title">结对项目控制面板</h2>
       <br><br>
       <div v-if="haspublicrepo === 'true'" class="func-card">
@@ -59,7 +58,7 @@
           获取评测结果
         </el-button>
       </div>
-    </el-drawer>
+    </el-dialog>
   </div>
 </template>
 
