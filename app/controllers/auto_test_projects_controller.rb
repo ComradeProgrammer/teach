@@ -310,8 +310,7 @@ class AutoTestProjectsController < ApplicationController
         compile_command,
         exec_command
     )
-
-    redirect_to(classroom_path(id: params[:classroom_id]))
+    p '11111111111111111111111'
   end
 
   # get result

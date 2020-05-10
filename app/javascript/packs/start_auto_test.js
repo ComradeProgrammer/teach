@@ -1,12 +1,18 @@
 import Vue from 'vue/dist/vue.esm'
+import VueRouter from 'vue-router/dist/vue-router.esm'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import csrf from '../src/shared/components/csrf.vue'
+import axios from 'axios/index'
 
 Vue.use(ElementUI);
+Vue.use(VueRouter);
+
+const router = new VueRouter();
 
 document.addEventListener('DOMContentLoaded', () => {
     new Vue({
+        router: router,
         el: '#start-auto-test-app',
         data() {
             return {
@@ -16,8 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     use_text_output: 'true',
                     compile_command: '',
                     exec_command: ''
-                },
-                is_loading: false
+                }
             }
         },
         components: {
@@ -28,8 +33,16 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         methods: {
             submitForm() {
-                this.is_loading = true
-                this.$refs.start_auto_test.$el.submit();
+                axios.post(
+                    '/classrooms/' + this.$el.data.classroom_id + '/auto_test_projects/start_auto_test',
+                    {
+                        params:
+                        {
+                            project_id: this.form.project_id
+                        }
+                    }
+                );
+                this.$router.push({path: '/classrooms/' + this.$el.data.classroom_id});
             }
         }
     })
