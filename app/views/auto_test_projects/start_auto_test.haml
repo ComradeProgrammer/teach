@@ -6,7 +6,7 @@
 #start-auto-test-app.small-container{data: {gitlabid: @public_personal_project_id, classroom_id: @classroom_id}}
   .page-title-holder
     .page-title 提交自动评测任务
-  %el-form{':model': "form", ref: 'start_auto_test', 'label-width': '100px', action: start_auto_test_classroom_auto_test_projects_path, method: 'post'}
+  %el-form{':model': "form", ref: 'start_auto_test', 'label-width': '100px'}
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}
     %csrf
@@ -29,4 +29,4 @@
     %el-form-item.clearFloat
       %el-button-group.floatRight
         %a.el-button{href: classroom_path(id: @classroom_id)} 返回
-        %el-button{'@click': 'submitForm', type: 'primary'} 提交
+        %el-button{'@click': 'submitFormAxios', type: 'primary'} 提交
