@@ -32,7 +32,9 @@
         GitLab
         <i class="el-icon-link"></i>
       </el-menu-item>
-
+      <el-menu-item index="6">
+        新建用户
+      </el-menu-item>
 
       <el-menu-item index="4" style="float: right">
         注销平台
@@ -74,6 +76,8 @@
           } else if (key === '5-2') {
             window.location.assign('/organizations');
           }
+        } else if (key === '6') {
+          window.location.href = '/members/new';
         }
       }
     }
