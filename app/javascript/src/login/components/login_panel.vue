@@ -50,11 +50,18 @@
       </div>
       <br/>
       <br/>
-      <a :href="teacher_href" :disabled="teacher_disabled">
+      <div v-if="teacher_disabled">
         <el-button :disabled="teacher_disabled">
           教师登陆
         </el-button>
-      </a>
+      </div>
+      <div v-else>
+        <a :href="teacher_href" :disabled="teacher_disabled">
+          <el-button :disabled="teacher_disabled">
+            教师登陆
+          </el-button>
+        </a>
+      </div>
     </el-tab-pane>
     <el-tab-pane label="管理员登陆">
       <div class="ul-content">
@@ -73,11 +80,19 @@
       </div>
       <br/>
       <br/>
-      <a :href="admin_href" :disabled="admin_disabled">
+      <div v-if="admin_disabled">
         <el-button :disabled="admin_disabled">
           管理员登陆
         </el-button>
-      </a>
+      </div>
+      <div v-else>
+        <a :href="admin_href">
+          <el-button :disabled="admin_disabled">
+            管理员登陆
+          </el-button>
+        </a>
+      </div>
+
     </el-tab-pane>
   </el-tabs>
 </template>
