@@ -361,6 +361,27 @@ class AutoTestProjectsController < ApplicationController
 
     render 'auto_test_projects/auto_test_results'
   end
+
+  def get_auto_test_points
+    @classroom_id = params[:classroom_id]
+    test_type = params[:test_type]
+    @public_personal_project_id = AutoTestProject.find_by(
+        :classroom_id => @classroom_id,
+        :test_type => test_type,
+        :is_public => 1
+    ).gitlab_id
+    auto_test_points = auto_test_runners_service.get_auto_test_points(@public_personal_project_id)
+    @points = Hash.new(Hash.new)
+    auto_test_projects.each_with_index do |point, index|
+      @points[index] = point
+    end
+
+    puts('>>>>>>>>>>>>>')
+    puts(@points)
+    puts('>>>>>>>>>>>>>')
+
+    render 'auto_test_projects/auto_test_results'
+  end
   
 
   private

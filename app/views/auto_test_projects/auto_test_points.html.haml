@@ -1,0 +1,12 @@
+- content_for :scripts do
+  = javascript_pack_tag 'show_auto_test_points'
+- content_for :styles do
+  = stylesheet_pack_tag 'show_auto_test_points'
+
+#test-points
+  %test-records{data: {points: @points}}
+
+:css
+  #test-records {
+    overflow: auto;
+  }

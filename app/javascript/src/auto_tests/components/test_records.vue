@@ -141,7 +141,7 @@
   import TestRecord from "../models/test_record";
   import mdWrapper from '../../shared/components/md_wrapper.vue'
   import AlertMixin from '../../shared/components/mixins/alert'
-  import axios from 'axios/index'
+  import axios from 'axios/'
 
   export default {
     data() {

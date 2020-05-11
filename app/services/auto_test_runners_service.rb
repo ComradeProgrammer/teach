@@ -52,6 +52,15 @@ class AutoTestRunnersService
     JSON.parse response.body
   end
 
+  def get_auto_test_points(project_id)
+    response = RestClient.get(auto_test_runner_host + '/get_auto_test_points', {
+      params: {
+        :project_id => project_id
+      }
+    })
+    JSON.parse response.body
+  end
+
   def auto_test_runner_host
     Constant::AUTO_TEST_RUNNER_HOST
   end
