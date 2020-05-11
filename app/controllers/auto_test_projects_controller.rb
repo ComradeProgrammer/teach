@@ -47,6 +47,83 @@ class AutoTestProjectsController < ApplicationController
     end
   end
 
+  def new_pair_projects_batch
+    # todo: complete new func and pages
+    @errors = []
+  end
+
+  # todo: test to see if buggy
+  def get_all_member_id(query)
+    all_students_gitlab_id_in_class = []
+    all_teachers_gitlab_id_in_class = []
+    query.each do |item|
+      tmp = User.find(item.user_id)
+      if tmp.role == 'student'
+        all_students_gitlab_id_in_class.append(tmp.gitlab_id)
+      else
+        all_teachers_gitlab_id_in_class.append(tmp.gitlab_id)
+      end
+    end
+    return [all_students_gitlab_id_in_class, all_teachers_gitlab_id_in_class]
+  end
+
+  def create_pair_project(id1, id2)
+    @classroom_students_query = SelectClassroom.where(:classroom_id => params[:classroom_id])
+    @all_students_gitlab_id_in_class = get_all_member_id(@classroom_students_query)[0]
+    @all_teachers_gitlab_id_in_class = get_all_member_id(@classroom_students_query)[1]
+    # find the classroom
+    classroom = Classroom.find_by(id: params[:classroom_id])
+    auto_test_project = classroom.auto_test_projects.new
+    name = 'student_pair_project_' + id1 + '_' + id2
+    @auto_test_project = {
+        name: name,
+        path: gitlab_host + '/' + @classroom_name + '/' + @projects_name + '/' + name,
+        description: '',
+        test_type: 'pair',
+        pair1_id: id1,
+        pair2_id: id2
+    }
+    @auto_test_project['namespace_id'] = classroom.pair_project_subgroup_id
+    @auto_test_project['visibility'] = 'public'
+    @auto_test_project['request_access_enabled'] = true
+
+    # check if there is duplicated repo
+    has_deplicated_name = false
+    all_subgroup_repo = groups_service.get_projects(@auto_test_project['namespace_id'])
+    if all_subgroup_repo
+      all_subgroup_repo.each do |item|
+        if item['name'] == @auto_test_project[:name]
+          has_deplicated_name = true
+        end
+      end
+    end
+    if has_deplicated_name
+      redirect_to classroom_path(params[:classroom_id])
+      return
+    end
+
+    project = projects_service.new_project(@auto_test_project)
+
+    gitlab_id_pair1 = User.find(@auto_test_project[:pair1_id]).gitlab_id
+    gitlab_id_pair2 = User.find(@auto_test_project[:pair2_id]).gitlab_id
+    projects_service.add_user_as_project_maintainer(project['id'], gitlab_id_pair1)
+    projects_service.add_user_as_project_maintainer(project['id'], gitlab_id_pair2)
+
+    auto_test_project.gitlab_id = project['id']
+    auto_test_project.test_type = @auto_test_project[:test_type]
+
+    auto_test_project.is_public = 0
+
+    auto_test_project.save
+    # classroom.users << owner
+    redirect_to classroom_path(params[:classroom_id])
+  rescue RestClient::BadRequest => e
+    @errors = ['名称或地址包含非法字符或已被占用']
+    @@errors_save = @errors
+    # render 'new'
+    redirect_to new_classroom_auto_test_project_path + '?type=' + @@project_type
+  end
+
   # create a new project
   def create
     @classroom_students_query = SelectClassroom.where(:classroom_id => params[:classroom_id])
