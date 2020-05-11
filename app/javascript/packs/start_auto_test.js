@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 );
-                this.$router.push({path: '/classrooms/' + this.$el.data.classroom_id});
+                window.location.assign('www.baidu.com');
+                // this.$router.push({path: '/classrooms/' + this.$el.data.classroom_id});
             }
         }
     })
