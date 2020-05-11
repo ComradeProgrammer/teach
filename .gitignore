@@ -36,7 +36,6 @@
 
 /public/packs
 /public/packs-test
-/node_modules
 yarn-debug.log*
 .yarn-integrity
  yarn.lock
@@ -50,3 +49,4 @@ coverage/
 .sass-cache
 
 package-lock.json
+yarn.lock

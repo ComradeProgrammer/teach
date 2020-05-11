@@ -261,6 +261,24 @@ class AutoTestProjectsController < ApplicationController
     render 'auto_test_projects/start_auto_test'
   end
 
+  def get_auto_test_repo
+    auto_test_record = AutoTestProject.find_by(:gitlab_id => params['params']['project_id'])
+    auto_test_classroom_id = auto_test_record.classroom_id
+    auto_test_type = auto_test_record.test_type
+    auto_test_students_record = AutoTestProject.where(
+      :classroom_id => auto_test_classroom_id,
+      :test_type => auto_test_type,
+      :is_public => 0
+    )
+
+    git_repo_list = ''
+    auto_test_students_record.each do |item|
+      git_repo_list += projects_service.project(item.gitlab_id)['http_url_to_repo'] + ','
+    end
+    git_repo_list.chop!
+    render plain: git_repo_list
+  end
+
   # start a new auto test
   def start_auto_test
     auto_test_record = AutoTestProject.find_by(:gitlab_id => params[:project_id])
@@ -310,7 +328,6 @@ class AutoTestProjectsController < ApplicationController
         compile_command,
         exec_command
     )
-    p '11111111111111111111111'
   end
 
   # get result

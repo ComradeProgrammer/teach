@@ -199,7 +199,7 @@ class ClassroomsController < ApplicationController
 
     # 所有 teacher
     @teachers = users.find_all do |s|
-      !@classroom_record.users.find_by(gitlab_id: s['id'], role: 'teacher').nil?
+      !@classroom_record.users.find_by(gitlab_id: s['id'], role: 'teacher').nil? || !@classroom_record.users.find_by(gitlab_id: s['id'], role: 'admin').nil?
     end
     @teachers.each do |t|
       t['is_me'] = t['id'] == current_user.id

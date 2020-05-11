@@ -11,40 +11,39 @@ Vue.use(VueRouter);
 const router = new VueRouter();
 
 document.addEventListener('DOMContentLoaded', () => {
-    new Vue({
-        router: router,
-        el: '#start-auto-test-app',
-        data() {
-            return {
-                form: {
-                    project_id: '',
-                    use_text_file: 'true',
-                    use_text_output: 'true',
-                    compile_command: '',
-                    exec_command: ''
-                }
-            }
-        },
-        components: {
-            csrf
-        },
-        mounted() {
-            this.form.project_id = this.$el.dataset.gitlabid;
-        },
-        methods: {
-            submitForm() {
-                axios.post(
-                    '/classrooms/' + this.$el.data.classroom_id + '/auto_test_projects/start_auto_test',
-                    {
-                        params:
-                        {
-                            project_id: this.form.project_id
-                        }
-                    }
-                );
-                window.location.assign('www.baidu.com');
-                // this.$router.push({path: '/classrooms/' + this.$el.data.classroom_id});
-            }
+  new Vue({
+    router: router,
+    el: '#start-auto-test-app',
+    data() {
+      return {
+        form: {
+          project_id: '',
+          use_text_file: 'true',
+          use_text_output: 'true',
+          compile_command: '',
+          exec_command: ''
         }
-    })
+      }
+    },
+    components: {
+      csrf
+    },
+    mounted() {
+      this.form.project_id = this.$el.dataset.gitlabid;
+    },
+    methods: {
+      submitFormAxios() {
+        axios.post(
+          '/classrooms/' + this.$el.dataset.classroomId + '/auto_test_projects/start_auto_test',
+          {
+            project_id: this.form.project_id,
+            use_text_file: this.form.use_text_file,
+            use_text_output: this.form.use_text_output,
+            compile_command: this.form.compile_command,
+            exec_command: this.form.exec_command
+        });
+        window.location.assign('/classrooms/' + this.$el.dataset.classroomId);
+      }
+    }
+  })
 });
