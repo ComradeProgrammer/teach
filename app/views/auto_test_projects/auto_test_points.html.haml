@@ -3,5 +3,5 @@
 - content_for :styles do
   = stylesheet_pack_tag 'show_auto_test_points'
 
-#test-points
-  %test-points{data: {points: @points}}
+#test-points-app.small-container{data: {points: @points}}
+  %tp{":points" => "points"}

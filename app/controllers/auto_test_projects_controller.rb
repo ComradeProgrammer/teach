@@ -449,15 +449,16 @@ class AutoTestProjectsController < ApplicationController
     ).gitlab_id
     auto_test_points = auto_test_runners_service.get_auto_test_points(@public_personal_project_id)
     @points = Hash.new(Hash.new)
-    auto_test_projects.each_with_index do |point, index|
+    auto_test_points.each_with_index do |point, index|
       @points[index] = point
     end
 
+    @points['1'] = {'1' => '2'}
     puts('>>>>>>>>>>>>>')
     puts(@points)
     puts('>>>>>>>>>>>>>')
 
-    render 'auto_test_projects/auto_test_results'
+    render 'auto_test_projects/auto_test_points'
   end
   
 

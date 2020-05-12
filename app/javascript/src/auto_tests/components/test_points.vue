@@ -1,5 +1,5 @@
 <template>
-  <div class="test-points small-container">
+  <div class="test-points">
       <div class="page-title-holder">
           <div class="page-title">
               评测点列表
@@ -11,20 +11,24 @@
           </div>
           <div class="point-card-body">
               <h4>输入</h4>
-              <fold-text text="point['input']"></fold-text>
+              <fold-text :text="point['input']"></fold-text>
               <h4>期望输出</h4>
-              <fold-text text="point['expected_output']"></fold-text>
+              <fold-text :text="point['expected_output']"></fold-text>
           </div>
   </div>
 </template>
 
 <script>
-import FoldText from "../../text_component/fold_unfold_test.vue";
+import Vue from 'vue/dist/vue.esm';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import FoldText from "../../text_component/fold_unfold_text.vue";
 
 export default {
+    props : ['points'],
+
     data() {
         return {
-            points: [],
             has_points: false
         }
     },

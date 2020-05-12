@@ -1,18 +1,26 @@
 import Vue from 'vue/dist/vue.esm'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import MavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
-import TestPoints from '../src/auto_tests/components/test_points.vue'
+import tp from '../src/auto_tests/components/test_points.vue'
 
 Vue.use(ElementUI);
-Vue.use(MavonEditor);
 
 document.addEventListener('DOMContentLoaded', () => {
-  const autoTestProjects = new Vue({
-    el: '#test-points',
+  new Vue({
+    el: '#test-points-app',
+    data() {
+      return {
+        points: []
+      }
+    },
     components: {
-        TestPoints
+        tp
+    },
+
+    mounted() {
+      this.points = JSON.parse(this.$el.dataset.points);
+      console.log('>>>>>>>>>>>>>>>>');
+      console.log(this.points);
     }
   })
 })
