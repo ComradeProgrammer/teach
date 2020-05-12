@@ -1,0 +1,9 @@
+- content_for :scripts do
+  = javascript_pack_tag 'new_pair_projects_batch'
+- content_for :styles do
+  = stylesheet_pack_tag 'new_pair_projects_batch'
+
+#new-pair-projects-batch-app.small-container{data: {classroom_id: @classroom_id}}
+  .page-title-holder
+    .page-title 批量创建结对作业项目 【待完善】
+  %new_pair_projects_batch_form{:action => organizations_path}
