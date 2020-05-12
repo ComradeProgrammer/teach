@@ -1,7 +1,12 @@
 <template>
   <el-form :model="memberForm" :rules="rules" ref="memberForm" :action="action" method="post">
     <csrf></csrf>
+    <li v-for="error in errors">
+        {{ error }}
+    </li>
     <el-form-item label="学生信息" prop="description">
+          <br/>
+          <br/>
           <li>
             请按照’姓名,学号,密码,邮箱‘的顺序输入信息，信息之间以逗号分隔，每个学生的信息占一行
           </li>
@@ -25,8 +30,16 @@
   Vue.use(ElementUI);
 
   export default {
-    props: ['action'],
+    props: ['action','errors'],
     data() {
+      let mess = /.*,[0-9]{8},.*,([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}(\s.*,[0-9]{8},.*,([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3})*(\s)?$/i;
+      let isMess = (rule,value,callback) => {
+        if(!mess.test(value)){
+          return callback(new Error('信息必须为英文逗号分隔，不同学生需另起一行'))
+        } else{
+          callback()
+        }
+      };
       return {
         memberForm: {
           description: ''
@@ -34,7 +47,8 @@
         rules: {
           description: [
                       {required: true, message: '请输入学生信息', trigger: 'blur'},
-                      {min: 8, message: '学生信息不能为空', trigger: 'blur'}
+                      {min: 8, message: '学生信息不能为空', trigger: 'blur'},
+                      { validator:isMess}
                     ]
         }
       }
