@@ -46,6 +46,14 @@
       </div>
       <el-divider></el-divider>
       <div v-if="haspublicrepo === 'true'" class="func-card">
+        <a :href="gettestpointshref">
+          <el-button>
+            查看所有评测点
+          </el-button>
+        </a>
+      </div>
+      <el-divider></el-divider>
+      <div v-if="haspublicrepo === 'true'" class="func-card">
         <a :href="getresulthref">
           <el-button>
             获取评测结果
@@ -73,6 +81,7 @@
     props: [
       'haspublicrepo',
       'testpointhref',
+      'gettestpointshref',
       'createpublichref',
       'repohref',
       'starttesthref',
