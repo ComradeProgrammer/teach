@@ -29,9 +29,24 @@ class UsersController < ApplicationController
     @page ||= 1
     # type: student 添加一个学生到班级
     # type: teacher 添加一个老师或助教
+
     @students, gitlab_headers = users_service.all page: @page
     @page_count = gitlab_headers[:x_total_pages].to_i
     render_404 if @page > @page_count
+    puts '+++++++++++++++++++++++++++++'
+    puts @students
+    puts @students.class
+    @students.each do |stu|
+      owner = User.find_by(gitlab_id: stu['id'])
+      if owner != nil
+        if @type == 'student' and owner.role != 'student'
+          @students.delete(stu)
+        end
+        if @type == 'teacher' and owner.role == 'student'
+          @students.delete(stu)
+        end
+      end
+    end
     @students.each do |s|
       s['added'] = !classroom.users.find_by(gitlab_id: s['id']).nil?
     end
