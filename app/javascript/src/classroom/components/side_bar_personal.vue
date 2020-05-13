@@ -64,7 +64,7 @@
               </el-button>
             </a>
           </div>
-          <div v-else class="func-card">
+          <div v-else>
             <el-button type="text" :disabled="true">
               提交评测任务
             </el-button>
