@@ -1,22 +1,7 @@
 <template>
     <el-form :model="pairForm" :rules="rules" ref="pairForm" :action="action" method="post">
         <csrf></csrf>
-        <el-form-item label="组织名称" prop="name">
-            <el-input v-model="pairForm.name" name='org[name]'></el-input>
-        </el-form-item>
-        <el-form-item label="组织代号" prop="code">
-            <el-input v-model="pairForm.code" name='org[code]'></el-input>
-        </el-form-item>
-        <el-form-item label="组织令牌" prop="token">
-            <el-input v-model="pairForm.token" name='org[token]'></el-input>
-        </el-form-item>
-        <el-form-item label="组织描述" prop="description">
-            <el-input v-model="pairForm.description" name='org[description]' type="textarea"></el-input>
-        </el-form-item>
-        <el-form-item>
-            <el-button @click="resetForm('pairForm')">重置</el-button>
-            <el-button type="primary" @click="submitForm('pairForm')">创建组织</el-button>
-        </el-form-item>
+        <el-input v-model="input" placeholder="请输入内容"></el-input>
     </el-form>
 </template>
 
@@ -26,7 +11,6 @@
     import ElementUI from 'element-ui';
     import 'element-ui/lib/theme-chalk/index.css';
     import csrf from '../../shared/components/csrf.vue';
-    import axios from 'axios/index';
 
     Vue.use(ElementUI);
 
@@ -34,26 +18,7 @@
         props: ['action'],
         data() {
             return {
-                pairForm: {
-                    name: '',
-                    code: '',
-                    token: '',
-                    description: ''
-                },
-                rules: {
-                    name: [
-                        {required: true, message: '请输入组织名称', trigger: 'blur'},
-                        {min: 2, max: 20, message: '组织名称长度必须为2到20字符', trigger: 'blur'}
-                    ],
-                    code: [
-                        {required: true, message: '请输入组织代号', trigger: 'blur'},
-                        {min: 5, max: 5, message: '组织代号必须5个字符', trigger: 'blur'}
-                    ],
-                    token: [
-                        {required: true, message: '请输入组织令牌', trigger: 'blur'},
-                        {min: 6, max: 16, message: '组织令牌必须为6到16个字符', trigger: 'blur'}
-                    ]
-                }
+                input: ''
             }
         },
         components: {

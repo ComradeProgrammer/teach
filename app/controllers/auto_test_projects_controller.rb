@@ -50,6 +50,20 @@ class AutoTestProjectsController < ApplicationController
   def new_pair_projects_batch
     # todo: complete new func and pages
     @errors = []
+    if @@errors_save.size > 0
+      @errors = @@errors_save
+      @@errors_save = []
+    end
+    @classroom_id = params[:classroom_id]
+    classroom = Classroom.find_by(id: @classroom_id)
+    @classroom_name = groups_service.get_group(classroom.gitlab_group_id)['path']
+    @type = params[:type]
+    @@project_type = params[:type]
+    @is_public = 'yes'
+    @title = '批量创建结对项目'
+    @projects_name = 'pair-projects'
+    @auto_test_project = AutoTestProject.new('pair')
+    # @is_public = params[:is_public]
   end
 
   # todo: test to see if buggy
@@ -77,12 +91,12 @@ class AutoTestProjectsController < ApplicationController
     auto_test_project = classroom.auto_test_projects.new
     name = 'student_pair_project_' + id1 + '_' + id2
     @auto_test_project = {
-        name: name,
-        path: gitlab_host + '/' + @classroom_name + '/' + @projects_name + '/' + name,
-        description: '',
-        test_type: 'pair',
-        pair1_id: id1,
-        pair2_id: id2
+        :name => name,
+        :path => gitlab_host + '/' + @classroom_name + '/' + @projects_name + '/' + name,
+        :description => '',
+        :test_type => 'pair',
+        :pair1_id => id1,
+        :pair2_id => id2
     }
     @auto_test_project['namespace_id'] = classroom.pair_project_subgroup_id
     @auto_test_project['visibility'] = 'public'
@@ -105,6 +119,7 @@ class AutoTestProjectsController < ApplicationController
 
     project = projects_service.new_project(@auto_test_project)
 
+    # add user
     gitlab_id_pair1 = User.find(@auto_test_project[:pair1_id]).gitlab_id
     gitlab_id_pair2 = User.find(@auto_test_project[:pair2_id]).gitlab_id
     projects_service.add_user_as_project_maintainer(project['id'], gitlab_id_pair1)
@@ -112,9 +127,7 @@ class AutoTestProjectsController < ApplicationController
 
     auto_test_project.gitlab_id = project['id']
     auto_test_project.test_type = @auto_test_project[:test_type]
-
     auto_test_project.is_public = 0
-
     auto_test_project.save
     # classroom.users << owner
     redirect_to classroom_path(params[:classroom_id])
@@ -123,6 +136,23 @@ class AutoTestProjectsController < ApplicationController
     @@errors_save = @errors
     # render 'new'
     redirect_to new_classroom_auto_test_project_path + '?type=' + @@project_type
+  end
+
+  def create_pair_project_batch(id_array)
+    puts '************************'
+    puts id_array.size
+    puts id_array
+    puts '************************'
+    if id_array.size % 2 != 0
+      @errors = ['名称或地址包含非法字符或已被占用']
+      @@errors_save = @errors
+      redirect_to new_pair_projects_batch
+    end
+    i = 0
+    while i < id_array.size
+      create_pair_project(id_array[i], id_array[i + 1])
+      i = i + 2
+    end
   end
 
   # create a new project
