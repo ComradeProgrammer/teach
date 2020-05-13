@@ -32,6 +32,8 @@
             .card
               .card-title.clearFloat
                 %span
+                  - if classroom['avatar_url']
+                    %img{src: classroom['avatar_url'], width: '5%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
                   %a{href: classroom_path(classroom['id'])}= classroom['name']
                 .floatRight
                   - if teacher?
@@ -45,7 +47,7 @@
                 = classroom['description']
     %el-tab-pane{label: '所有班级'}
       .content-list
-        -if @classrooms.length == 0
+        -if @all_classrooms.length == 0
           %div
             - if teacher?
               %el-card{style: 'width: 80%; margin: auto;'}
@@ -58,6 +60,8 @@
             .card
               .card-title.clearFloat
                 %span
+                  - if classroom['avatar_url']
+                    %img{src: classroom['avatar_url'], width: '5%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
                   %a{href: my_class?(classroom['id']) ? classroom_path(classroom['id']) : '#'}= classroom['name']
                   .floatRight
                     - unless classroom['own']

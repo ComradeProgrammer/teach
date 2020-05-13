@@ -5,7 +5,11 @@
 
 #show-classroom-app.small-container{data: {students: @students.to_json, teachers: @teachers.to_json, endpoint: classroom_users_url(classroom_id: params[:id])}}
   .page-title-holder
-    .page-title= @classroom['name']
+    .page-title
+      %span
+        - if @classroom['avatar_url']
+          %img{src: @classroom['avatar_url'], width: '30%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
+        = @classroom['name']
     .page-title-controls
       - if teacher?
         %el-button{'v-if': 'isCreatingProjects', type: 'primary', ':loading':'true'} 正在自动分配仓库
