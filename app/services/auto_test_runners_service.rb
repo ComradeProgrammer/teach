@@ -9,9 +9,9 @@ see out API doc at: https://github.com/Jiyuan-Yang/teach-auto-test-runner/blob/m
 class AutoTestRunnersService
   def create_auto_test_point(project_id, input, expected_output)
     response = RestClient.post(auto_test_runner_host + '/create_auto_test_point', {
-        :project_id => project_id,
-        :input => input,
-        :expected_output => expected_output
+      :project_id => project_id,
+      :input => input,
+      :expected_output => expected_output
     })
     JSON.parse response.body
   end
@@ -19,9 +19,9 @@ class AutoTestRunnersService
   def start_auto_test(test_type, project_id, git_repo_list, use_text_file = nil,
                       use_text_output = nil, compile_command = nil, exec_command = nil)
     payload = {
-        :test_type => test_type,
-        :project_id => project_id,
-        :git_repo_list => git_repo_list
+      :test_type => test_type,
+      :project_id => project_id,
+      :git_repo_list => git_repo_list
     }
 
     if use_text_file
@@ -45,9 +45,9 @@ class AutoTestRunnersService
 
   def get_auto_test_results(project_id)
     response = RestClient.get(auto_test_runner_host + '/get_auto_test_results', {
-        params: {
-          :project_id => project_id
-        }
+      params: {
+        :project_id => project_id
+      }
     })
     JSON.parse response.body
   end
@@ -59,6 +59,14 @@ class AutoTestRunnersService
       }
     })
     JSON.parse response.body
+  end
+
+  def remove_auto_test_point(point_id)
+    response = RestClient.get(auto_test_runner_host + '/remove_auto_test_point', {
+      params: {
+        :id => point_id
+      }
+    })
   end
 
   def auto_test_runner_host

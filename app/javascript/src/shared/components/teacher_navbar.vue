@@ -8,6 +8,13 @@
         班级
       </el-menu-item>
 
+      <el-submenu index="6">
+        <template slot="title">管理</template>
+        <el-menu-item index="6-1">
+          批量导入学生
+        </el-menu-item>
+      </el-submenu>
+
       <el-submenu index="5" v-if="admin === 'admin'">
         <template slot="title">组织</template>
         <el-menu-item index="5-1">
@@ -31,9 +38,6 @@
       <el-menu-item index="2">
         GitLab
         <i class="el-icon-link"></i>
-      </el-menu-item>
-      <el-menu-item index="6">
-        新建用户
       </el-menu-item>
 
       <el-menu-item index="4" style="float: right">
@@ -76,8 +80,10 @@
           } else if (key === '5-2') {
             window.location.assign('/organizations');
           }
-        } else if (key === '6') {
-          window.location.href = '/members/new';
+        } else if (key.startsWith('6-')) {
+          if (key === '6-1') {
+            window.location.assign('/members/new');
+          }
         }
       }
     }

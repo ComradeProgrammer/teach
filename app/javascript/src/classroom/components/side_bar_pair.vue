@@ -7,57 +7,84 @@
       width="40%">
       <h2 class="title">结对项目控制面板</h2>
       <br><br>
-      <div v-if="haspublicrepo === 'true'" class="func-card">
-        <a :href="testpointhref">
-          <el-button>
-            创建结对项目评测点
-          </el-button>
-        </a>
-      </div>
-      <div v-else class="func-card">
-        <p>当您创建公共发布区后，您才能够创建评测点</p>
-        <a :href="createpublichref">
-          <el-button>
-            创建结对项目公共发布区
-          </el-button>
-        </a>
-      </div>
-      <el-divider></el-divider>
-      <div class="func-card">
-        <a :href="repohref">
-          <el-button>
-            分配结对项目学生仓库
-          </el-button>
-        </a>
-      </div>
-      <el-divider></el-divider>
-      <div v-if="haspublicrepo === 'true'" class="func-card">
-        <a :href="starttesthref">
-          <el-button>
-            提交评测任务
-          </el-button>
-        </a>
-      </div>
-      <div v-else class="func-card">
-        <p>当您创建公共发布区后，您才能够提交评测任务</p>
-        <el-button :disabled="true">
-          提交评测任务
-        </el-button>
-      </div>
-      <el-divider></el-divider>
-      <div v-if="haspublicrepo === 'true'" class="func-card">
-        <a :href="getresulthref">
-          <el-button>
-            获取评测结果
-          </el-button>
-        </a>
-      </div>
-      <div v-else class="func-card">
-        <p>当您创建公共发布区后，您才能够获取评测结果</p>
-        <el-button :disabled="true">
-          获取评测结果
-        </el-button>
-      </div>
+      <el-collapse class="func-card">
+        <el-collapse-item title="仓库管理" name="1">
+          <div v-if="haspublicrepo === 'true'">
+            <el-button type="text" :disabled="true">
+              创建结对项目公共发布区
+            </el-button>
+          </div>
+          <div v-else>
+            <a :href="createpublichref">
+              <el-button type="text">
+                创建结对项目公共发布区
+              </el-button>
+            </a>
+          </div>
+          <div>
+            <a :href="repohref">
+              <el-button type="text">
+                分配结对项目学生仓库
+              </el-button>
+            </a>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="评测管理" name="2">
+          <div v-if="haspublicrepo === 'true'">
+            <a :href="testpointhref">
+              <el-button type="text">
+                创建结对项目评测点
+              </el-button>
+            </a>
+          </div>
+          <div v-else>
+            <el-button type="text" :disabled="true">
+              创建结对项目评测点
+            </el-button>
+          </div>
+
+          <div v-if="haspublicrepo === 'true'">
+            <a :href="gettestpointshref">
+              <el-button type="text">
+                管理评测点
+              </el-button>
+            </a>
+          </div>
+          <div v-else>
+            <el-button type="text" :disabled="true">
+              管理评测点
+            </el-button>
+          </div>
+
+          <div v-if="haspublicrepo === 'true'">
+            <a :href="starttesthref">
+              <el-button type="text">
+                提交评测任务
+              </el-button>
+            </a>
+          </div>
+          <div v-else class="func-card">
+            <el-button type="text" :disabled="true">
+              提交评测任务
+            </el-button>
+          </div>
+
+          <div v-if="haspublicrepo === 'true'">
+            <a :href="getresulthref">
+              <el-button type="text">
+                获取评测结果
+              </el-button>
+            </a>
+          </div>
+          <div v-else>
+            <el-button type="text" :disabled="true">
+              获取评测结果
+            </el-button>
+          </div>
+
+        </el-collapse-item>
+      </el-collapse>
     </el-dialog>
   </div>
 </template>
@@ -76,6 +103,7 @@
       'createpublichref',
       'repohref',
       'starttesthref',
+      'gettestpointshref',
       'getresulthref'
     ],
     data() {

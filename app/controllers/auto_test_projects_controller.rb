@@ -19,7 +19,7 @@ class AutoTestProjectsController < ApplicationController
 
   def show
   end
-  
+
   # new auto test project
   def new
     @errors = []
@@ -91,12 +91,12 @@ class AutoTestProjectsController < ApplicationController
     auto_test_project = classroom.auto_test_projects.new
     name = 'student_pair_project_' + id1 + '_' + id2
     @auto_test_project = {
-        :name => name,
-        :path => gitlab_host + '/' + @classroom_name + '/' + @projects_name + '/' + name,
-        :description => '',
-        :test_type => 'pair',
-        :pair1_id => id1,
-        :pair2_id => id2
+      :name => name,
+      :path => gitlab_host + '/' + @classroom_name + '/' + @projects_name + '/' + name,
+      :description => '',
+      :test_type => 'pair',
+      :pair1_id => id1,
+      :pair2_id => id2
     }
     @auto_test_project['namespace_id'] = classroom.pair_project_subgroup_id
     @auto_test_project['visibility'] = 'public'
@@ -168,7 +168,7 @@ class AutoTestProjectsController < ApplicationController
         @all_teachers_gitlab_id_in_class.append(tmp.gitlab_id)
       end
     end
-    
+
     # find the classroom
     classroom = Classroom.find_by(id: params[:classroom_id])
     auto_test_project = classroom.auto_test_projects.new
@@ -183,7 +183,7 @@ class AutoTestProjectsController < ApplicationController
     else
       @auto_test_project['visibility'] = 'private'
     end
-    
+
     @auto_test_project['request_access_enabled'] = true
 
     # check if there is duplicated repo
@@ -196,7 +196,7 @@ class AutoTestProjectsController < ApplicationController
         end
       end
     end
-    
+
     # find duplicate repo
     if has_deplicated_name
       redirect_to classroom_path(params[:classroom_id])
@@ -237,7 +237,7 @@ class AutoTestProjectsController < ApplicationController
     # render 'new'
     redirect_to new_classroom_auto_test_project_path + '?type=' + @@project_type
   end
-  
+
   def new_private_personal_project
     @classroom_id = params[:classroom_id]
     @errors = []
@@ -338,9 +338,9 @@ class AutoTestProjectsController < ApplicationController
     @classroom_id = params[:classroom_id]
     test_type = params[:test_type]
     @public_personal_project_id = AutoTestProject.find_by(
-        :classroom_id => @classroom_id,
-        :test_type => test_type,
-        :is_public => 1
+      :classroom_id => @classroom_id,
+      :test_type => test_type,
+      :is_public => 1
     ).gitlab_id
     @errors = []
     render 'auto_test_projects/create_auto_test_point'
@@ -348,9 +348,9 @@ class AutoTestProjectsController < ApplicationController
 
   def create_auto_test_point
     res = auto_test_runners_service.create_auto_test_point(
-        params[:project_id],
-        params[:input],
-        params[:expected_output]
+      params[:project_id],
+      params[:input],
+      params[:expected_output]
     )
     puts('[Debug] create_auto_test_point >>>>>>>>>>')
     puts(res)
@@ -361,9 +361,9 @@ class AutoTestProjectsController < ApplicationController
     @classroom_id = params[:classroom_id]
     test_type = params[:test_type]
     @public_personal_project_id = AutoTestProject.find_by(
-        :classroom_id => @classroom_id,
-        :test_type => test_type,
-        :is_public => 1
+      :classroom_id => @classroom_id,
+      :test_type => test_type,
+      :is_public => 1
     ).gitlab_id
     @errors = []
     render 'auto_test_projects/start_auto_test'
@@ -393,9 +393,9 @@ class AutoTestProjectsController < ApplicationController
     auto_test_classroom_id = auto_test_record.classroom_id
     auto_test_type = auto_test_record.test_type
     auto_test_students_record = AutoTestProject.where(
-        :classroom_id => auto_test_classroom_id,
-        :test_type => auto_test_type, 
-        :is_public => 0
+      :classroom_id => auto_test_classroom_id,
+      :test_type => auto_test_type,
+      :is_public => 0
     )
 
     git_repo_list = ''
@@ -428,13 +428,13 @@ class AutoTestProjectsController < ApplicationController
     end
 
     auto_test_runners_service.start_auto_test(
-        auto_test_type,
-        params[:project_id],
-        git_repo_list,
-        use_text_file,
-        use_text_output,
-        compile_command,
-        exec_command
+      auto_test_type,
+      params[:project_id],
+      git_repo_list,
+      use_text_file,
+      use_text_output,
+      compile_command,
+      exec_command
     )
   end
 
@@ -443,9 +443,9 @@ class AutoTestProjectsController < ApplicationController
     @classroom_id = params[:classroom_id]
     test_type = params[:test_type]
     @public_personal_project_id = AutoTestProject.find_by(
-        :classroom_id => @classroom_id,
-        :test_type => test_type,
-        :is_public => 1
+      :classroom_id => @classroom_id,
+      :test_type => test_type,
+      :is_public => 1
     ).gitlab_id
     auto_test_results = auto_test_runners_service.get_auto_test_results(@public_personal_project_id)
     @refined_results = []
@@ -474,25 +474,32 @@ class AutoTestProjectsController < ApplicationController
     @classroom_id = params[:classroom_id]
     test_type = params[:test_type]
     @public_personal_project_id = AutoTestProject.find_by(
-        :classroom_id => @classroom_id,
-        :test_type => test_type,
-        :is_public => 1
+      :classroom_id => @classroom_id,
+      :test_type => test_type,
+      :is_public => 1
     ).gitlab_id
     auto_test_points = auto_test_runners_service.get_auto_test_points(@public_personal_project_id)
     @points = []
-    auto_test_points.each_with_index do |point, index|
-      @points.push({'index' => index, 'input' => 'input', 'expected_output' => 'expected_output'})
+    # while parsing JSON, the key is string
+    auto_test_points.each do |item|
+      @points.push({:index => item['id'], :input => item['input'], :expected_output => item['expected_output']})
     end
 
     # @points.push({'index' => 0, 'input' => 'input', 'expected_output' => 'expected_output'})
-    puts('>>>>>>>>>>>>>')
-    puts(@points)
-    puts('>>>>>>>>>>>>>')
+    # puts('>>>>>>>>>>>>>')
+    # puts(@points)
+    # puts('>>>>>>>>>>>>>')
 
     @points = @points.to_json
+    @test_type = test_type
     render 'auto_test_projects/auto_test_points'
   end
-  
+
+  def remove_auto_test_point
+    auto_test_runners_service.remove_auto_test_point(params[:point_id])
+    redirect_to get_auto_test_points_classroom_auto_test_projects_path(params[:classroom_id],
+                                                                  :test_type => params[:test_type])
+  end
 
   private
 
@@ -538,14 +545,14 @@ class AutoTestProjectsController < ApplicationController
 
   def create_pipeline(project_id, gitlab_username)
     pipeline = {
-        ref: 'master',
-        variables: [
-            {
-                # predefined CI 变量改为该项目 owner
-                key: 'GITLAB_USER_LOGIN',
-                value: gitlab_username
-            }
-        ]
+      ref: 'master',
+      variables: [
+        {
+          # predefined CI 变量改为该项目 owner
+          key: 'GITLAB_USER_LOGIN',
+          value: gitlab_username
+        }
+      ]
     }
     admin_api_post "projects/#{project_id}/pipeline", pipeline
   end

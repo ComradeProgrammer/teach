@@ -4,4 +4,6 @@
   = stylesheet_pack_tag 'show_auto_test_points'
 
 #test-points-app.small-container{data: {points: @points}}
-  %selftp{:points => @points}
+  .page-title-holder
+    .page-title 查看评测点
+  %selftp{:points => @points, :testtype => @test_type}
