@@ -5,10 +5,10 @@
             </p>
             <template v-if="need_unfold">
                 <template v-if="fold">
-                    <p>{{content.slice(0, 40) + "..."}}</p>
+                    <p>{{text.slice(0, 40) + "..."}}</p>
                 </template>
                 <template v-else="">
-                    <p>{{content}}</p>
+                    <p>{{text}}</p>
                 </template>
                 <el-button type="text" @click="change_state">{{fold?'展开':'收起'}}</el-button>
             </template>
@@ -36,14 +36,14 @@ export default {
     },
 
     mounted() {
-        if (text.length > 40) {
-            need_unfold = true;
+        if (this.text.length > 40) {
+            this.need_unfold = true;
         }
     },
 
     methods: {
         change_state() {
-            fold = !fold;
+            this.fold = !this.fold;
         }
     }
 }

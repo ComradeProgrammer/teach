@@ -453,11 +453,12 @@ class AutoTestProjectsController < ApplicationController
       @points[index] = point
     end
 
-    @points['1'] = {'1' => '2'}
+    @points[0] = {'input' => 'input', 'expected_output' => 'expected_output'}
     puts('>>>>>>>>>>>>>')
     puts(@points)
     puts('>>>>>>>>>>>>>')
 
+    @points = @points.to_json
     render 'auto_test_projects/auto_test_points'
   end
   
