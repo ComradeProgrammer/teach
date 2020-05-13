@@ -6,4 +6,4 @@
 #new-member-app.small-container
   .page-title-holder
     .page-title 创建用户
-  %member_form{:action => members_path}
+  %member_form{:action => members_path,:errors => @errors}

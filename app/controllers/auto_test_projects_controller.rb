@@ -67,6 +67,7 @@ class AutoTestProjectsController < ApplicationController
     return [all_students_gitlab_id_in_class, all_teachers_gitlab_id_in_class]
   end
 
+  # todo: test to see if buggy
   def create_pair_project(id1, id2)
     @classroom_students_query = SelectClassroom.where(:classroom_id => params[:classroom_id])
     @all_students_gitlab_id_in_class = get_all_member_id(@classroom_students_query)[0]
