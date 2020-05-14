@@ -39,11 +39,11 @@
                   %a{href: classroom_path(classroom['id'])}= classroom['name']
                 .floatRight
                   - if teacher?
-                    %a.el-button.el-button--mini{href: edit_classroom_path(classroom['id'])} 编辑
-                    %a.el-button.el-button--danger.el-button--mini{href: exit_classroom_path(classroom['id'])} 退出班级
-                    = link_to '删除', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger el-button--mini'
+                    %a.el-button.el-button--primary.is-circle.el-icon-edit{href: edit_classroom_path(classroom['id'])}
+                    %a.el-button.el-button--info.is-circle.el-icon-close{href: exit_classroom_path(classroom['id'])}
+                    = link_to '', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger is-circle el-icon-delete'
                   - if student?
-                    %a.el-button.el-button--danger.el-button--mini{href: exit_classroom_path(classroom['id'])} 退出班级
+                    %a.el-button.el-button--info.is-circle.el-icon-close{href: exit_classroom_path(classroom['id'])}
 
               .card-info
                 = classroom['description']
@@ -69,12 +69,12 @@
                   %a{href: my_class?(classroom['id']) ? classroom_path(classroom['id']) : '#'}= classroom['name']
                   .floatRight
                     - unless classroom['own']
-                      %a.el-button.el-button--mini{href: join_classroom_path(classroom['id'])} 加入班级
+                      %a.el-button.el-button--success.is-circle.el-icon-plus{href: join_classroom_path(classroom['id'])}
                     - if teacher? && classroom['own']
-                      %a.el-button.el-button--mini{href: edit_classroom_path(classroom['id'])} 编辑
-                      = link_to '删除', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger el-button--mini'
+                      %a.el-button.el-button--primary.is-circle.el-icon-edit{href: edit_classroom_path(classroom['id'])}
+                      = link_to '', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger is-circle el-icon-delete'
                     - if student? && classroom['own']
-                      %el-button.el-button--mini{':disabled': 'true'} 已加入
+                      %el-button.el-button--success.is-circle.el-icon-plus{':disabled': 'true'} 已加入
 
               .card-info
                 = classroom['description']
