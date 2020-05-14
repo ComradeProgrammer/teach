@@ -28,6 +28,13 @@
               </el-button>
             </a>
           </div>
+          <div>
+            <a :href="reposhref">
+              <el-button type="text">
+                批量分配结对项目学生仓库
+              </el-button>
+            </a>
+          </div>
         </el-collapse-item>
 
         <el-collapse-item title="评测管理" name="2">
@@ -89,6 +96,7 @@
       'testpointhref',
       'createpublichref',
       'repohref',
+      'reposhref',
       'starttesthref',
       'getresulthref'
     ],

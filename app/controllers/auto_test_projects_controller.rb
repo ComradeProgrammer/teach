@@ -138,18 +138,21 @@ class AutoTestProjectsController < ApplicationController
     redirect_to new_classroom_auto_test_project_path + '?type=' + @@project_type
   end
 
-  def create_pair_project_batch(id_array)
+  def create_pair_project_batch
+    id_array = params[:pairForm['text']]
     puts '************************'
-    puts id_array.size
+    puts params[:pairForm]
+    # puts id_array.size
     puts id_array
     puts '************************'
+    redirect_to new_pair_projects_batch_classroom_auto_test_projects_path
     if id_array.size % 2 != 0
       @errors = ['名称或地址包含非法字符或已被占用']
       @@errors_save = @errors
-      redirect_to new_pair_projects_batch
+      redirect_to new_pair_projects_batch_classroom_auto_test_projects_path
     end
     i = 0
-    while i < id_array.size
+    while i < 1111
       create_pair_project(id_array[i], id_array[i + 1])
       i = i + 2
     end
