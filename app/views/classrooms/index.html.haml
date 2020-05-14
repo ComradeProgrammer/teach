@@ -29,24 +29,39 @@
 
         -else
           - @classrooms.each do |classroom|
-            .card
-              .card-title.clearFloat
-                %span
+            %el-card{shadow: "hover", style: "width: 95%;margin:auto;"}
+              %div{slot: 'header'}
+                %span{style: 'font-size:30px'}
                   - if classroom['avatar_url']
-                    %img{src: classroom['avatar_url'], width: '5%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
+                    %img{src: classroom['avatar_url'], width: '4%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
                   - else
-                    %img{src: 'https://i.postimg.cc/RV4LZWxb/SETPClass.png', width: '5%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
+                    %img{src: 'https://i.postimg.cc/RV4LZWxb/SETPClass.png', width: '4%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
                   %a{href: classroom_path(classroom['id'])}= classroom['name']
-                .floatRight
-                  - if teacher?
-                    %a.el-button.el-button--primary.is-circle.el-icon-edit{href: edit_classroom_path(classroom['id'])}
-                    %a.el-button.el-button--info.is-circle.el-icon-close{href: exit_classroom_path(classroom['id'])}
-                    = link_to '', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger is-circle el-icon-delete'
-                  - if student?
-                    %a.el-button.el-button--info.is-circle.el-icon-close{href: exit_classroom_path(classroom['id'])}
-
-              .card-info
-                = classroom['description']
+                  .floatRight
+                    - if teacher?
+                      %a.el-button.el-button--primary.is-circle.el-icon-edit{href: edit_classroom_path(classroom['id'])}
+                      %a.el-button.el-button--info.is-circle.el-icon-close{href: exit_classroom_path(classroom['id'])}
+                      = link_to '', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger is-circle el-icon-delete'
+                    - if student?
+                      %a.el-button.el-button--info.is-circle.el-icon-close{href: exit_classroom_path(classroom['id'])}
+              %div
+                %ul
+                  %li
+                    %b 班级简介
+                    - if classroom['description'] != ''
+                      %p= classroom['description']
+                    - else
+                      %p 暂无班级简介
+                  %li
+                    %b 总Commit数
+                    =classroom['commit_count']
+                  %li
+                    %b 仓库占用空间
+                    = classroom['repository_size'].to_s + ' KB'
+                  %li
+                    %b 班级占用空间
+                    = classroom['storage_size'].to_s + ' KB'
+            %br
     %el-tab-pane{label: '所有班级'}
       .content-list
         -if @all_classrooms.length == 0
@@ -59,13 +74,13 @@
                 当前平台还没有任何班级，请等待老师或助教创建班级
         -else
           - @all_classrooms.each do |classroom|
-            .card
-              .card-title.clearFloat
-                %span
+            %el-card{shadow: "hover", style: "width: 95%;margin:auto;"}
+              %div{slot: 'header'}
+                %span{style: 'font-size:30px'}
                   - if classroom['avatar_url']
-                    %img{src: classroom['avatar_url'], width: '5%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
+                    %img{src: classroom['avatar_url'], width: '4%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
                   - else
-                    %img{src: 'https://i.postimg.cc/RV4LZWxb/SETPClass.png', width: '5%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
+                    %img{src: 'https://i.postimg.cc/RV4LZWxb/SETPClass.png', width: '4%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
                   %a{href: my_class?(classroom['id']) ? classroom_path(classroom['id']) : '#'}= classroom['name']
                   .floatRight
                     - unless classroom['own']
@@ -75,6 +90,21 @@
                       = link_to '', classroom_path(classroom['id']), method: :delete, data: {confirm: '确定删除？'}, class: 'el-button el-button--danger is-circle el-icon-delete'
                     - if student? && classroom['own']
                       %el-button.el-button--success.is-circle.el-icon-plus{':disabled': 'true'} 已加入
-
-              .card-info
-                = classroom['description']
+              %div
+                %ul
+                  %li
+                    %b 班级简介
+                    - if classroom['description'] != ''
+                      %p= classroom['description']
+                    - else
+                      %p 暂无班级简介
+                  %li
+                    %b 总Commit数
+                    =classroom['commit_count']
+                  %li
+                    %b 仓库占用空间
+                    = classroom['repository_size'].to_s + ' KB'
+                  %li
+                    %b 班级占用空间
+                    = classroom['storage_size'].to_s + ' KB'
+            %br
