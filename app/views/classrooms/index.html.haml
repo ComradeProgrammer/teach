@@ -34,6 +34,8 @@
                 %span
                   - if classroom['avatar_url']
                     %img{src: classroom['avatar_url'], width: '5%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
+                  - else
+                    %img{src: 'https://i.postimg.cc/RV4LZWxb/SETPClass.png', width: '5%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
                   %a{href: classroom_path(classroom['id'])}= classroom['name']
                 .floatRight
                   - if teacher?
@@ -62,6 +64,8 @@
                 %span
                   - if classroom['avatar_url']
                     %img{src: classroom['avatar_url'], width: '5%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
+                  - else
+                    %img{src: 'https://i.postimg.cc/RV4LZWxb/SETPClass.png', width: '5%', style: 'box-shadow: #E4E7ED 5px 5px 5px 2px;border-radius: 10px'}
                   %a{href: my_class?(classroom['id']) ? classroom_path(classroom['id']) : '#'}= classroom['name']
                   .floatRight
                     - unless classroom['own']
