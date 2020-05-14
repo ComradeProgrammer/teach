@@ -485,13 +485,9 @@ class AutoTestProjectsController < ApplicationController
       @points.push({:index => item['id'], :input => item['input'], :expected_output => item['expected_output']})
     end
 
-    # @points.push({'index' => 0, 'input' => 'input', 'expected_output' => 'expected_output'})
-    # puts('>>>>>>>>>>>>>')
-    # puts(@points)
-    # puts('>>>>>>>>>>>>>')
-
     @points = @points.to_json
     @test_type = test_type
+    @classroom_id = params[:classroom_id]
     render 'auto_test_projects/auto_test_points'
   end
 

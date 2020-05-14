@@ -16,11 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     components: {
       selftp
     },
-
-    mounted() {
-      //this.points = JSON.parse(this.$el.dataset.points);
-      //console.log('>>>>>>>>>>>>>>>>');
-      //console.log(this.points);
-    }
+    
   })
 })

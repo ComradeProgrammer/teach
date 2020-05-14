@@ -64,8 +64,7 @@
               - else
                 - haspublicrepo = 'false'
               %side_bar_personal{:haspublicrepo => haspublicrepo,
-              :testpointhref => create_auto_test_point_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'personal'),
-              :gettestpointshref => get_auto_test_points_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'personal'),
+              :testpointhref => get_auto_test_points_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'personal'),
               :createpublichref => new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'personal'),
               :repohref => new_private_personal_project_classroom_auto_test_projects_path(classroom_id: @classroom_record.id),
               :starttesthref => start_auto_test_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'personal'),
@@ -91,12 +90,11 @@
               - else
                 - haspairpublicrepo = 'false'
               %side_bar_pair{:haspublicrepo => haspairpublicrepo,
-              :testpointhref => create_auto_test_point_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'pair'),
-              :gettestpointshref => get_auto_test_points_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'pair'),
+              :testpointhref => get_auto_test_points_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'pair'),
               :createpublichref => new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'pair', is_public: 'yes'),
               :repohref => new_classroom_auto_test_project_path(classroom_id: @classroom_record.id, type: 'pair', is_public: 'no'),
               :starttesthref => start_auto_test_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'pair'),
-              :getresulthref => get_auto_test_results_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'pair'),}
+              :getresulthref => get_auto_test_results_classroom_auto_test_projects_path(classroom_id: @classroom_record.id, test_type: 'pair')}
         .content-list
           - @pair_projects.each do |project|
             .card

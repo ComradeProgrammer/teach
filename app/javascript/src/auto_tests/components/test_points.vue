@@ -1,30 +1,37 @@
 <template>
-  <el-table
-    :data="selfpoints"
-    stripe
-    style="width: 100%">
-    <el-table-column
-      prop="index"
-      label="测试点ID" class="index-col">
-    </el-table-column>
-    <el-table-column
-      prop="input"
-      label="输入数据">
-    </el-table-column>
-    <el-table-column
-      prop="expected_output"
-      label="期望输出">
-    </el-table-column>
-    <el-table-column prop="index" label="操作">
-      <template slot-scope="scope">
-        <a :href="'remove_auto_test_point?test_type=' + testtype + '&point_id=' + selfpoints[scope.$index].index">
-          <el-button type="text">
-            删除
-          </el-button>
-        </a>
-      </template>
-    </el-table-column>
-  </el-table>
+  <div>
+    <a :href="createtestpointhref">
+      <el-button type="primary">
+        创建{{selfscribe}}项目评测点
+      </el-button>
+    </a>
+    <el-table
+      :data="selfpoints"
+      stripe
+      style="width: 100%">
+      <el-table-column
+        prop="index"
+        label="测试点ID" class="index-col">
+      </el-table-column>
+      <el-table-column
+        prop="input"
+        label="输入数据">
+      </el-table-column>
+      <el-table-column
+        prop="expected_output"
+        label="期望输出">
+      </el-table-column>
+      <el-table-column prop="index" label="操作">
+        <template slot-scope="scope">
+          <a :href="'remove_auto_test_point?test_type=' + testtype + '&point_id=' + selfpoints[scope.$index].index">
+            <el-button type="text">
+              删除
+            </el-button>
+          </a>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script>
@@ -36,12 +43,13 @@
   Vue.use(ElementUI);
 
   export default {
-    props: ['points', 'testtype'],
+    props: ['points', 'testtype', 'createtestpointhref'],
 
     data: function () {
       return {
         has_points: false,
-        selfpoints: []
+        selfpoints: [],
+        selfscribe: ''
       }
     },
 
@@ -51,24 +59,15 @@
 
     mounted() {
       this.selfpoints = JSON.parse(this.points);
-      // console.log('###################');
-      // console.log(this.selfpoints);
-      /*
-      console.log(points_dict.length);
-      if (points_dict.length > 0)
+      console.log(this.selfpoints);
+      if (this.testtype === 'personal')
       {
-          for (let index in points_dict)
-          {
-              console.log(index);
-              this.selfpoints.push({
-                  index: index,
-                  input: points_dict[index]['input'],
-                  expected_output: points_dict[index]['expected_output']
-              });
-          }
-          this.has_points = true;
+        this.selfscribe = '个人';
       }
-      */
+      else if (this.testtype == 'pair')
+      {
+        this.selfscribe = '结对';
+      }
     }
   }
 

@@ -34,26 +34,13 @@
           <div v-if="haspublicrepo === 'true'">
             <a :href="testpointhref">
               <el-button type="text">
-                创建结对项目评测点
+                管理结对项目评测点
               </el-button>
             </a>
           </div>
           <div v-else>
             <el-button type="text" :disabled="true">
-              创建结对项目评测点
-            </el-button>
-          </div>
-
-          <div v-if="haspublicrepo === 'true'">
-            <a :href="gettestpointshref">
-              <el-button type="text">
-                管理评测点
-              </el-button>
-            </a>
-          </div>
-          <div v-else>
-            <el-button type="text" :disabled="true">
-              管理评测点
+              管理结对项目评测点
             </el-button>
           </div>
 
@@ -103,7 +90,6 @@
       'createpublichref',
       'repohref',
       'starttesthref',
-      'gettestpointshref',
       'getresulthref'
     ],
     data() {
