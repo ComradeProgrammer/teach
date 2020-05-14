@@ -22,12 +22,8 @@ class ClassroomsController < ApplicationController
     user = User.find_by(gitlab_id: current_user.id)
     user.classrooms.all.each do |classroom|
       klass = groups_service.get_group(classroom.gitlab_group_id)
-      statistics = groups_service.get_group_statistics(klass['id'])
       klass['id'] = classroom.id
       klass['own'] = true
-      klass['commit_count'] = statistics[:commit_count]
-      klass['repository_size'] = statistics[:repository_size]
-      klass['storage_size'] = statistics[:storage_size]
       @classrooms << klass
       @all_classrooms << klass
     end
