@@ -20,9 +20,8 @@
           班级博客
       %a.el-button{href: @classroom['web_url']}
         转到 GitLab
-        %i.iconfont.icon-link{style: "font-size: 13px"}
   %p.info= @classroom['description']
-  %el-tabs
+  %el-tabs{type: 'card'}
     %el-tab-pane{label: '学生'}
       .page-title-holder-small
         .page-title 学生列表

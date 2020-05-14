@@ -15,6 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     input: '',
                     expected_output: ''
                 },
+                rules: {
+                    input: [
+                        {required: true, message: '不能为空', trigger: 'blur'}
+                    ],
+                    expected_output: [
+                        {required: true, message: '不能为空', trigger: 'blur'}
+                    ]
+                }
             }
         },
         components: {
@@ -25,7 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         methods: {
             submitForm() {
-                this.$refs.new_auto_test_point.$el.submit();
+                this.$refs.new_auto_test_point.validate((valid) => {
+                    if (valid) {
+                        this.$refs.new_auto_test_point.$el.submit();
+                    } else {
+                        return false;
+                    }
+                });
             }
         }
     })

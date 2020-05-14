@@ -21,16 +21,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 classList: [],
                 userList: [],
                 rules: {
-                    // todo: add more rules
-                    //content: [
-                    //    {required: true, message: '请输入广播内容', trigger: 'blur'}
-                    //]
+                    scope: [
+                        {required: true, message: '请选择范围', trigger: 'blur'}
+                    ],
+                    class_id: [
+                        {required: true, message: '请选择班级', trigger: 'blur'}
+                    ],
+                    user_id: [
+                        {required: true, message: '请选择成员', trigger: 'blur'}
+                    ],
+                    content: [
+                        {required: true, message: '不能为空', trigger: 'blur'}
+                    ]
                 }
             }
         },
         computed: {
             scope: function () {
-                return this.form.scope;
+                return this.broadcast.scope;
             }
         },
         components: {
@@ -61,15 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         methods: {
             submitForm() {
-                // todo: add validation
-                axios.post('/broadcasts', {
-                    type: this.form.scope,
-                    class_id: this.form.class_id,
-                    user_id: this.form.user_id,
-                    content: this.form.content
-                });
-                window.location.href = '/classrooms';
-                /*
                 this.$refs.broadcast.validate((valid) => {
                     if (valid) {
                         axios.post('/broadcasts', {
@@ -83,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         return false;
                     }
                 });
-                 */
             },
             getAllClassIdAndName() {
                 return axios.get('/classrooms/get_all_classroom_id_and_name');

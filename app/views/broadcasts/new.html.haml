@@ -10,23 +10,23 @@
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}
     %csrf
-    %el-form-item{label: '广播范围'}
-      %el-select{'v-model': 'form.scope', placeholder: "请选择广播范围"}
+    %el-form-item{label: '广播范围', prop: 'scope'}
+      %el-select{'v-model': 'broadcast.scope', placeholder: "请选择广播范围"}
         %el-option{label: '全体成员', value: 'all'}
         %el-option{label: '全体学生', value: 'all_students'}
         %el-option{label: '全体老师', value: 'all_teachers'}
         %el-option{label: '班级', value: 'class'}
         %el-option{label: '个人', value: 'user'}
-    %el-form-item{label: '选择班级', 'v-if': 'scope === \'class\''}
-      %el-select{'v-model': 'form.class_id', placeholder: "请选择班级"}
+    %el-form-item{label: '选择班级', 'v-if': 'scope === \'class\'', prop: 'class_id'}
+      %el-select{'v-model': 'broadcast.class_id', placeholder: "请选择班级"}
         %template{'v-for': 'classItem in classList'}
           %el-option{':label': 'classItem.label', ':value': 'classItem.value'}
-    %el-form-item{label: '选择成员', 'v-if': 'scope === \'user\''}
-      %el-select{'v-model': 'form.user_id', placeholder: "请选择成员"}
+    %el-form-item{label: '选择成员', 'v-if': 'scope === \'user\'', prop: 'user_id'}
+      %el-select{'v-model': 'broadcast.user_id', placeholder: "请选择成员"}
         %template{'v-for': 'userItem in userList'}
           %el-option{':label': 'userItem.label', ':value': 'userItem.value'}
     %el-form-item{label: '广播内容', prop: 'content'}
-      %el-input{'v-model': 'form.content', type: 'textarea', ':autosize': '{minRows: 4, maxRows: 8}'}
+      %el-input{'v-model': 'broadcast.content', type: 'textarea', ':autosize': '{minRows: 4, maxRows: 8}'}
     %el-form-item.clearFloat
       %el-button-group.floatRight
         %a.el-button{href: classrooms_path} 返回
