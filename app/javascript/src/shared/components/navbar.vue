@@ -127,6 +127,7 @@
         issues: '2',
         gitlab: '3',
         projects: [],
+        classroomId: '',
         milestones: [],
         gitlabHost: '',
         dialogVisible: false,
@@ -141,6 +142,7 @@
       const navbar = document.getElementById('navbar');
       this.gitlabHost = navbar.dataset.gitlabhost;
       const projects = JSON.parse(navbar.dataset.projects);
+      this.classroomId = JSON.parse(navbar.dataset.classroomid)[0];
       for (let project of projects) {
         let milestones = project.milestones;
         for (let milestone of milestones) {
@@ -202,7 +204,7 @@
           this.dialogVisible = true;
           this.flag = false;
         } else if (key === '10') {
-
+          window.location.assign(`/classrooms/${this.classroomId}/teaching_progress_index`)
         }
       },
       handleClose(done) {

@@ -55,7 +55,7 @@
     components: {
       new_task_period_dialog,
       new_task_step_dialog,
-    }
+    },
     mounted() {
       this.taskInfoParsed = JSON.parse(this.taskinfo);
     }

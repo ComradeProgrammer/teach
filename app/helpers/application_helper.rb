@@ -14,9 +14,35 @@ module ApplicationHelper
     classroom["name"]
   end
 
+  def current_student_classroom_id
+    user_gitlab_id = current_user.id
+    user = User.find_by(:gitlab_id => user_gitlab_id)
+    if user.role == 'student'
+      SelectClassroom.find_by(:user_id => user.id).classroom_id
+    else
+      nil
+    end
+  end
+
   def projects_data
     data = {}
     data['gitlabHost'] = gitlab_host
+    data['classroomid'] = []
+    data['classroomname'] = []
+    if current_user.id
+      user_gitlab_id = current_user.id
+      user = User.find_by(:gitlab_id => user_gitlab_id)
+      SelectClassroom.where(:user_id => user.id).each do |item|
+        data['classroomid'].append(item.classroom_id)
+        classroom_gitlab_id = Classroom.find(item.classroom_id).gitlab_group_id
+        classroom_name = ''
+        if groups_service
+          classroom_name = groups_service.get_group(classroom_gitlab_id)["name"]
+        end
+        data['classroomname'].append("#{classroom_name} / ID: #{item.classroom_id}")
+      end
+      data['role'] = user.role
+    end
     return data if teacher?
     project_service = ProjectsService.new current_user
     # 最小为开发者权限
@@ -43,10 +69,26 @@ module ApplicationHelper
     puts(infos)
     data['projects'] = infos.to_json
     data['issues-endpoint'] = issues_url(format: :json)
+    if current_user.id
+      user_gitlab_id = current_user.id
+      user = User.find_by(:gitlab_id => user_gitlab_id)
+      SelectClassroom.where(:user_id => user.id).each do |item|
+        data['classroomid'].append(item.classroom_id)
+      end
+      data['role'] = user.role
+    end
     data
   end
 
   def ie_svg_meta_tag
     tag('meta', 'http-equiv': 'X-UA-Compatible', content: 'IE=11').html_safe
+  end
+
+  def groups_service
+    if current_user.id
+      ::GroupsService.new current_user
+    else
+      nil
+    end
   end
 end

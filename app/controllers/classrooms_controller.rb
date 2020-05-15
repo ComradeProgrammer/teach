@@ -300,7 +300,8 @@ class ClassroomsController < ApplicationController
   end
 
   def teaching_progress_index
-
+    @role = User.find_by(:gitlab_id => current_user.id).role
+    render 'classrooms/teaching_progress_index'
   end
 
   def create_task_period
