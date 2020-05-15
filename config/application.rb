@@ -22,5 +22,7 @@ module Teach
 
     config.active_job.queue_adapter = :sidekiq
     config.time_zone = "Asia/Shanghai"
+    config.time_zone = 'Beijing'
+    config.active_record.default_timezone = :local
   end
 end

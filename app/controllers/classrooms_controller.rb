@@ -301,11 +301,31 @@ class ClassroomsController < ApplicationController
 
   def teaching_progress_index
     @role = User.find_by(:gitlab_id => current_user.id).role
+    @classroom_id = params[:id]
     render 'classrooms/teaching_progress_index'
   end
 
   def create_task_period
-
+    # Format:
+    # {"period"=>{"classroom_id"=>"3", "title"=>"test", "description"=>"this"},
+    # "p"=>"2020-05-14 00:00:00", "e"=>"2020-06-09 00:00:00",
+    # "controller"=>"classrooms", "action"=>"create_task_period", "id"=>"3"}
+    period_info = params["period"]
+    from_date = params["f"]
+    to_date = params["t"]
+    # puts period_info
+    # puts from_date
+    # puts to_date
+    task_period = TaskPeriod.new
+    task_period.from_date = from_date
+    task_period.to_date = to_date
+    task_period.title = period_info["title"]
+    task_period.description = period_info["description"]
+    task_period.classroom_id = period_info["classroom_id"]
+    task_period.save
+    @role = User.find_by(:gitlab_id => current_user.id).role
+    @classroom_id = params[:id]
+    render 'classrooms/teaching_progress_index'
   end
 
   def create_task_step

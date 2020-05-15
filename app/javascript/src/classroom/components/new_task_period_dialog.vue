@@ -21,9 +21,10 @@
             type="datetimerange"
             :picker-options="pickerOptions"
             range-separator="至"
+            value-format="yyyy-MM-dd HH:mm:ss"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            name="period[period]">
+            name="ft">
           </el-date-picker>
         </el-form-item>
 
@@ -94,7 +95,7 @@
             {min: 1, max: 10, message: '标题长度在1到10个字符', trigger: 'blur'}
           ],
           description: [
-            {max: 10, message: '描述长度不得超过50个字符', trigger: 'blur'}
+            {max: 50, message: '描述长度不得超过50个字符', trigger: 'blur'}
           ],
         }
       }

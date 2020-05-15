@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_15_061926) do
+ActiveRecord::Schema.define(version: 2020_05_15_101348) do
 
   create_table "auto_test_projects", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -126,8 +126,8 @@ ActiveRecord::Schema.define(version: 2020_05_15_061926) do
   end
 
   create_table "task_periods", force: :cascade do |t|
-    t.date "from_date"
-    t.date "to_date"
+    t.datetime "from_date"
+    t.datetime "to_date"
     t.string "title"
     t.text "description"
     t.integer "classroom_id"
@@ -136,7 +136,7 @@ ActiveRecord::Schema.define(version: 2020_05_15_061926) do
   end
 
   create_table "task_steps", force: :cascade do |t|
-    t.date "step_date"
+    t.datetime "step_date"
     t.string "title"
     t.text "description"
     t.integer "task_period_id"

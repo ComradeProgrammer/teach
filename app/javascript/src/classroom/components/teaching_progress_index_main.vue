@@ -1,10 +1,11 @@
 <template>
   <div>
     <div v-if="role === 'teacher' || role === 'admin'">
-      <new_task_step_dialog>
-      </new_task_step_dialog>
-      <new_task_period_dialog>
+      <new_task_period_dialog
+        :classroomid="classroomid"
+        :createperiodhref="`/classrooms/${classroomid}/create_task_period`">
       </new_task_period_dialog>
+      <br>
     </div>
     <div v-if="taskInfoParsed.length > 0">
       <el-collapse v-model="activeNames">
@@ -17,6 +18,10 @@
               :description="subItem.description">
             </el-step>
           </el-steps>
+          <new_task_step_dialog
+            :taskperiodid="item.id"
+            :createstephref="`/classrooms/${classroomid}/create_task_step`">
+          </new_task_step_dialog>
         </el-collapse-item>
       </el-collapse>
     </div>
@@ -45,7 +50,11 @@
   Vue.use(ElementUI);
 
   export default {
-    props: ['taskinfo', 'role'],
+    props: [
+      'taskinfo',
+      'role',
+      'classroomid'
+    ],
     data() {
       return {
         taskInfoParsed: [],
