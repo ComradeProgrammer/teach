@@ -17,11 +17,12 @@
 
         <el-form-item label="时间点" prop="step">
           <el-date-picker
-            v-model="stepForm.period"
+            v-model="stepForm.step"
             type="datetime"
             placeholder="选择日期时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
             :picker-options="pickerOptions"
-            name="step[step]">
+            name="f">
           </el-date-picker>
         </el-form-item>
 
@@ -92,7 +93,7 @@
             {min: 1, max: 10, message: '标题长度在1到10个字符', trigger: 'blur'}
           ],
           description: [
-            {max: 10, message: '描述长度不得超过50个字符', trigger: 'blur'}
+            {max: 50, message: '描述长度不得超过50个字符', trigger: 'blur'}
           ],
         }
       }

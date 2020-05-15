@@ -11,7 +11,7 @@
       <el-collapse v-model="activeNames">
         <el-collapse-item v-for="item in taskInfoParsed" :title="item.title" :name="item.id">
           <p>{{item.description}}</p>
-          <el-steps :active="1" finish-status="success">
+          <el-steps :active="stepActivateIndex[taskInfoParsed.indexOf(item)]" finish-status="success">
             <el-step
               v-for="subItem in item.tasksteps"
               :title="subItem.title"
@@ -59,6 +59,7 @@
       return {
         taskInfoParsed: [],
         activeNames: [],
+        stepActivateIndex: []
       }
     },
     components: {
@@ -67,6 +68,22 @@
     },
     mounted() {
       this.taskInfoParsed = JSON.parse(this.taskinfo);
+      for (let i = 0; i < this.taskInfoParsed.length; ++i) {
+        if (this.taskInfoParsed[i]["selected"] === "true") {
+          this.activeNames.push(this.taskInfoParsed[i]["id"])
+        }
+        if (this.taskInfoParsed[i]["sub_use_minus_one"] === true) {
+          this.stepActivateIndex.push(-1);
+        } else if (this.taskInfoParsed[i]["sub_use_max_plus_one"] === true) {
+          this.stepActivateIndex.push(this.taskInfoParsed[i]["tasksteps"].length);
+        } else {
+          for (let j = 0; j < this.taskInfoParsed[i]["tasksteps"].length; ++j) {
+            if (this.taskInfoParsed[i]["tasksteps"][j]["selected"] === "true") {
+              this.stepActivateIndex.push(j);
+            }
+          }
+        }
+      }
     }
   }
 </script>

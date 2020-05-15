@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'date'
 
 class ClassroomsController < ApplicationController
   @@dup_class = false
@@ -111,7 +112,7 @@ class ClassroomsController < ApplicationController
     @classroom = Classroom.new
     @classroom_id = params[:id]
   end
-  
+
   def update
     @classroom = params[:classroom]
     @classroom_id = params[:id]
@@ -302,6 +303,59 @@ class ClassroomsController < ApplicationController
   def teaching_progress_index
     @role = User.find_by(:gitlab_id => current_user.id).role
     @classroom_id = params[:id]
+
+    @all_task_infos = []
+
+    current_time = DateTime.now
+
+    TaskPeriod.where(:classroom_id => @classroom_id).each do |item|
+      task_steps_dict = []
+      sub_judge = true
+      sub_use_minus_one = "false"
+      sub_use_max_plus_one = "false"
+      TaskStep.order(step_date: :asc).where(:task_period_id => item.id).each do |sub_item|
+        if sub_judge && sub_item.step_date > current_time
+          sub_judge = false
+          if task_steps_dict.length > 0
+            task_steps_dict[-1][:selected] = "true"
+          else
+            sub_use_minus_one = "true"
+          end
+        end
+        task_steps_dict.append(
+          {
+            :id => sub_item.id,
+            :step_date => sub_item.step_date,
+            :title => sub_item.title,
+            :description => sub_item.description,
+            :selected => "false"
+          }
+        )
+      end
+      if sub_judge
+        sub_use_max_plus_one = "true"
+      end
+      is_selected = "false"
+      if item.from_date <= current_time && item.to_date >= current_time
+        is_selected = "true"
+      end
+      @all_task_infos.append(
+        {
+          :id => item.id,
+          :title => item.title,
+          :description => item.description,
+          :from_date => item.from_date,
+          :to_date => item.to_date,
+          :tasksteps => task_steps_dict,
+          :selected => is_selected,
+          :sub_use_minus_one => sub_use_minus_one,
+          :sub_use_max_plus_one => sub_use_max_plus_one
+        }
+      )
+    end
+    @all_task_infos = @all_task_infos.to_json
+    # puts '>>>>>>>>'
+    # puts @all_task_infos
     render 'classrooms/teaching_progress_index'
   end
 
@@ -323,13 +377,41 @@ class ClassroomsController < ApplicationController
     task_period.description = period_info["description"]
     task_period.classroom_id = period_info["classroom_id"]
     task_period.save
+
+    # add two end points for each period
+    task_step_0 = TaskStep.new
+    task_step_0.step_date = from_date
+    task_step_0.title = '开始'
+    task_step_0.description = 'Start of a Period'
+    task_step_0.task_period_id = task_period.id
+    task_step_0.save
+
+    task_step_1 = TaskStep.new
+    task_step_1.step_date = to_date
+    task_step_1.title = '结束'
+    task_step_1.description = 'End of a Period'
+    task_step_1.task_period_id = task_period.id
+    task_step_1.save
+
     @role = User.find_by(:gitlab_id => current_user.id).role
     @classroom_id = params[:id]
-    render 'classrooms/teaching_progress_index'
+    redirect_to teaching_progress_index_classroom_path
   end
 
   def create_task_step
+    step_info = params["step"]
+    step_date = params["f"]
 
+    task_step_0 = TaskStep.new
+    task_step_0.step_date = step_date
+    task_step_0.title = step_info["title"]
+    task_step_0.description = step_info["description"]
+    task_step_0.task_period_id = step_info["task_period_id"]
+    task_step_0.save
+
+    @role = User.find_by(:gitlab_id => current_user.id).role
+    @classroom_id = params[:id]
+    redirect_to teaching_progress_index_classroom_path
   end
 
   private

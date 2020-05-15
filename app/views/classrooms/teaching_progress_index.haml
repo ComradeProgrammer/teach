@@ -6,5 +6,5 @@
 #teaching-progress-index.small-container
   .page-title-holder
     .page-title 教学进度
-  %teaching_progress_index_main{:taskinfo => [],
+  %teaching_progress_index_main{:taskinfo => @all_task_infos,
   :role => @role, :classroomid => @classroom_id}
