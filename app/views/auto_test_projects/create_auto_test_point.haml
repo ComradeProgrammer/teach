@@ -5,7 +5,11 @@
 
 #new-auto-test-point-app.small-container{data: {gitlabid: @public_personal_project_id}}
   .page-title-holder
-    .page-title 创建个人项目测试点
+    .page-title
+      - if @test_type == 'personal'
+        创建个人项目评测点
+      - else
+        创建结对项目评测点
   %el-form{':model': "form", ref: 'new_auto_test_point', ':rules': 'rules', 'label-width': '100px', action: create_auto_test_point_classroom_auto_test_projects_path, method: 'post'}
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}

@@ -8,4 +8,4 @@
     .page-title 查看评测点
   %selftp{:points => @points, 
     :testtype => @test_type,
-    :createtestpointhref => create_auto_test_point_classroom_auto_test_projects_path(classroom_id: @classroom_id, test_type: 'personal')}
+    :createtestpointhref => create_auto_test_point_classroom_auto_test_projects_path(classroom_id: @classroom_id, test_type: @test_type)}

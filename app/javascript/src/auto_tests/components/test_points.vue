@@ -45,7 +45,7 @@
   export default {
     props: ['points', 'testtype', 'createtestpointhref'],
 
-    data: function () {
+    data() {
       return {
         has_points: false,
         selfpoints: [],
@@ -59,15 +59,14 @@
 
     mounted() {
       this.selfpoints = JSON.parse(this.points);
-      console.log(this.selfpoints);
-      if (this.testtype === 'personal')
-      {
+      // console.log(this.selfpoints);
+      // console.log(this.testtype);
+      if (this.testtype === 'personal') {
         this.selfscribe = '个人';
-      }
-      else if (this.testtype == 'pair')
-      {
+      } else if (this.testtype === 'pair') {
         this.selfscribe = '结对';
       }
+      // console.log(this.selfscribe);
     }
   }
 

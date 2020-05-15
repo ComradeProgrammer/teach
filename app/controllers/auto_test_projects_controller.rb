@@ -339,10 +339,10 @@ class AutoTestProjectsController < ApplicationController
 
   def new_auto_test_point
     @classroom_id = params[:classroom_id]
-    test_type = params[:test_type]
+    @test_type = params[:test_type]
     @public_personal_project_id = AutoTestProject.find_by(
       :classroom_id => @classroom_id,
-      :test_type => test_type,
+      :test_type => @test_type,
       :is_public => 1
     ).gitlab_id
     @errors = []
