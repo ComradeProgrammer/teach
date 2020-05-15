@@ -13,13 +13,14 @@
         prop="index"
         label="测试点ID" class="index-col">
       </el-table-column>
-      <el-table-column
-        prop="input"
-        label="输入数据">
-      </el-table-column>
-      <el-table-column
-        prop="expected_output"
-        label="期望输出">
+      <el-table-column prop="index" label="测试点数据">
+        <template slot-scope="scope">
+          <selfdetails
+            :index="selfpoints[scope.$index].index"
+            :input="selfpoints[scope.$index].input"
+            :expected_output="selfpoints[scope.$index].expected_output">
+          </selfdetails>
+        </template>
       </el-table-column>
       <el-table-column prop="index" label="操作">
         <template slot-scope="scope">
@@ -39,6 +40,7 @@
   import ElementUI from 'element-ui';
   import 'element-ui/lib/theme-chalk/index.css';
   import selfft from "../../text_component/fold_unfold_text.vue";
+  import selfdetails from "./side_bar_test_point_details.vue";
 
   Vue.use(ElementUI);
 
@@ -54,7 +56,8 @@
     },
 
     components: {
-      selfft
+      selfft,
+      selfdetails
     },
 
     mounted() {
