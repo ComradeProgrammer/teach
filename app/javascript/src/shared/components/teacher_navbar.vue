@@ -9,9 +9,28 @@
       </el-menu-item>
 
       <el-submenu index="6">
-        <template slot="title">管理</template>
+        <template slot="title">班级管理</template>
         <el-menu-item index="6-1">
-          批量导入学生
+          批量添加学生账户
+        </el-menu-item>
+        <el-menu-item index="6-2">
+          学生学习情况监视
+        </el-menu-item>
+        <el-menu-item index="6-3">
+          学生成绩管理
+        </el-menu-item>
+      </el-submenu>
+
+      <el-submenu index="7">
+        <template slot="title">系统管理</template>
+        <el-menu-item index="7-1">
+          评测节点管理
+        </el-menu-item>
+        <el-menu-item index="7-2">
+          系统运行状态监视
+        </el-menu-item>
+        <el-menu-item index="7-3">
+          系统设置
         </el-menu-item>
       </el-submenu>
 
