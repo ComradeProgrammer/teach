@@ -1,7 +1,7 @@
 <template>
   <el-form :model="pairForm" :rules="rules" ref="pairForm" :action="action" method="post">
     <csrf></csrf>
-    <p>请输入结对学生的学号，按每2人一行进行输入，用英文逗号','隔开</p>
+    <p>请输入结对学生的username(学号)，按每组2人一行进行输入，用空格' '隔开</p>
     <el-input
       type="textarea"
       :rows="10"

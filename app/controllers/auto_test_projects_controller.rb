@@ -83,31 +83,40 @@ class AutoTestProjectsController < ApplicationController
 
   # todo: test to see if buggy
   def create_pair_project(id1, id2)
+    @auto_test_project = AutoTestProject.new('pair')
     @classroom_students_query = SelectClassroom.where(:classroom_id => params[:classroom_id])
     @all_students_gitlab_id_in_class = get_all_member_id(@classroom_students_query)[0]
     @all_teachers_gitlab_id_in_class = get_all_member_id(@classroom_students_query)[1]
     # find the classroom
     classroom = Classroom.find_by(id: params[:classroom_id])
     auto_test_project = classroom.auto_test_projects.new
-    name = 'student_pair_project_' + id1 + '_' + id2
+
+    classroom_gitlab = groups_service.get_group classroom[:gitlab_group_id]
+    classroom_path = classroom_gitlab["full_path"]
+    # debug(classroom_gitlab["web_url"])
+    pair1_id = User.find_by(:username => id1)[:id]
+    pair2_id = User.find_by(:username => id2)[:id]
+    name = 'student_pair_project_' + pair1_id.to_s + '_' + pair2_id.to_s
     @auto_test_project = {
-      :name => name,
-      :path => gitlab_host + '/' + @classroom_name + '/' + @projects_name + '/' + name,
-      :description => '',
-      :test_type => 'pair',
-      :pair1_id => id1,
-      :pair2_id => id2
+        'name' => name,
+        'path' => name,
+        # 'description'=> 'The pair project of ' + id1 + ' and ' + id2,
+        'description' => '',
+        'test_type'=> 'pair',
+        'pair1_id'=> pair1_id,
+        'pair2_id'=> pair2_id,
+        'namespace_id' => classroom.pair_project_subgroup_id,
+        'visibility' => 'public',
+        'request_access_enabled' => true
     }
-    @auto_test_project['namespace_id'] = classroom.pair_project_subgroup_id
-    @auto_test_project['visibility'] = 'public'
-    @auto_test_project['request_access_enabled'] = true
+    # debug(@auto_test_project)
 
     # check if there is duplicated repo
     has_deplicated_name = false
     all_subgroup_repo = groups_service.get_projects(@auto_test_project['namespace_id'])
     if all_subgroup_repo
       all_subgroup_repo.each do |item|
-        if item['name'] == @auto_test_project[:name]
+        if item['name'] == @auto_test_project['name']
           has_deplicated_name = true
         end
       end
@@ -120,42 +129,52 @@ class AutoTestProjectsController < ApplicationController
     project = projects_service.new_project(@auto_test_project)
 
     # add user
-    gitlab_id_pair1 = User.find(@auto_test_project[:pair1_id]).gitlab_id
-    gitlab_id_pair2 = User.find(@auto_test_project[:pair2_id]).gitlab_id
+    gitlab_id_pair1 = User.find(@auto_test_project['pair1_id']).gitlab_id
+    gitlab_id_pair2 = User.find(@auto_test_project['pair2_id']).gitlab_id
     projects_service.add_user_as_project_maintainer(project['id'], gitlab_id_pair1)
     projects_service.add_user_as_project_maintainer(project['id'], gitlab_id_pair2)
 
     auto_test_project.gitlab_id = project['id']
-    auto_test_project.test_type = @auto_test_project[:test_type]
+    auto_test_project.test_type = @auto_test_project['test_type']
     auto_test_project.is_public = 0
+
+    # debug('auto p: ')
+    # debug(auto_test_project)
     auto_test_project.save
+    # debug(AutoTestProject.all)
     # classroom.users << owner
-    redirect_to classroom_path(params[:classroom_id])
+    # redirect_to classroom_path(params[:classroom_id])
   rescue RestClient::BadRequest => e
     @errors = ['名称或地址包含非法字符或已被占用']
     @@errors_save = @errors
-    # render 'new'
-    redirect_to new_classroom_auto_test_project_path + '?type=' + @@project_type
+    redirect_to new_pair_projects_batch_classroom_auto_test_projects_path
+  end
+
+  def debug(item)
+    puts '**********'
+    puts '************************'
+    puts item
+    puts '************************'
+    puts '**********'
   end
 
   def create_pair_project_batch
-    id_array = params[:pairForm['text']]
-    puts '************************'
-    puts params[:pairForm]
-    # puts id_array.size
-    puts id_array
-    puts '************************'
-    redirect_to new_pair_projects_batch_classroom_auto_test_projects_path
-    if id_array.size % 2 != 0
-      @errors = ['名称或地址包含非法字符或已被占用']
+    id_str = params[:pairForm]['text']
+    # debug(id_str)
+    id_slice = id_str.split(' ')
+    # debug(id_slice)
+    if id_slice.size % 2 != 0
+      @errors = ['输入非法']
       @@errors_save = @errors
       redirect_to new_pair_projects_batch_classroom_auto_test_projects_path
+      return
     end
     i = 0
-    while i < 1111
-      create_pair_project(id_array[i], id_array[i + 1])
+    while i < id_slice.size
+      create_pair_project(id_slice[i], id_slice[i + 1])
       i = i + 2
     end
+    # redirect_to classroom_path(params[:classroom_id])
   end
 
   # create a new project
@@ -188,6 +207,8 @@ class AutoTestProjectsController < ApplicationController
     end
 
     @auto_test_project['request_access_enabled'] = true
+
+    # debug(@auto_test_project)
 
     # check if there is duplicated repo
     has_deplicated_name = false
