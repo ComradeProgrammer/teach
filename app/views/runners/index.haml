@@ -1,0 +1,9 @@
+- content_for :scripts do
+  = javascript_pack_tag 'runners_index'
+- content_for :styles do
+  = stylesheet_pack_tag 'runners_index'
+
+#runners-index-app.small-container
+  .page-title-holder
+    .page-title 评测节点管理控制台
+  %runners_index_table{:newrunnerhref => '#', :allrunners => @all_runners}

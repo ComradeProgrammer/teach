@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_08_051655) do
+ActiveRecord::Schema.define(version: 2020_05_15_034823) do
 
   create_table "auto_test_projects", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -89,6 +89,15 @@ ActiveRecord::Schema.define(version: 2020_05_08_051655) do
     t.string "code"
     t.string "token"
     t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "runners", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.string "token"
+    t.string "system"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

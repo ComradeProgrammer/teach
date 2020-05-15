@@ -142,9 +142,13 @@ Rails.application.routes.draw do
       get 'get_all_info', to: 'organizations#get_all_info'
     end
   end
+
   resources :members do
     collection do
       get 'get_all_info',to: 'members#get_all_info'
     end
   end
+
+  # attention: resources not resource
+  resources :runners
 end

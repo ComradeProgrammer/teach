@@ -103,6 +103,10 @@
           if (key === '6-1') {
             window.location.assign('/members/new');
           }
+        } else if (key.startsWith('7-')) {
+          if (key === '7-1') {
+            window.location.assign('/runners');
+          }
         }
       }
     }

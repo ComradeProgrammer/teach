@@ -7,7 +7,7 @@
       <template v-if="fold">
         <p>{{text.slice(0, 40) + "..."}}</p>
       </template>
-      <template v-else="">
+      <template v-else>
         <p>{{text}}</p>
       </template>
       <el-button type="text" @click="change_state">{{fold?'展开':'收起'}}</el-button>
