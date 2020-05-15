@@ -299,6 +299,18 @@ class ClassroomsController < ApplicationController
     redirect_to classrooms_path
   end
 
+  def teaching_progress_index
+
+  end
+
+  def create_task_period
+
+  end
+
+  def create_task_step
+
+  end
+
   private
 
   # new team proj dir

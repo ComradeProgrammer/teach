@@ -1,0 +1,2 @@
+class TaskStep < ApplicationRecord
+end

@@ -43,6 +43,10 @@
         班级
       </el-menu-item>
 
+      <el-menu-item index="10">
+        教学进度
+      </el-menu-item>
+
       <el-menu-item index="7">
         广播消息
       </el-menu-item>
@@ -74,12 +78,12 @@
     </el-menu>
 
     <el-dialog v-if="flag"
-      title="新建问题"
-      top="50px"
-      :visible.sync="dialogVisible"
-      v-loading="loading"
-      element-loading-text="创建中"
-      width="80%">
+               title="新建问题"
+               top="50px"
+               :visible.sync="dialogVisible"
+               v-loading="loading"
+               element-loading-text="创建中"
+               width="80%">
       <new-issue ref="newIssue" :issue="newIssue"></new-issue>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -88,12 +92,12 @@
     </el-dialog>
 
     <el-dialog v-else="flag"
-      title="新建标签"
-      top="50px"
-      :visible.sync="dialogVisible"
-      v-loading="loading"
-      element-loading-text="创建中"
-      width="80%">
+               title="新建标签"
+               top="50px"
+               :visible.sync="dialogVisible"
+               v-loading="loading"
+               element-loading-text="创建中"
+               width="80%">
       <new-label ref="newLabel" :label="newLabel"></new-label>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -126,7 +130,7 @@
         milestones: [],
         gitlabHost: '',
         dialogVisible: false,
-	flag: true,
+        flag: true,
         newLabel: new Label(),
         newIssue: new Issue(),
         // 创建 Issue 时的 loading
@@ -188,7 +192,7 @@
         } else if (key.startsWith('6-')) {
           this.newIssue.projectId = parseInt(key.substr(2));
           this.dialogVisible = true;
-	  this.flag = true;
+          this.flag = true;
         } else if (key === '7') {
           window.location.href = "/broadcasts";
         } else if (key === '8') {
@@ -196,8 +200,10 @@
         } else if (key.startsWith('9-')) {
           this.newLabel.projectId = parseInt(key.substr(2));
           this.dialogVisible = true;
-	  this.flag = false;
-        } 
+          this.flag = false;
+        } else if (key === '10') {
+
+        }
       },
       handleClose(done) {
         this.$confirm('确认关闭？')
@@ -247,8 +253,7 @@
               // issues 和 boards 中创建
               this.dialogVisible = false;
               window.eventhub.$emit('addNewIssue', this.newIssue);
-            }
-            else {
+            } else {
               // 其他页面通过导航栏创建
               this.addNewIssue(this.newIssue);
             }

@@ -1,0 +1,2 @@
+class TaskPeriod < ApplicationRecord
+end

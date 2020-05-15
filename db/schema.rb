@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_15_034823) do
+ActiveRecord::Schema.define(version: 2020_05_15_061926) do
 
   create_table "auto_test_projects", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -123,6 +123,25 @@ ActiveRecord::Schema.define(version: 2020_05_15_034823) do
     t.integer "pipeline_id"
     t.index ["auto_test_project_id"], name: "index_student_test_records_on_auto_test_project_id"
     t.index ["user_id"], name: "index_student_test_records_on_user_id"
+  end
+
+  create_table "task_periods", force: :cascade do |t|
+    t.date "from_date"
+    t.date "to_date"
+    t.string "title"
+    t.text "description"
+    t.integer "classroom_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "task_steps", force: :cascade do |t|
+    t.date "step_date"
+    t.string "title"
+    t.text "description"
+    t.integer "task_period_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "team_events", force: :cascade do |t|

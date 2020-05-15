@@ -13,6 +13,9 @@
         <el-menu-item index="6-1">
           批量添加学生账户
         </el-menu-item>
+        <el-menu-item index="6-4">
+          教学进度管理
+        </el-menu-item>
         <el-menu-item index="6-2">
           学生学习情况监视
         </el-menu-item>
@@ -102,6 +105,8 @@
         } else if (key.startsWith('6-')) {
           if (key === '6-1') {
             window.location.assign('/members/new');
+          } else if (key === '6-4') {
+
           }
         } else if (key.startsWith('7-')) {
           if (key === '7-1') {

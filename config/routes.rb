@@ -51,6 +51,12 @@ Rails.application.routes.draw do
   # teachers
   post '/classrooms/:id/edit', to: 'classrooms#update'
   resources :classrooms do
+    member do
+      get 'teaching_progress_index', to: 'classrooms#teaching_progress_index'
+      post 'create_task_period', to: 'classrooms#create_task_period'
+      post 'create_task_step', to: 'classrooms#create_task_step'
+    end
+
     collection do
       resources :auto_test_projects, only: [] do
         collection do
