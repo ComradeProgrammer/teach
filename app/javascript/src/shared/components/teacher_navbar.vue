@@ -59,7 +59,12 @@
           收到的广播
         </el-menu-item>
       </el-submenu>
-
+      <el-submenu index="8">
+         <template slot="title">博客</template>
+          <el-menu-item v-for="classroomId in classroomIdList" :index="'8-' + classroomId">
+             {{classroomNameList[classroomIdList.indexOf(classroomId)]}}
+          </el-menu-item>
+      </el-submenu>
       <el-menu-item index="2">
         GitLab
         <i class="el-icon-link"></i>
@@ -123,6 +128,9 @@
           if (key === '7-1') {
             window.location.assign('/runners');
           }
+        } else if (key.startsWith('8-')){
+          let classroomIdTmp = key.split("8-")[1];
+          window.location.assign(`/classrooms/${classroomIdTmp}/blogs`);
         }
       }
     }

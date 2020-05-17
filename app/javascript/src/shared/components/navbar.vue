@@ -50,7 +50,12 @@
       <el-menu-item index="7">
         广播消息
       </el-menu-item>
-
+      <el-submenu index="11">
+      <template slot="title">博客</template>
+        <el-menu-item v-for="classroomId in classroomIdList" :index="'11-' + classroomId">
+        {{classroomNameList[classroomIdList.indexOf(classroomId)]}}
+       </el-menu-item>
+      </el-submenu>
       <el-menu-item index="5">
         GitLab
         <i class="el-icon-link"></i>
@@ -135,10 +140,19 @@
         newLabel: new Label(),
         newIssue: new Issue(),
         // 创建 Issue 时的 loading
-        loading: false
+        loading: false,
+        classroomIdList: [],
+        classroomNameList: []
       };
     },
     mounted() {
+      this.classroomIdList = JSON.parse(
+      document.getElementById('navbar').dataset.classroomid);
+      this.classroomNameList = JSON.parse(
+      document.getElementById('navbar').dataset.classroomname);
+      //console.log(document.getElementById('navbar').dataset);
+      //console.log(this.classroomIdList);
+      //console.log(this.classroomNameList);
       const navbar = document.getElementById('navbar');
       this.gitlabHost = navbar.dataset.gitlabhost;
       const projects = JSON.parse(navbar.dataset.projects);
@@ -205,6 +219,9 @@
           this.flag = false;
         } else if (key === '10') {
           window.location.assign(`/classrooms/${this.classroomId}/teaching_progress_index`)
+        } else if (key.startsWith('11-')){
+          let classroomIdTmp = key.split("11-")[1];
+          window.location.assign(`/classrooms/${classroomIdTmp}/blogs`);
         }
       },
       handleClose(done) {

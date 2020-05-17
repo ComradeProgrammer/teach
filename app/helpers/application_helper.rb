@@ -65,18 +65,18 @@ module ApplicationHelper
         infos << info
       end
     end
-    puts('&&&&&&&')
-    puts(infos)
+    #puts('&&&&&&&')
+    #puts(infos)
     data['projects'] = infos.to_json
     data['issues-endpoint'] = issues_url(format: :json)
-    if current_user.id
-      user_gitlab_id = current_user.id
-      user = User.find_by(:gitlab_id => user_gitlab_id)
-      SelectClassroom.where(:user_id => user.id).each do |item|
-        data['classroomid'].append(item.classroom_id)
-      end
-      data['role'] = user.role
-    end
+    #if current_user.id
+    #  user_gitlab_id = current_user.id
+    #  user = User.find_by(:gitlab_id => user_gitlab_id)
+    #  SelectClassroom.where(:user_id => user.id).each do |item|
+    #    data['classroomid'].append(item.classroom_id)
+    #  end
+    #  data['role'] = user.role
+    #end
     data
   end
 

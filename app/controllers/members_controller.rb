@@ -7,9 +7,9 @@ class MembersController < ApplicationController
 
   def create
     @errors = []
-    puts "create======================"
+    #puts "create======================"
     member_form = params[:member]
-    puts member_form
+    #puts member_form
     all_students = member_form['description']
     students = all_students.split("\r\n")
     num = 1
@@ -26,17 +26,17 @@ class MembersController < ApplicationController
           not_move = 1
         end
       end
-      puts account
+      #puts account
       if flag == 0
         member = members_service.new_member account
-        puts "-------------------------------------"
+        #puts "-------------------------------------"
         puts member
         model = User.new
         model.gitlab_id = member['id']
         model.username = account[:name]
         model.role = 'student'
-        puts model.gitlab_id
-        puts model.username
+        #puts model.gitlab_id
+        #puts model.username
         model.save
       end
       num = num + 1
