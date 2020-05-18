@@ -61,6 +61,7 @@ Rails.application.routes.draw do
       resources :auto_test_projects, only: [] do
         collection do
           post 'create_private_personal_project', to: 'auto_test_projects#create_private_personal_project'
+          get 'validate_runner', to: 'auto_test_projects#validate_runner'
         end
       end
     end
