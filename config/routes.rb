@@ -99,6 +99,8 @@ Rails.application.routes.draw do
       get 'insight', to: 'insight#show'
 
       collection do
+        get 'new_team_projects_batch', to: 'team_projects#new_team_projects_batch'
+        post 'create_team_projects_batch', to: 'team_projects#create_team_projects_batch'
         resources :team_events
       end
     end

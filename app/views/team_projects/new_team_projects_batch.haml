@@ -1,0 +1,9 @@
+- content_for :scripts do
+  = javascript_pack_tag 'new_team_projects_batch'
+- content_for :styles do
+  = stylesheet_pack_tag 'new_team_projects_batch'
+
+#new-team-projects-batch-app.small-container{data: {classroom_id: @classroom_id}}
+  .page-title-holder
+    .page-title 批量创建团队作业项目
+  %new_team_projects_batch_form{:action => create_team_projects_batch_classroom_team_projects_path}

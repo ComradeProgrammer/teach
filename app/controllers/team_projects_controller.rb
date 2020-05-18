@@ -26,6 +26,40 @@ class TeamProjectsController < ApplicationController
     }
   end
 
+  def new_team_projects_batch
+    @errors = []
+    # find if duplicate
+    if @@errors_save.size > 0
+      @errors = @@errors_save
+      @@errors_save = []
+    end
+    if @@dup_proj
+      @errors = ['名称重复']
+      @@dup_proj = false
+    end
+    @classroom_id = params[:classroom_id]
+    @team_project = {
+        name: '',
+        path: '',
+        description: '',
+        initialize_with_readme: false
+    }
+  end
+
+  def debug(item)
+    puts '**********'
+    puts '************************'
+    puts item
+    puts '************************'
+    puts '**********'
+  end
+
+  def create_team_projects_batch
+    id_str = params[:teamForm]['text']
+    debug(id_str.split("\n"))
+    id_str.split("\n").each { |s| puts "team: " + s }
+  end
+
   def create
     # puts('team create >>>>>>>>>>>>>>>>>>>>>>>>>>>')
     # puts(params)
