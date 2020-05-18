@@ -69,6 +69,11 @@ class AutoTestRunnersService
     })
   end
 
+  def validate_runner(path)
+    response = RestClient.get(path + '/query_runner')
+    JSON.parse response.body
+  end
+
   def auto_test_runner_host
     Constant::AUTO_TEST_RUNNER_HOST
   end

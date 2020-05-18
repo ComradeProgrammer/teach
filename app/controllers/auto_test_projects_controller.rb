@@ -81,6 +81,19 @@ class AutoTestProjectsController < ApplicationController
     return [all_students_gitlab_id_in_class, all_teachers_gitlab_id_in_class]
   end
 
+  def validate_runner
+    path = params[:path]
+    # p '#######'
+    # p path
+    begin
+      res = auto_test_runners_service.validate_runner path
+    rescue Exception => e
+      p e
+    end
+    # p res
+    render json: res
+  end
+
   # todo: test to see if buggy
   def create_pair_project(id1, id2)
     @auto_test_project = AutoTestProject.new('pair')

@@ -34,7 +34,7 @@
           text: [
             {required: true, message: '请输入学号', trigger: 'blur'}
           ]
-        }
+        },
       }
     },
     components: {

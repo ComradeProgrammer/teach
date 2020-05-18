@@ -2,6 +2,7 @@ import Vue from 'vue/dist/vue.esm';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import csrf from '../src/shared/components/csrf.vue';
+import select_runner from '../src/auto_tests/components/runner_input.vue';
 import axios from 'axios/index';
 
 Vue.use(ElementUI);
@@ -16,7 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
           user_id: '',
         },
         studentList: [],
-        classroom_id: ''
+        classroom_id: '',
+        path: ''
       }
     },
     computed: {
@@ -25,7 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     },
     components: {
-      csrf
+      csrf,
+      select_runner
     },
     mounted() {
       this.classroom_id = this.$el.dataset.classroomId;
@@ -47,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
           type: this.form.scope,
           class_id: this.classroom_id,
           user_id: this.form.user_id,
+          path: this.path
         });
         window.location.assign('/classrooms');
       },
