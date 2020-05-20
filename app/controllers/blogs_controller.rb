@@ -5,7 +5,7 @@ class BlogsController < ApplicationController
     respond_to do |format|
       format.json do
         classroom = Classroom.find(params[:classroom_id])
-        type_query = if search_params[:type] == 'my'
+        type_query = if search_params[:type] == 'all'
                        %w[blog daily_scrum]
                      else
                        search_params[:type]
@@ -15,14 +15,29 @@ class BlogsController < ApplicationController
           team_project = TeamProject.find(params[:team_project_id])
           records = records.where(project_id: team_project.gitlab_id)
         end
+        user = User.find_by(gitlab_id: current_user.id)
+        user_projects = projects_service.all()
+        pro_id = []
+        user_projects.each do |pro|
+          pro_id<<pro['id']
+        end
+        puts '-------------------'
+        puts pro_id
+        puts '--'
+        puts records
+        records = records.where(project_id:pro_id)
+        puts '=='
+        puts records
         if search_params[:scope] == 'my'
-          user = User.find_by(gitlab_id: current_user.id)
           blog_records = records.where(user_id: user.id, blog_type: type_query)
+          #elsif search_params[:scope] == 'all' && user.role == 'student'
+          #blog_records = records.where(user_id: user.id, blog_type: type_query)
         else
           blog_records = records.where(blog_type: type_query)
         end
         blogs = []
         blog_records.each do |br|
+          puts br.project_id
           blog = blogs_service.get_blog br.project_id, br.gitlab_id
           blog['id'] = br.id
           blog['gitlab_id'] = br.gitlab_id
@@ -43,6 +58,10 @@ class BlogsController < ApplicationController
   def show
     blog = Blog.find(params[:id])
     render_404 unless blog.classroom_id == params[:classroom_id].to_i
+    #puts "----------------------------"
+    #puts blog
+    #puts blog.title
+    #puts blog.can_edit
   end
 
   def show_raw
@@ -109,5 +128,8 @@ class BlogsController < ApplicationController
       render_403
       return
     end
+  end
+  def projects_service
+    ::ProjectsService.new current_user
   end
 end
