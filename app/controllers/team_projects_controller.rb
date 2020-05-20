@@ -139,7 +139,7 @@ class TeamProjectsController < ApplicationController
       namespace_id: classroom.team_project_subgroup_id
     }
     # 以 owner 身份创建项目
-    owner = classroom.users.where(role: 'teacher').first
+    owner = classroom.users.where(role: 'admin').first
     @team_project = create_project_as_owner team_project, owner.gitlab_id
     # 当前用户添加为 Maintainer
     # now we assume that only teacher could create project
