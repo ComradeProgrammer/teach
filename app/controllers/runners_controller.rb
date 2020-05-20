@@ -15,4 +15,10 @@ class RunnersController < ApplicationController
   def create
 
   end
+
+  def add_runner_page
+  end
+
+  def add_runner
+  end
 end

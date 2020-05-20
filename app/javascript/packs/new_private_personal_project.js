@@ -2,7 +2,6 @@ import Vue from 'vue/dist/vue.esm';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import csrf from '../src/shared/components/csrf.vue';
-import select_runner from '../src/auto_tests/components/runner_input.vue';
 import axios from 'axios/index';
 
 Vue.use(ElementUI);
@@ -28,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     components: {
       csrf,
-      select_runner
     },
     mounted() {
       this.classroom_id = this.$el.dataset.classroomId;

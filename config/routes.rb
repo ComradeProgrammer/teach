@@ -159,5 +159,10 @@ Rails.application.routes.draw do
   end
 
   # attention: resources not resource
-  resources :runners
+  resources :runners do
+    collection do
+      get 'add_runner_page', to: 'runners#add_runner_page'
+      post 'add_runner', to: 'runners#add_runner'
+    end
+  end
 end

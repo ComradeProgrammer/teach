@@ -1,0 +1,9 @@
+- content_for :scripts do
+  = javascript_pack_tag 'new_add_runner_page'
+- content_for :styles do
+  = stylesheet_pack_tag 'new_add_runner_page'
+
+#add-runner-app.small-container
+  .page-title-holder
+    .page-title 添加自动评测机
+  %add_runner_page_content

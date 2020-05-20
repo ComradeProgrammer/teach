@@ -89,6 +89,7 @@ class AutoTestProjectsController < ApplicationController
       res = auto_test_runners_service.validate_runner path
     rescue Exception => e
       p e
+      raise e
     end
     # p res
     render json: res

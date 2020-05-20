@@ -10,7 +10,6 @@
     - @errors.each do |error|
       %el-alert.error-item{type: 'error', 'title': error}
     %csrf
-    %select_runner{'v-model': 'path'}
     %el-form-item{label: '学生范围'}
       %el-select{'v-model': 'form.scope', placeholder: "请选择学生范围"}
         %el-option{label: '班级全体学生', value: 'class'}
