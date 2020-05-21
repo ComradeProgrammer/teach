@@ -49,7 +49,9 @@
 
       <el-menu-item index="7">
         广播消息
+        <el-badge v-if="broadcast_num > 0" class="mark" :value=broadcast_num />
       </el-menu-item>
+
       <el-submenu index="11">
       <template slot="title">博客</template>
         <el-menu-item v-for="classroomId in classroomIdList" :index="'11-' + classroomId">
@@ -121,6 +123,7 @@
   import AlertMixin from '../../shared/components/mixins/alert'
 
   export default {
+    props: ['broadcast_num'],
     mixins: [AlertMixin],
     components: {
       NewIssue,

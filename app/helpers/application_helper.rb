@@ -80,6 +80,11 @@ module ApplicationHelper
     data
   end
 
+  def get_broadcast_num
+    user_id = User.find_by(gitlab_id: current_user.id).id
+    Broadcast.where(:to_id => user_id).length
+  end
+
   def ie_svg_meta_tag
     tag('meta', 'http-equiv': 'X-UA-Compatible', content: 'IE=11').html_safe
   end

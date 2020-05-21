@@ -29,9 +29,9 @@
     #container
       #navbar{data: projects_data}
         - if admin?
-          %navbar{:admin => 'admin'}
+          %navbar{:admin => 'admin', :broadcast_num => get_broadcast_num}
         - else
-          %navbar
+          %navbar{:broadcast_num => get_broadcast_num}
       #content
         .content-wrapper
           = yield

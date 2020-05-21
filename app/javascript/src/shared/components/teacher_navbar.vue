@@ -57,8 +57,10 @@
         </el-menu-item>
         <el-menu-item index="3-2">
           收到的广播
+          <el-badge v-if="broadcast_num > 0" class="mark" :value=broadcast_num />
         </el-menu-item>
       </el-submenu>
+
       <el-submenu index="8">
          <template slot="title">博客</template>
           <el-menu-item v-for="classroomId in classroomIdList" :index="'8-' + classroomId">
@@ -78,7 +80,7 @@
 </template>
 <script>
   export default {
-    props: ['admin'],
+    props: ['admin', 'broadcast_num'],
     data() {
       return {
         activeIndex: '1',

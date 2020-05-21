@@ -72,10 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.$refs.broadcast.validate((valid) => {
                     if (valid) {
                         axios.post('/broadcasts', {
-                            type: this.form.scope,
-                            class_id: this.form.class_id,
-                            user_id: this.form.user_id,
-                            content: this.form.content
+                            type: this.broadcast.scope,
+                            class_id: this.broadcast.class_id,
+                            user_id: this.broadcast.user_id,
+                            content: this.broadcast.content
                         });
                         window.location.href = '/classrooms';
                     } else {
