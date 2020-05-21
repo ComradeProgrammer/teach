@@ -77,15 +77,15 @@
               this.runner_state.os = data.os;
               this.$emit('available', {
                 uid: this.runner_state.id,
-                os: this.runner_state.os
+                os: this.runner_state.os,
+                path: this.path
               });
             }
           }
         ).catch((err) => {
             console.log('Error: happen in checking runner.');
             console.log(err);
-          }
-        )
+          });
         this.show_check = true;
       }
     }

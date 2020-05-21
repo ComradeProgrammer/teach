@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_15_101348) do
+ActiveRecord::Schema.define(version: 2020_05_21_081050) do
 
   create_table "auto_test_projects", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -100,6 +100,9 @@ ActiveRecord::Schema.define(version: 2020_05_15_101348) do
     t.string "system"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "path"
+    t.string "os"
+    t.string "uid"
   end
 
   create_table "select_classrooms", force: :cascade do |t|

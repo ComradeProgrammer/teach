@@ -1,5 +1,5 @@
 class Runner < ApplicationRecord
-  attr_accessor :name, :path, :os, :uid
+  validates :uid, uniqueness: { case_sensitive: false}
 
   def to_json
     {

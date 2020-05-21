@@ -16,8 +16,9 @@
               <el-button style="float: right; padding: 3px 0" type="text">查看详情</el-button>
             </div>
             <ul>
-              <li>地址</li>
-              <li>系统信息</li>
+              <li>地址: {{runner.path}}</li>
+              <li>系统信息: {{runner.os}}</li>
+              <li>uid: {{runner.uid}}</li>
             </ul>
           </el-card>
         </div>
@@ -50,7 +51,7 @@
     },
     mounted() {
       this.all_runners_info = JSON.parse(this.allrunners);
-      // console.log(this.allrunners);
+      console.log(this.allrunners);
     }
   }
 </script>

@@ -385,26 +385,17 @@ class AutoTestProjectsController < ApplicationController
   end
 
   def create_auto_test_point
-    res = auto_test_runners_service.create_auto_test_point(
-      params[:project_id],
-      params[:input],
-      params[:expected_output]
-    )
-    puts('[Debug] create_auto_test_point >>>>>>>>>>')
-    puts(res)
+    Runner.all.each do |runner|
+      res = auto_test_runners_service.create_auto_test_point(
+        params[:project_id],
+        params[:input],
+        params[:expected_output],
+        runner[:path]
+      )
+      puts('[Debug] create_auto_test_point in runner{runner[:uid]} >>>>>>>>>>')
+      puts(res)
+    end
     redirect_to(classroom_path(id: params[:classroom_id]))
-  end
-
-  def new_start_auto_test
-    @classroom_id = params[:classroom_id]
-    test_type = params[:test_type]
-    @public_personal_project_id = AutoTestProject.find_by(
-      :classroom_id => @classroom_id,
-      :test_type => test_type,
-      :is_public => 1
-    ).gitlab_id
-    @errors = []
-    render 'auto_test_projects/start_auto_test'
   end
 
   def get_auto_test_repo
@@ -423,6 +414,19 @@ class AutoTestProjectsController < ApplicationController
     end
     git_repo_list.chop!
     render plain: git_repo_list
+  end
+
+  def new_start_auto_test
+    @classroom_id = params[:classroom_id]
+    test_type = params[:test_type]
+    @public_personal_project_id = AutoTestProject.find_by(
+      :classroom_id => @classroom_id,
+      :test_type => test_type,
+      :is_public => 1
+    ).gitlab_id
+    @errors = []
+    @runners = Runner.all
+    render 'auto_test_projects/start_auto_test'
   end
 
   # start a new auto test
@@ -465,10 +469,12 @@ class AutoTestProjectsController < ApplicationController
       exec_command = params[:exec_command]
     end
 
+    runner = Runner.find_by(uid: params[:runner_uid])
     auto_test_runners_service.start_auto_test(
       auto_test_type,
       params[:project_id],
       git_repo_list,
+      runner[:path],
       use_text_file,
       use_text_output,
       compile_command,
@@ -485,11 +491,13 @@ class AutoTestProjectsController < ApplicationController
       :test_type => test_type,
       :is_public => 1
     ).gitlab_id
-    auto_test_results = auto_test_runners_service.get_auto_test_results(@public_personal_project_id)
     @refined_results = []
-    auto_test_results.keys.each do |key|
-      auto_test_results[key]['name'] = User.find(key.to_i).username
-      @refined_results.append(auto_test_results[key])
+    Runner.all.each do |runner|
+      auto_test_results = auto_test_runners_service.get_auto_test_results(@public_personal_project_id, runner[:path])
+      auto_test_results.keys.each do |key|
+        auto_test_results[key]['name'] = User.find(key.to_i).username
+        @refined_results.append(auto_test_results[key])
+      end
     end
     puts('>>>>>>>>>>>>>')
     puts(@refined_results)
@@ -530,7 +538,9 @@ class AutoTestProjectsController < ApplicationController
   end
 
   def remove_auto_test_point
-    auto_test_runners_service.remove_auto_test_point(params[:point_id])
+    Runner.all.each do |runner|
+      auto_test_runners_service.remove_auto_test_point(params[:point_id], runner[:path])
+    end
     redirect_to get_auto_test_points_classroom_auto_test_projects_path(params[:classroom_id],
                                                                   :test_type => params[:test_type])
   end

@@ -1,14 +1,10 @@
 import Vue from 'vue/dist/vue.esm'
-import VueRouter from 'vue-router/dist/vue-router.esm'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import csrf from '../src/shared/components/csrf.vue'
 import axios from 'axios/index'
 
 Vue.use(ElementUI);
-Vue.use(VueRouter);
-
-const router = new VueRouter();
 
 document.addEventListener('DOMContentLoaded', () => {
   new Vue({
@@ -21,8 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
           use_text_file: 'true',
           use_text_output: 'true',
           compile_command: '',
-          exec_command: ''
-        }
+          exec_command: '',
+          runner_uid: ''
+        },
+        runners: []
       }
     },
     components: {
@@ -30,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     mounted() {
       this.form.project_id = this.$el.dataset.gitlabid;
+      this.runners = this.$el.dataset.runners;
     },
     methods: {
       submitFormAxios() {
@@ -40,7 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
             use_text_file: this.form.use_text_file,
             use_text_output: this.form.use_text_output,
             compile_command: this.form.compile_command,
-            exec_command: this.form.exec_command
+            exec_command: this.form.exec_command,
+            runner_uid: this.runner_uid
         });
         window.location.assign('/classrooms/' + this.$el.dataset.classroomId);
       }

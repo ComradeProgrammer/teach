@@ -7,8 +7,8 @@ see out API doc at: https://github.com/Jiyuan-Yang/teach-auto-test-runner/blob/m
 =end
 
 class AutoTestRunnersService
-  def create_auto_test_point(project_id, input, expected_output)
-    response = RestClient.post(auto_test_runner_host + '/create_auto_test_point', {
+  def create_auto_test_point(project_id, input, expected_output, runner_path)
+    response = RestClient.post(runner_path + '/create_auto_test_point', {
       :project_id => project_id,
       :input => input,
       :expected_output => expected_output
@@ -16,7 +16,7 @@ class AutoTestRunnersService
     JSON.parse response.body
   end
 
-  def start_auto_test(test_type, project_id, git_repo_list, use_text_file = nil,
+  def start_auto_test(test_type, project_id, git_repo_list, runner_path,use_text_file = nil,
                       use_text_output = nil, compile_command = nil, exec_command = nil)
     payload = {
       :test_type => test_type,
@@ -44,7 +44,7 @@ class AutoTestRunnersService
   end
 
   def get_auto_test_results(project_id)
-    response = RestClient.get(auto_test_runner_host + '/get_auto_test_results', {
+    response = RestClient.get(runner_path + '/get_auto_test_results', {
       params: {
         :project_id => project_id
       }
@@ -52,8 +52,8 @@ class AutoTestRunnersService
     JSON.parse response.body
   end
 
-  def get_auto_test_points(project_id)
-    response = RestClient.get(auto_test_runner_host + '/get_auto_test_points', {
+  def get_auto_test_points(project_id, runner_path)
+    response = RestClient.get(runner_path + '/get_auto_test_points', {
       params: {
         :project_id => project_id
       }
@@ -61,16 +61,16 @@ class AutoTestRunnersService
     JSON.parse response.body
   end
 
-  def remove_auto_test_point(point_id)
-    response = RestClient.get(auto_test_runner_host + '/remove_auto_test_point', {
+  def remove_auto_test_point(point_id, runner_path)
+    response = RestClient.get(runner_path + '/remove_auto_test_point', {
       params: {
         :id => point_id
       }
     })
   end
 
-  def validate_runner(path)
-    response = RestClient.get(path + '/query_runner')
+  def validate_runner(runner_path)
+    response = RestClient.get(runner_path + '/query_runner')
     JSON.parse response.body
   end
 
