@@ -81,8 +81,10 @@ module ApplicationHelper
   end
 
   def get_broadcast_num
-    user_id = User.find_by(gitlab_id: current_user.id).id
-    Broadcast.where(:to_id => user_id).length
+    if current_user.id
+      user_id = User.find_by(gitlab_id: current_user.id).id
+      Broadcast.where(:to_id => user_id).length
+    end
   end
 
   def ie_svg_meta_tag

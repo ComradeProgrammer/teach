@@ -87,7 +87,6 @@ class BroadcastsController < ApplicationController
     Broadcast.where(:to_id => user_id).each do |item|
       item.destroy
     end
-    update_broadcast_num
     redirect_to broadcasts_path
   end
 
