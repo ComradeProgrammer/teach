@@ -54,10 +54,16 @@ class TeamProjectsController < ApplicationController
     puts '**********'
   end
 
-  def create_team_project()
+  def create_team_project(team_name, id_array)
     save_team_projects = TeamProject.new
-    @team_project = params[:team_project]
-
+    # @team_project = params[:team_project]
+    @team_project = {
+        'name' => team_name,
+        'path' => team_name,
+        'description' => '',
+        'initialize_with_readme' => true,
+        'members' => []
+    }
     # look up for duplicate projects
     @@dup_proj = false
     TeamProject.all.each do |a_project|
@@ -77,16 +83,16 @@ class TeamProjectsController < ApplicationController
         namespace_id: classroom.team_project_subgroup_id
     }
     # 以 owner 身份创建项目
-    owner = classroom.users.where(role: 'teacher').first
+    owner = classroom.users.where(role: 'admin').first
     @team_project = create_project_as_owner team_project, owner.gitlab_id
     # 当前用户添加为 Maintainer
     # now we assume that only teacher could create project
     # therefore, we should add all teachers in the classroom and the group member
     # to this repo as Maintainer
     member_gitlab_id = []
-    @team_project_ori = params[:team_project]
-    @team_project_ori[:members].each do |member|
-      member_gitlab_id.append(User.find(member).gitlab_id)
+    id_array.each do |username|
+      id = User.find_by(:username => username)[:id]
+      member_gitlab_id.append(User.find(id).gitlab_id)
     end
 
     save_team_projects.gitlab_id = @team_project['id']
@@ -99,6 +105,7 @@ class TeamProjectsController < ApplicationController
         # projects_service.add_user_as_project_maintainer(@team_project['id'], gitlab_id)
       end
     end
+    return
   rescue RestClient::BadRequest => e
     @errors = ['BadRequest, 可能名称或地址包含非法字符']
     @@errors_save = @errors
@@ -108,7 +115,15 @@ class TeamProjectsController < ApplicationController
   def create_team_projects_batch
     id_str = params[:teamForm]['text']
     debug(id_str.split("\n"))
-    id_str.split("\n").each { |s| puts "team: " + s }
+    lines = id_str.split("\n")
+    lines.each do |line|
+      team_name = line.split(":")[0]
+      id_array = line.split(":")[1].split(" ")
+      # debug(team_name)
+      # debug(id_array)
+      create_team_project(team_name, id_array)
+    end
+    redirect_to classroom_path(params[:classroom_id])
   end
 
   def create

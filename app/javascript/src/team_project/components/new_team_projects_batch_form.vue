@@ -1,7 +1,10 @@
 <template>
   <el-form :model="teamForm" :rules="rules" ref="teamForm" :action="action" method="post">
     <csrf></csrf>
-    <p>请输入团队学生的username(学号)，按每组一行进行输入，不同组员用空格' '隔开</p>
+    <p>请输入团队的名字和学生的username(学号)，按每组一行进行输入，不同组员用空格' '隔开</p>
+    <p>格式：[team_name]: [username] [username] ... 例如：</p>
+    <p>    team1: 17370001 17370002 17370003</p>
+    <p>    team2: 17370004 17370012 17374003</p>
     <el-input
       type="textarea"
       :rows="10"
