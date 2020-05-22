@@ -101,6 +101,8 @@ class BlogsController < ApplicationController
     blog_record.gitlab_id = blog['id']
     user = User.find_by(gitlab_id: current_user.id)
     blog_record.user_id = user.id
+    blog_record.score1 = 0
+    blog_record.score2 = 0
     blog_record.save
     redirect_to classroom_blogs_path
   end
