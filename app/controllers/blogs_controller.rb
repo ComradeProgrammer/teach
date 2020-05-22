@@ -1,6 +1,23 @@
 class BlogsController < ApplicationController
   before_action :check_classroom
-
+  def score
+    puts '-----------------------score'
+    puts params
+    blog = Blog.find(params[:blog_id])
+    @blog_id = blog.id
+    score_form = params[:score]
+    puts score_form
+  end
+  def add_score
+    puts params
+    blog = Blog.find(params[:blog_id])
+    score_form = params[:score]
+    blog.score1 = score_form['score1']
+    blog.score2 = score_form['score2']
+    blog.save
+    puts score_form
+    redirect_to classroom_blogs_path
+  end
   def index
     respond_to do |format|
       format.json do
@@ -58,6 +75,7 @@ class BlogsController < ApplicationController
   def show
     blog = Blog.find(params[:id])
     render_404 unless blog.classroom_id == params[:classroom_id].to_i
+    @scores = {:score1 => blog.score1,:score2 => blog.score2}
     #puts "----------------------------"
     #puts blog
     #puts blog.title

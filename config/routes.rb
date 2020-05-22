@@ -93,6 +93,8 @@ Rails.application.routes.draw do
 
     resources :team_projects, only: %i[show new create] do
       resources :blogs do
+        get 'score', to: 'blogs#score'
+        post 'add_score', to: 'blogs#add_score'
         member do
           get 'raw', to: 'blogs#show_raw'
         end
@@ -107,6 +109,9 @@ Rails.application.routes.draw do
     end
 
     resources :blogs do
+      get 'score', to: 'blogs#score'
+      post 'add_score', to: 'blogs#add_score'
+
       member do
         get 'raw', to: 'blogs#show_raw'
       end
@@ -124,6 +129,8 @@ Rails.application.routes.draw do
   end
 
   resources :blogs, only: [] do
+    get 'score', to: 'blogs#score'
+    post 'add_score', to: 'blogs#add_score'
     resources :comments, only: %i[index create update destroy], constraints: ->(req) { req.format == :json }
   end
 

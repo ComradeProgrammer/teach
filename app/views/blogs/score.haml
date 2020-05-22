@@ -1,0 +1,9 @@
+- content_for :scripts do
+  = javascript_pack_tag 'new_score'
+- content_for :styles do
+  = stylesheet_pack_tag 'new_score'
+
+#new-score-app.small-container
+  .page-title-holder
+    .page-title 博客评分
+  %score_form{:action => "add_score"}
