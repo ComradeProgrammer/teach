@@ -117,6 +117,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :homeworks do
+      collection do
+        get 'get_all_info', to: 'homeworks#get_all_info'
+      end
+    end
+
     collection do
       get 'get_all_student_id_and_name', to: 'classrooms#get_all_student_id_and_name'
       get 'get_all_classroom_id_and_name', to: 'classrooms#get_all_classroom_id_and_name'
@@ -158,6 +164,7 @@ Rails.application.routes.draw do
       get 'get_all_info', to: 'organizations#get_all_info'
     end
   end
+
 
   resources :members do
     collection do

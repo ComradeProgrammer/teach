@@ -1,0 +1,9 @@
+- content_for :scripts do
+  = javascript_pack_tag 'new_homework'
+- content_for :styles do
+  = stylesheet_pack_tag 'new_homework'
+
+#new-homework-app.small-container
+  .page-title-holder
+    .page-title 创建博客作业
+  %homework_form{:action => classroom_homeworks_path}

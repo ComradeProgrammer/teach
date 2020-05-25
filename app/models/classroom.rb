@@ -6,6 +6,7 @@ class Classroom < ApplicationRecord
   has_many :team_projects, dependent: :destroy
   has_many :blogs, dependent: :destroy
   has_many :team_events, dependent: :destroy
+  has_many :homework
 
   validates :gitlab_group_id, presence: true, uniqueness: true
 

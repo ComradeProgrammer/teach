@@ -15,9 +15,13 @@
     .page-title-controls
       - if teacher?
         %el-button{'v-if': 'isCreatingProjects', type: 'primary', ':loading':'true'} 正在自动分配仓库
+        %a.el-button{href: new_classroom_homework_path(classroom_id: params[:id])}
+          新建博客作业
       - if my_class? params[:id]
         %a.el-button{href: classroom_blogs_path(classroom_id: params[:id])}
           班级博客
+        %a.el-button{href: classroom_homeworks_path(classroom_id: params[:id])}
+          所有博客作业
       %a.el-button{href: @classroom['web_url']}
         转到 GitLab
   %p.info= @classroom['description']

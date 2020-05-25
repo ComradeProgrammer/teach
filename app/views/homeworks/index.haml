@@ -1,0 +1,24 @@
+.small-container
+  .page-title-holder
+    .page-title 博客作业
+
+  .content-list
+    -if @homeworks.length == 0
+      %div
+        %el-card{style: 'width: 80%; margin: auto;'}
+          %br
+          您还没有创建任何博客作业，您可以在班级中创建博客作业
+    -else
+      - @homeworks.each do |homework|
+        %el-card{shadow: "hover", style: "width: 95%;margin:auto;"}
+          %div{slot: 'header'}
+            %span{style: 'font-size:30px'}
+              %p= homework['name']
+          %div
+            %ul
+              %li
+                %b 作业简介
+                - if homework['description'] != ''
+                  %p= homework['description']
+                - else
+                  %p 暂无博客简介
