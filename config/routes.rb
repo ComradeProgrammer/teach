@@ -156,6 +156,7 @@ Rails.application.routes.draw do
   resources :broadcasts do
     collection do
       get 'destroy_all', to: 'broadcasts#destroy_all'
+      get 'get_latest_broadcast', to: 'broadcasts#get_latest_broadcast'
     end
   end
 

@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             user_id: this.broadcast.user_id,
                             content: this.broadcast.content
                         });
-                        window.location.href = '/classrooms';
+                        // window.location.href = '/classrooms';
                     } else {
                         return false;
                     }

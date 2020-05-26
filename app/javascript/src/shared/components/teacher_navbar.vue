@@ -51,7 +51,10 @@
       </el-submenu>
 
       <el-submenu index="3">
-        <template slot="title">广播</template>
+        <template slot="title">
+            广播
+          <el-badge is-dot v-if="broadcast_num > 0" class="mark" />
+        </template>
         <el-menu-item index="3-1">
           发送广播
         </el-menu-item>
@@ -79,6 +82,7 @@
   </div>
 </template>
 <script>
+  import axios from 'axios/index';
   export default {
     props: ['admin', 'broadcast_num'],
     data() {
@@ -98,6 +102,7 @@
         document.getElementById('navbar').dataset.classroomid);
       this.classroomNameList = JSON.parse(
         document.getElementById('navbar').dataset.classroomname);
+      setInterval(this.getLatestBroadcast, 2000);
     },
     methods: {
       handleSelect(key) {
@@ -134,6 +139,17 @@
           let classroomIdTmp = key.split("8-")[1];
           window.location.assign(`/classrooms/${classroomIdTmp}/blogs`);
         }
+      },
+      getLatestBroadcast() {
+        axios.get('/broadcasts/get_latest_broadcast').then((response) => {
+          if (response.data['broadcast_num'] > this.broadcast_num) {
+            this.broadcast_num = response.data['broadcast_num']
+            this.$notify({
+              title: '新广播',
+              message: response.data['latest_broadcast']['content']
+            })
+          }
+        });
       }
     }
   }
