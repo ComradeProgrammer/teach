@@ -3,7 +3,7 @@
 - content_for :styles do
   = stylesheet_pack_tag 'new_blog'
 
-#new-blog-app.small-container{data: {blogs: new_blog_data}, 'v-loading': 'loading', 'element-loading-text': '加载中'}
+#new-blog-app.small-container{data: {blogs: new_blog_data, homeworks: @homeworks}, 'v-loading': 'loading', 'element-loading-text': '加载中'}
   .page-title-holder
     .page-title 创建博客
   %el-form{ref: 'newBlogForm', 'v-if': 'blog', ':model': 'blog', ':rules': 'rules', 'label-width': '80px', action: classroom_blogs_path, method: 'post'}
@@ -12,6 +12,10 @@
       %el-select{'v-model': 'containerId', '@change': 'chooseContainer', ':placeholder': 'blogContainerPlaceholder'}
         %el-option{'v-for': '(container, index) in containers', ':label': 'container.name', ':value': 'container.id', ':key': 'index'}
       %input{':value': 'blog.project_id', name: 'blog[project_id]', style: 'display: none'}
+    %el-form-item{label: '作业', 'prop': 'hw_id'}
+      %el-select{'v-model': 'hwId', ':placeholder': "str_hw"}
+        %el-option{'v-for': '(homework, index) in homeworks', ':label': 'homework.name', ':value': 'homework.id', ':key': 'index'}
+      %input{':value': 'blog.hw_id', name: 'blog[hw_id]', style: 'display: none'}
     %el-form-item{label: '标题', 'prop': 'title'}
       %el-input{'v-model': 'blog.title', name: 'blog[title]'}
     %el-form-item{label: '内容', 'prop': 'code'}

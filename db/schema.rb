@@ -30,8 +30,6 @@ ActiveRecord::Schema.define(version: 2020_05_25_075405) do
     t.integer "user_id"
     t.integer "classroom_id"
     t.string "blog_type"
-    t.integer "score1"
-    t.integer "score2"
     t.index ["classroom_id"], name: "index_blogs_on_classroom_id"
     t.index ["user_id"], name: "index_blogs_on_user_id"
   end
