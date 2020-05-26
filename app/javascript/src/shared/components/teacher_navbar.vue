@@ -143,11 +143,11 @@
       getLatestBroadcast() {
         axios.get('/broadcasts/get_latest_broadcast').then((response) => {
           if (response.data['broadcast_num'] > this.broadcast_num) {
-            this.broadcast_num = response.data['broadcast_num']
+            this.broadcast_num = response.data['broadcast_num'];
             this.$notify({
               title: '新广播',
               message: response.data['latest_broadcast']['content']
-            })
+            });
           }
         });
       }
