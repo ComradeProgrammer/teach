@@ -76,6 +76,14 @@ class BroadcastsController < ApplicationController
     redirect_to(classrooms_path)
   end
 
+  def get_latest_broadcast
+    user_id = User.find_by(gitlab_id: current_user.id).id
+    user_broadcasts = Broadcast.where(:to_id => user_id)
+    latest_broadcast = user_broadcasts[-1]
+    return_dict = {broadcast_num: user_broadcasts.length, latest_broadcast: latest_broadcast}
+    render json: return_dict
+  end
+
   def destroy
     @broadcast = Broadcast.find(params[:id])
     @broadcast.destroy

@@ -121,6 +121,7 @@
   import Issue from '../../issues/models/issue'
   import IssuesService from "../../issues/services/issues_service";
   import AlertMixin from '../../shared/components/mixins/alert'
+  import axios from "axios";
 
   export default {
     props: ['broadcast_num'],
@@ -173,6 +174,7 @@
           class_name: project.class_name
         });
       }
+      setInterval(this.getLatestBroadcast, 2000);
     },
     updated() {
       if (this.dialogVisible) {
@@ -305,6 +307,17 @@
             this.loading = false;
             this.dialogVisible = false;
           })
+      },
+      getLatestBroadcast() {
+        axios.get('/broadcasts/get_latest_broadcast').then((response) => {
+          if (response.data['broadcast_num'] > this.broadcast_num) {
+            this.broadcast_num = response.data['broadcast_num'];
+            this.$notify({
+              title: '新广播',
+              message: response.data['latest_broadcast']['content']
+            });
+          }
+        });
       }
     }
   }
