@@ -69,7 +69,7 @@ class BlogsController < ApplicationController
   end
 
   def new
-    
+    @homeworks = Homework.all.to_json
   end
 
   def show

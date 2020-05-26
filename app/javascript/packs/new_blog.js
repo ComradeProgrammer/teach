@@ -37,8 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
         isChartButtonLoading: false,
         chartVisible: false,
         type: '',
+        str_hw: '请选择作业',
+        homeworks: [],
         containers: [],
         containerId: null,
+        hwId: null,
         blog: null,
         rules: {
           project_id: [
@@ -75,6 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     mounted() {
       const $app = this.$el;
+      console.log($app.dataset.homeworks);
+      this.homeworks = JSON.parse($app.dataset.homeworks);
+      console.log(this.homeworks);
+
       this.type = $app.dataset.blogsType;
       this.blogsService = new BlogsService({
         blogsEndpoint: $app.dataset.blogsEndpoint
