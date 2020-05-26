@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         str_hw: '请选择作业',
         homeworks: [],
         containers: [],
+        containers1:[],
         containerId: null,
         hwId: null,
         blog: null,
@@ -109,6 +110,12 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       }
+      for (let homework of homeworks) {
+        this.containers1.push({
+          id: homework.id,
+          name: homework.name,
+        });
+      }
     },
     methods: {
       createBlog() {
@@ -176,6 +183,9 @@ document.addEventListener('DOMContentLoaded', () => {
           res = !!valid;
         });
         return res;
+      },
+      choosehomework(containers1){
+        this.blog.hw_id = containers1;
       },
       chooseContainer(container) {
         if (this.type === 'blog') {

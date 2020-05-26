@@ -6,12 +6,21 @@
 #show-blog-app{data: {blog: current_blog, blogs: blogs_data, comments: comments_data}, 'v-loading': 'loading', 'element-loading-text': '加载中'}
   .root.small-container{'v-if': 'blog'}
     %el-container
-      %el-aside{width:'15%',style:"background-color: blue"}
+      %el-aside{width:'15%'}
         %div
+          博客所属作业
+          %ul
+          %li=@homework[:name]
+          %ul
+          博客分数
+          %ul
+          %ul
           score1
           %li=@scores[:score1]
           score2
           %li=@scores[:score2]
+          %ul
+          %ul
           %div{'v-if':'!blog.can_edit'}
             %a.el-buttun{':href':"'#{classroom_path(id: params[:classroom_id])}' + '/blogs/' + blog.id + '/score'" } 评分
       %el-main

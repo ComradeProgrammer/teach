@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_25_075405) do
+ActiveRecord::Schema.define(version: 2020_05_26_140252) do
 
   create_table "auto_test_projects", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -30,6 +30,9 @@ ActiveRecord::Schema.define(version: 2020_05_25_075405) do
     t.integer "user_id"
     t.integer "classroom_id"
     t.string "blog_type"
+    t.integer "score1"
+    t.integer "score2"
+    t.integer "homework"
     t.index ["classroom_id"], name: "index_blogs_on_classroom_id"
     t.index ["user_id"], name: "index_blogs_on_user_id"
   end

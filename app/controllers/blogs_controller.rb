@@ -76,6 +76,7 @@ class BlogsController < ApplicationController
     blog = Blog.find(params[:id])
     render_404 unless blog.classroom_id == params[:classroom_id].to_i
     @scores = {:score1 => blog.score1,:score2 => blog.score2}
+    @homework = Homework.find(blog.homework)
     #puts "----------------------------"
     #puts blog
     #puts blog.title
@@ -92,6 +93,7 @@ class BlogsController < ApplicationController
   def create
     classroom = Classroom.find(params[:classroom_id])
     new_blog = params[:blog]
+    puts new_blog
     type = 'blog'
     if new_blog['file_name'] == 'daily_scrum.md'
       type = 'daily_scrum'
@@ -103,6 +105,7 @@ class BlogsController < ApplicationController
     blog_record.user_id = user.id
     blog_record.score1 = 0
     blog_record.score2 = 0
+    blog_record.homework = new_blog['hw_id']
     blog_record.save
     redirect_to classroom_blogs_path
   end

@@ -13,7 +13,7 @@
         %el-option{'v-for': '(container, index) in containers', ':label': 'container.name', ':value': 'container.id', ':key': 'index'}
       %input{':value': 'blog.project_id', name: 'blog[project_id]', style: 'display: none'}
     %el-form-item{label: '作业', 'prop': 'hw_id'}
-      %el-select{'v-model': 'hwId', ':placeholder': "str_hw"}
+      %el-select{'v-model': 'hwId', '@change': 'choosehomework',':placeholder': "str_hw"}
         %el-option{'v-for': '(homework, index) in homeworks', ':label': 'homework.name', ':value': 'homework.id', ':key': 'index'}
       %input{':value': 'blog.hw_id', name: 'blog[hw_id]', style: 'display: none'}
     %el-form-item{label: '标题', 'prop': 'title'}
