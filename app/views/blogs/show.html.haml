@@ -5,70 +5,71 @@
 
 #show-blog-app{data: {blog: current_blog, blogs: blogs_data, comments: comments_data}, 'v-loading': 'loading', 'element-loading-text': '加载中'}
   .root.small-container{'v-if': 'blog'}
-    %el-container
-      %el-aside{width:'15%'}
+    .blog-title.clearFloat
+      %el-row
+        %el-col{':span': 18}
+          %el-input#blog-title.big-label{'v-if': 'policy.title && blog.can_edit', 'v-model': 'blog.title', '@blur': "update('title')"}
+          %label.big-label{'v-else': 'policy.title', '@click': "openPolicy('title')"}
+            {{ blog.title }}
+        %el-col{':span': 6}
+          %el-button.floatRight{'v-if': 'blog.can_edit', type: 'danger', '@click': 'deleteBlog', ':loading': 'deleteLoading'}
+            删除
+    .block-title.clearFloat
+      %span.author
+        %img{':title': "'作者: ' + blog.author.username", ':src': "blog.author.avatar_url"}
+        %a{href: 'blog.author.web_url'}
+          {{ blog.author.name }}
+      %span.light
+        创建于 {{ dateStr(blog.created_at) }}
+        更新于 {{ dateStr(blog.updated_at) }}
+      %i.el-icon-loading{'v-if': 'codeLoading'}
+      %i.el-icon-edit.icon-button.floatRight{'@click': "openPolicy('code')", 'v-if': 'blog.can_edit'}
+    %md-wrapper{'v-if': 'blog', 'v-model': 'blog.code', '@save': "update('code')", ':project-id': 'blog.project_id', ':project-url': 'blog.project_url', ':preview': '!policy.code', ':box-shadow': 'false'}
+    %div
+      %el-card{shadow: "hover", style: "width: 95%;margin:auto;"}
         %div
-          博客所属作业
           %ul
-          %li=@homework[:name]
+            %li
+              %b 所属作业
+              %p= @homework[:name]
+        %div
           %ul
-          博客分数
+            %li
+              %b score1
+              %p= @scores[:score1]
+        %div
           %ul
-          %ul
-          score1
-          %li=@scores[:score1]
-          score2
-          %li=@scores[:score2]
-          %ul
-          %ul
-          %div{'v-if':'!blog.can_edit'}
-            %a.el-buttun{':href':"'#{classroom_path(id: params[:classroom_id])}' + '/blogs/' + blog.id + '/score'" } 评分
-      %el-main
-        .blog-title.clearFloat
-          %el-row
-            %el-col{':span': 18}
-              %el-input#blog-title.big-label{'v-if': 'policy.title && blog.can_edit', 'v-model': 'blog.title', '@blur': "update('title')"}
-              %label.big-label{'v-else': 'policy.title', '@click': "openPolicy('title')"}
-                {{ blog.title }}
-            %el-col{':span': 6}
-              %el-button.floatRight{'v-if': 'blog.can_edit', type: 'danger', '@click': 'deleteBlog', ':loading': 'deleteLoading'}
-                删除
-        .block-title.clearFloat
-          %span.author
-            %img{':title': "'作者: ' + blog.author.username", ':src': "blog.author.avatar_url"}
-            %a{href: 'blog.author.web_url'}
-              {{ blog.author.name }}
-          %span.light
-            创建于 {{ dateStr(blog.created_at) }}
-            更新于 {{ dateStr(blog.updated_at) }}
-          %i.el-icon-loading{'v-if': 'codeLoading'}
-          %i.el-icon-edit.icon-button.floatRight{'@click': "openPolicy('code')", 'v-if': 'blog.can_edit'}
-        %md-wrapper{'v-if': 'blog', 'v-model': 'blog.code', '@save': "update('code')", ':project-id': 'blog.project_id', ':project-url': 'blog.project_url', ':preview': '!policy.code', ':box-shadow': 'false'}
+            %li
+              %b score2
+              %p= @scores[:score2]
+        %div{'v-if':'!blog.can_edit'}
+          %a.el-buttun{':href':"'#{classroom_path(id: params[:classroom_id])}' + '/blogs/' + blog.id + '/score'" } 评分
 
-        #comments
-          .block-title
-            %span.light 评论
-            %i.el-icon-loading{'v-if': 'commentsLoading'}
-          %el-card{'v-for': "(comment, index) in comments", ':key': 'index', 'shadow': 'never', ':body-style': "{padding: '16px'}"}
-            .comment-card
-              .commenter
-                %a{':href': 'comment.author.web_url'}
-                  %img{':src': 'comment.author.avatar_url'}
-              .comment-body
-                .comment-title.clearFloat{'v-if': 'isPreview(comment.id)'}
-                  %span {{ comment.author.name }}
-                  %span.light @{{ comment.author.username }}
-                  %span.light {{ timeStr(comment.created_at) }}
-                  %span.comment-action.floatRight{'v-if': 'comment.can_edit'}
-                    %i.el-icon-edit.icon-button{'@click': 'editComment(comment.id)'}
-                    %i.el-icon-delete.icon-button.danger-icon{'@click': 'deleteComment(comment.id)'}
-                .comment-content
-                  %md-wrapper{'v-model': 'comment.body', ':cant-save': 'true', ':border': 'false', ':project-id': 'blog.project_id', ':project-url': 'blog.project_url', ':preview': 'isPreview(comment.id)', ':box-shadow': 'false', 'func': 'mini'}
-                  .comment-buttons.clearFloat{'v-if': '!isPreview(comment.id)'}
-                    %el-button{'@click': 'currentEditComment = null'}
-                      取消
-                    %el-button.floatRight{type: 'primary', '@click': 'updateComment'}
-                      评论
+    %ul
+    #comments
+      .block-title
+        %span.light 评论
+        %i.el-icon-loading{'v-if': 'commentsLoading'}
+      %el-card{'v-for': "(comment, index) in comments", ':key': 'index', 'shadow': 'never', ':body-style': "{padding: '16px'}"}
+        .comment-card
+          .commenter
+            %a{':href': 'comment.author.web_url'}
+              %img{':src': 'comment.author.avatar_url'}
+          .comment-body
+            .comment-title.clearFloat{'v-if': 'isPreview(comment.id)'}
+              %span {{ comment.author.name }}
+              %span.light @{{ comment.author.username }}
+              %span.light {{ timeStr(comment.created_at) }}
+              %span.comment-action.floatRight{'v-if': 'comment.can_edit'}
+                %i.el-icon-edit.icon-button{'@click': 'editComment(comment.id)'}
+                %i.el-icon-delete.icon-button.danger-icon{'@click': 'deleteComment(comment.id)'}
+            .comment-content
+              %md-wrapper{'v-model': 'comment.body', ':cant-save': 'true', ':border': 'false', ':project-id': 'blog.project_id', ':project-url': 'blog.project_url', ':preview': 'isPreview(comment.id)', ':box-shadow': 'false', 'func': 'mini'}
+              .comment-buttons.clearFloat{'v-if': '!isPreview(comment.id)'}
+                %el-button{'@click': 'currentEditComment = null'}
+                  取消
+                %el-button.floatRight{type: 'primary', '@click': 'updateComment'}
+                  评论
 
     .new-comment
       .comment-card

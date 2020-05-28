@@ -4,7 +4,11 @@ class HomeworksController < ApplicationController
   def new
 
   end
-
+  def destroy
+    @homework = Homework.find(params[:id])
+    @homework.destroy
+    redirect_to homeworks_path
+  end
   def create
     homework_form = params[:homework]
     #puts member_form
