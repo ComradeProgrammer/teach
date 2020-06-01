@@ -5,7 +5,7 @@
     "webpacker": "bin/webpack-dev-server"
   },
   "dependencies": {
-    "@rails/webpacker": "4.0.2",
+    "@rails/webpacker": "5.1.1",
     "axios": "^0.18.0",
     "echarts": "^4.2.0-rc.2",
     "element-ui": "^2.7.2",
@@ -22,6 +22,6 @@
     "vue-template-compiler": "^2.6.10"
   },
   "devDependencies": {
-    "webpack-dev-server": "3.3.1"
+    "webpack-dev-server": "^3.11.0"
   }
 }

@@ -1,34 +1,12 @@
-.small-container
+- content_for :scripts do
+  = javascript_pack_tag 'index_organization'
+- content_for :styles do
+  = stylesheet_pack_tag 'index_organization'
+  
+#index-organization-app.small-container
   .page-title-holder
     .page-title 组织管理
-
-  .content-list
-    -if @all_org_info.length == 0
-      %div
-        %el-card{style: 'width: 80%; margin: auto;'}
-          %br
-          您还没有创建任何组织，您可以用管理员账户创建组织
-    -else
-      - @all_org_info.each do |org|
-        %el-card{shadow: "hover", style: "width: 95%;margin:auto;"}
-          %div{slot: 'header'}
-            %span{style: 'font-size:30px'}
-              %p= org['name']
-          %div
-            %ul
-              %li
-                %b 组织代号
-                %p= org['code']
-          %div
-            %ul
-              %li
-                %b 组织令牌
-                %p= org['token']
-          %div
-            %ul
-              %li
-                %b 组织简介
-                - if org['description'] != ''
-                  %p= org['description']
-                - else
-                  %p 暂无组织简介
+  %org_index{:org => @all_org_info.to_json,:action => organizations_path}
+  
+  
+  

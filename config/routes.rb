@@ -160,9 +160,12 @@ Rails.application.routes.draw do
     end
   end
 
+  # post 'organizations/:id/destroy', to: 'organizations#destroy'
   resources :organizations do
     collection do
       get 'get_all_info', to: 'organizations#get_all_info'
+      post ':id/destroy', to: 'organizations#destroy'
+      post ':id', to: 'organizations#update'
     end
   end
 
