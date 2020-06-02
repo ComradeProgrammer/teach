@@ -43,7 +43,7 @@ class AutoTestRunnersService
     RestClient.post(auto_test_runner_host + '/start_auto_test', payload)
   end
 
-  def get_auto_test_results(project_id)
+  def get_auto_test_results(project_id, runner_path)
     response = RestClient.get(runner_path + '/get_auto_test_results', {
       params: {
         :project_id => project_id

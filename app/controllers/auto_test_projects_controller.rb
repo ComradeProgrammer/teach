@@ -425,7 +425,13 @@ class AutoTestProjectsController < ApplicationController
       :is_public => 1
     ).gitlab_id
     @errors = []
-    @runners = Runner.all
+    @runners = []
+    Runner.all.each do |runner|
+      @runners.append({name: runner[:name], os: runner[:os], uid: runner[:uid]}.to_json)
+    end
+    @runners.to_json
+    p '##########'
+    p @runners
     render 'auto_test_projects/start_auto_test'
   end
 
@@ -524,7 +530,10 @@ class AutoTestProjectsController < ApplicationController
       :test_type => test_type,
       :is_public => 1
     ).gitlab_id
-    auto_test_points = auto_test_runners_service.get_auto_test_points(@public_personal_project_id)
+    auto_test_points = Array.new
+    Runner.all.each do |runner|
+      auto_test_points = auto_test_runners_service.get_auto_test_points(@public_personal_project_id, runner[:path])
+    end
     @points = []
     # while parsing JSON, the key is string
     auto_test_points.each do |item|

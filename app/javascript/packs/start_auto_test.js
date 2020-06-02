@@ -8,7 +8,6 @@ Vue.use(ElementUI);
 
 document.addEventListener('DOMContentLoaded', () => {
   new Vue({
-    router: router,
     el: '#start-auto-test-app',
     data() {
       return {
@@ -28,7 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     mounted() {
       this.form.project_id = this.$el.dataset.gitlabid;
-      this.runners = this.$el.dataset.runners;
+      this.runners = JSON.parse(this.$el.dataset.runners);
+      console.log("####################")
+      console.log(this.runners)
+      for (let i = 0; i < this.runners.length; i++)
+      {
+        this.runners[0] = JSON.parse(this.runners[0])
+      }
+      console.log(this.runners[0])
     },
     methods: {
       submitFormAxios() {
