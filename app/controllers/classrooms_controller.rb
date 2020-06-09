@@ -3,6 +3,15 @@ require 'date'
 
 class ClassroomsController < ApplicationController
   @@dup_class = false
+  @@shared = 0
+
+  def counter
+    @@shared
+  end
+
+  def counter_inc
+    @@shared = @@shared + 1
+  end
 
   # tool func: get id & name
   def get_all_classroom_id_and_name
@@ -300,7 +309,7 @@ class ClassroomsController < ApplicationController
     redirect_to classrooms_path
   end
 
-  def teaching_progress_index
+  def load_task_info
     @role = User.find_by(:gitlab_id => current_user.id).role
     @classroom_id = params[:id]
 
@@ -353,6 +362,10 @@ class ClassroomsController < ApplicationController
         }
       )
     end
+  end
+
+  def teaching_progress_index
+    load_task_info
     @all_task_infos = @all_task_infos.to_json
     # puts '>>>>>>>>'
     # puts @all_task_infos
@@ -412,6 +425,20 @@ class ClassroomsController < ApplicationController
     @role = User.find_by(:gitlab_id => current_user.id).role
     @classroom_id = params[:id]
     redirect_to teaching_progress_index_classroom_path
+  end
+
+  def get_latest_step
+    load_task_info
+    task_steps = @all_task_infos[0][:tasksteps]
+    task_steps.each do |item|
+      if item[:selected] == "true"
+        @latest_title = item[:title]
+        break
+      end
+    end
+    return_dict = {first: counter, title: @latest_title}
+    self.counter_inc
+    render json: return_dict
   end
 
   private

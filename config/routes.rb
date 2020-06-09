@@ -55,6 +55,7 @@ Rails.application.routes.draw do
       get 'teaching_progress_index', to: 'classrooms#teaching_progress_index'
       post 'create_task_period', to: 'classrooms#create_task_period'
       post 'create_task_step', to: 'classrooms#create_task_step'
+      get 'get_latest_step', to: 'classrooms#get_latest_step'
     end
 
     collection do

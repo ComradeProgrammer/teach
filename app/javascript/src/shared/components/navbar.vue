@@ -175,6 +175,7 @@
         });
       }
       setInterval(this.getLatestBroadcast, 2000);
+      this.getLatestStep();
     },
     updated() {
       if (this.dialogVisible) {
@@ -315,6 +316,16 @@
             this.$notify({
               title: '新广播',
               message: response.data['latest_broadcast']['content']
+            });
+          }
+        });
+      },
+      getLatestStep() {
+        axios.get(`/classrooms/${this.classroomId}/get_latest_step`).then((response) => {
+          if (response.data['first'] < 1) {
+            this.$notify({
+              title: '下一任务',
+              message: response.data['title']
             });
           }
         });
